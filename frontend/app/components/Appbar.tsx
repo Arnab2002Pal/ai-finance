@@ -6,13 +6,13 @@ const Appbar = () => {
   const { data: session, status } = useSession()  
   
   return (
-    <header className="shadow-md mx-4 md:mx-12 mt-6 rounded-xl border-white border-2 border-solid bg-black">
+    <header className=" mx-4 md:mx-12 mt-6 rounded-xl ">
       <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <a href="/" className="text-xl font-bold text-white">MyApp</a>
+            <a href="/" className="text-xl font-bold text-white">AI Financial Tracker</a>
           </div>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             {status === 'loading' ? (
               <div className="text-white">Loading...</div>
             ) : session ? (
@@ -33,7 +33,7 @@ const Appbar = () => {
                 Sign In
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </header>
