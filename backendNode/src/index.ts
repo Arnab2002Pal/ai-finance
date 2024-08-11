@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import {userRouter} from './router/userRouter'
+import questionRouter  from './router/questionRouter'
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use(cors()); 
 
 app.use('/api/v1', userRouter)
+app.use('/api/v1/question', questionRouter)
+
 
 
 // Start server

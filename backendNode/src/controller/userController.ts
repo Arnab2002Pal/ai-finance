@@ -76,7 +76,7 @@ export const googleUserToken = async (req: NewRequest, res: Response) => {
 
 export const credentialUser = async (req: Request, res: Response) => {
     // implement user creation logic for credentials provider
-    const { username: email, password } = req.body
+    const { email, password } = req.body
 
     try {
         const user = await prisma.user.findUnique({
@@ -88,6 +88,7 @@ export const credentialUser = async (req: Request, res: Response) => {
                 message: 'User not found'
             })
         }
+        
         return res.status(200).json({
             success: true,
             userData: {

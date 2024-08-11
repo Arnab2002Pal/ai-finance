@@ -1,7 +1,12 @@
 "use client";
 import { TypewriterEffect } from "./ui/typewriter-effect";
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
 
 export function HeroTitle() {
+    const router = useRouter()
+
     const words = [
         {
             text: "AI-Powered",
@@ -24,11 +29,12 @@ export function HeroTitle() {
             </p>
             <TypewriterEffect words={words} />
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4 mt-10">
-                <button className="w-40 h-10 rounded-xl bg-black border border-white border-transparent text-white text-sm">
+                <button onClick={() => router.push('/signup')} className="w-40 h-10 rounded-xl bg-black border border-white border-transparent text-white text-sm">
                     Join now
                 </button>
-                <button className="w-40 h-10 rounded-xl bg-white text-black border border-black  text-sm">
-                    Signin
+                <button onClick={()=>signIn()} 
+                className="w-40 h-10 rounded-xl bg-white text-black border border-black text-sm">
+                    SignIn
                 </button>
             </div>
         </div>

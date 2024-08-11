@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Appbar from "./components/Appbar";
 import { AuroraBackground } from "@/app/components/ui/aurora-background";
 import { HeroTitle } from "./components/HeroTitle";

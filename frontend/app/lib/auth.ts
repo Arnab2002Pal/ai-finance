@@ -9,12 +9,12 @@ export const NEXT_AUTH = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: { label: "Email", type: "text", placeholder: "example@example.com" },
+                email: { label: "Email", type: "text", placeholder: "example@example.com" },
                 password: { label: "Password", type: "password", placeholder: "password" }
             },
             async authorize(credentials) {                
                 const userData = {
-                    username: credentials?.username,
+                    email: credentials?.email,
                     password: credentials?.password
                 }
                 
@@ -46,7 +46,6 @@ export const NEXT_AUTH = {
                 user.accessToken = await googleAuthentication('session', { userData })
                 return true;
             }else if(account.provider === "credentials"){
-               
                 return true
             }
             return false
