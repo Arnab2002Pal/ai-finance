@@ -33,11 +33,6 @@ export default function SignInForm() {
         }
     };
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target
-    //     setFormData({ ...formData, [name]: value })
-    // }
-
     return (
         <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black border-gray-700 border-2">
             <h2 className="font-bold text-xl text-neutral-200">

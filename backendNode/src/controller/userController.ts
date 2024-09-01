@@ -107,3 +107,83 @@ export const credentialUser = async (req: Request, res: Response) => {
     }
 
 } 
+
+
+export const userInfo = async (req: Request, res: Response) => {
+    const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+            });
+        }
+
+        // Update or create the related locationInfo
+        const location = await prisma.locationInfo.upsert({
+            where: { user_id: user.id },
+            update: {
+                location: locationInfo.location,
+            },
+            create: {
+                user_id: user.id,
+                location: locationInfo.location,
+            },
+        });
+
+        // Update or create the related accountInfo
+        const account = await prisma.accountInfo.upsert({
+            where: { user_id: user.id },
+            update: {
+                occupation: accountInfo.occupation,
+                monthlyIncome: Number(accountInfo.monthlyIncome),
+                totalExpense: Number(accountInfo.totalExpense), 
+                currentInvestment: accountInfo.currentInvestment,
+                shortTermGoal: accountInfo.shortTermGoal,
+                longTermGoal: accountInfo.longTermGoal,
+                riskTolerance: accountInfo.riskTolerance,
+                debt: accountInfo.debt,
+            },
+            create: {
+                user_id: user.id,
+                occupation: accountInfo.occupation,
+                monthlyIncome: Number(accountInfo.monthlyIncome),
+                totalExpense: Number(accountInfo.totalExpense),
+                currentInvestment: accountInfo.currentInvestment,
+                shortTermGoal: accountInfo.shortTermGoal,
+                longTermGoal: accountInfo.longTermGoal,
+                riskTolerance: accountInfo.riskTolerance,
+                debt: accountInfo.debt,
+            },
+        });
+
+        // Update or create the related termsAndCondition
+        const terms = await prisma.termsAndCondition.upsert({
+            where: { user_id: user.id },
+            update: {
+                acceptTerms: termsAndCondition.acceptTerms,
+            },
+            create: {
+                user_id: user.id,
+                acceptTerms: termsAndCondition.acceptTerms,
+            },
+        });
+        console.log(location, account, terms)
+        
+        res.status(201).json({
+            success: true,
+            message: 'User information created or updated successfully',
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while creating or updating user information',
+        });
+    }
+};

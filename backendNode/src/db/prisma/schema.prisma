@@ -16,35 +16,45 @@ datasource db {
 model User {
   id              Int         @id @default(autoincrement())
   provider        String
-  name            String
+  name            String      @unique
   email           String      @unique
   password        String
   profile_image   String
   created_at      DateTime    @default(now())
   updated_at      DateTime    @updatedAt
 
-  UserAnswer UserAnswer[]
+  locationInfo    LocationInfo?
+  accountInfo     AccountInfo?
+  termsAndCondition TermsAndCondition?
 }
 
-
-model Question {
+model LocationInfo {
   id              Int         @id @default(autoincrement())
-  question        String
-
-  UserAnswer UserAnswer[]
-}
-
-
-model UserAnswer {
-  id              Int         @id @default(autoincrement())
-  user_id         Int
-  question_id     Int
-  answer          String
-  created_at      DateTime    @default(now())
-  updated_at      DateTime    @updatedAt
+  user_id         Int         @unique
+  location        String
   
   User            User        @relation(fields: [user_id], references: [id])
-  Question        Question    @relation(fields: [question_id], references: [id])
+}
+
+model AccountInfo {
+  id              Int         @id @default(autoincrement())
+  user_id         Int         @unique
+  occupation      String
+  monthlyIncome   Int
+  totalExpense    Int
+  currentInvestment String
+  shortTermGoal   String
+  longTermGoal    String
+  riskTolerance   String
+  debt            String
   
-  @@unique([user_id, question_id])
+  User            User        @relation(fields: [user_id], references: [id])
+}
+
+model TermsAndCondition {
+  id              Int         @id @default(autoincrement())
+  user_id         Int         @unique
+  acceptTerms     Boolean
+  
+  User            User        @relation(fields: [user_id], references: [id])
 }

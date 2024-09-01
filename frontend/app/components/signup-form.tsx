@@ -109,7 +109,7 @@ export default function SignupForm() {
         <div className="flex flex-col space-y-4">
        
           <button 
-            onClick={() => signIn('google', { callbackUrl: 'http://localhost:3000/question' })}
+            onClick={() => signIn('google', { callbackUrl: 'http://localhost:3000/form' })}
             className="relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"
           >

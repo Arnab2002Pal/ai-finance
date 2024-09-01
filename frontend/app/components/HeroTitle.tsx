@@ -3,7 +3,6 @@ import { TypewriterEffect } from "./ui/typewriter-effect";
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-
 export function HeroTitle() {
     const router = useRouter()
 
