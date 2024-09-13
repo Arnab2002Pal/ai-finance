@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  provider      String
+  name          String   @unique
+  email         String   @unique
+  password      String
+  profile_image String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  locationInfo      LocationInfo?
+  accountInfo       AccountInfo?
+  termsAndCondition TermsAndCondition?
+
+  FinancialAdvice FinancialAdvice? // One-to-One relation with FinancialResponse
+}
+
+model LocationInfo {
+  id         Int      @id @default(autoincrement())
+  user_id    Int      @unique
+  location   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+}
+
+model AccountInfo {
+  id                Int      @id @default(autoincrement())
+  user_id           Int      @unique
+  occupation        String
+  age               Int
+  monthlyIncome     Int
+  totalExpense      String
+  currentInvestment String
+  shortTermGoal     String
+  longTermGoal      String
+  riskTolerance     String
+  debt              String
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+}
+
+model TermsAndCondition {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @unique
+  acceptTerms Boolean
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  User User @relation(fields: [user_id], references: [id])
+}
+
+model FinancialAdvice {
+  id               Int        @id @default(autoincrement())
+  user_id          Int        @unique
+  expenseAnalysis  Json 
+  investmentAdvice Json 
+  savingPlan       Json 
+  debtManagement   Json
+  goalRoadmap      Json 
+  structuredPlan   Json 
+  growth           Json 
+  summary          String 
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+  
+  User             User       @relation(fields: [user_id], references: [id])
+}
+
+

@@ -12,8 +12,8 @@ const MultiStepForm = () => {
     const [step, setStep] = useState(1);
     const { data: session, status } = useSession()
     const userEmail = session?.user?.email
-    console.log(userEmail);
-    
+    const [loading, setLoading] = useState(false)
+
     const [formData, setFormData] = useState({
         email: "",
         locationInfo: {
@@ -68,34 +68,39 @@ const MultiStepForm = () => {
     const renderStepContent = () => {
         switch (step) {
             case 1:
-                // return <PersonalInfo formData={formData.personalInfo} handleChange={handleChange} />;
                 return <Location formData={formData.locationInfo} handleChange={handleChange} />;
             case 2:
-                // return <AccountInfo formData={formData.accountInfo} handleChange={handleChange} />;
                 return <AccountInfo formData={formData.accountInfo} handleChange={handleChange} />;
             case 3:
-                // return <Confirmation formData={formData.confirmation} handleChange={handleChange} />;
                 return <TermsAndCondition formData={formData.termsAndCondition} handleChange={handleChange} />;
             default:
-                // return <PersonalInfo formData={formData.personalInfo} handleChange={handleChange} />;
                 return <Location formData={formData.locationInfo} handleChange={handleChange} />;
         }
     };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (formData.termsAndCondition.acceptTerms === true) {
-            console.log(formData);
-            const result = await postUserInfo('userInfo', formData)
-            
-            if (result.success === true) {
-                router.push('home')
+
+            try {
+                const result = await postUserInfo('userInfo', formData);
+
+                if (result.success === true) {
+                    router.push('/home');
+                } else {
+                    alert('Something went wrong. Please try again.');
+                    // router.push('/error'); // Optional: You can route to an error page
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred. Please try again later.');
+                // router.push('/error'); // Optional: Handle API error by redirecting to a specific page
             }
         } else {
             alert('Please accept the Terms and Conditions to proceed.');
         }
-        // Handle the final form submission, e.g., sending data to a server.
     };
-
+    
     return (
         <form onSubmit={handleSubmit} className="container mx-auto p-4">
             <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
@@ -107,7 +112,7 @@ const MultiStepForm = () => {
                     <svg className="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" />
                     </svg>
-                </li>
+                </li >
                 <li className={`flex items-center ${step === 2 ? 'text-green-500' : ''}`}>
                     <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 2 ? 'border-green-500' : 'border-gray-400'}`}>
                         2
@@ -123,7 +128,7 @@ const MultiStepForm = () => {
                     </span>
                     Review
                 </li>
-            </ol>
+            </ol >
 
             <div className="flex items-center justify-center mt-20">
                 <div className={`w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${step === 1 ? 'max-w-md' : step === 2 ? 'max-w-screen-md' : 'max-w-md'
@@ -171,12 +176,11 @@ const MultiStepForm = () => {
 
                             </div>
                         }
-
-
                     </div>
                 </div>
             </div>
-        </form>
+        </form >
+
     )
 }
 

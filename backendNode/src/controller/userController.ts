@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { genSaltSync, hashSync } from "bcrypt-ts";
+import { gptCall } from '../service/gpt';
+import { InvestmentAdvice, UserInput } from '../interface/inputInterface';
+import { responseCleanUp } from '../service/responseFormatter';
+import { updateOrCreateAccountInfo, updateOrCreateLocationInfo, updateOrCreateTermsAndCondition } from '../service/dbService';
+import { generateFinancialAdvice } from '../service/gptService';
 
 // TODO: create a user sign in page
 
@@ -111,6 +116,19 @@ export const credentialUser = async (req: Request, res: Response) => {
 
 export const userInfo = async (req: Request, res: Response) => {
     const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
+    
+    const gptInput: UserInput = {
+        country: locationInfo.location,
+        age: Number(locationInfo.age) || 22,
+        occupation: accountInfo.occupation,
+        monthly_salary: Number(accountInfo.monthlyIncome),
+        total_expenses: accountInfo.totalExpense,
+        total_investment: accountInfo.currentInvestment,
+        short_term_goal: accountInfo.shortTermGoal,
+        long_term_goal: accountInfo.longTermGoal,
+        debt: accountInfo.debt,
+        risk_tolerance: accountInfo.riskTolerance 
+    }    
 
     try {
         const user = await prisma.user.findUnique({
@@ -124,57 +142,73 @@ export const userInfo = async (req: Request, res: Response) => {
             });
         }
 
+        await updateOrCreateLocationInfo(user.id, locationInfo)
+        await updateOrCreateAccountInfo(user.id, accountInfo)
+        await updateOrCreateTermsAndCondition(user.id, termsAndCondition)
+
         // Update or create the related locationInfo
-        const location = await prisma.locationInfo.upsert({
-            where: { user_id: user.id },
-            update: {
-                location: locationInfo.location,
-            },
-            create: {
-                user_id: user.id,
-                location: locationInfo.location,
-            },
-        });
+        // await prisma.locationInfo.upsert({
+        //     where: { user_id: user.id },
+        //     update: {
+        //         location: locationInfo.location,
+        //     },
+        //     create: {
+        //         user_id: user.id,
+        //         location: locationInfo.location,
+        //     },
+        // });
 
         // Update or create the related accountInfo
-        const account = await prisma.accountInfo.upsert({
-            where: { user_id: user.id },
-            update: {
-                occupation: accountInfo.occupation,
-                monthlyIncome: Number(accountInfo.monthlyIncome),
-                totalExpense: Number(accountInfo.totalExpense), 
-                currentInvestment: accountInfo.currentInvestment,
-                shortTermGoal: accountInfo.shortTermGoal,
-                longTermGoal: accountInfo.longTermGoal,
-                riskTolerance: accountInfo.riskTolerance,
-                debt: accountInfo.debt,
-            },
-            create: {
-                user_id: user.id,
-                occupation: accountInfo.occupation,
-                monthlyIncome: Number(accountInfo.monthlyIncome),
-                totalExpense: Number(accountInfo.totalExpense),
-                currentInvestment: accountInfo.currentInvestment,
-                shortTermGoal: accountInfo.shortTermGoal,
-                longTermGoal: accountInfo.longTermGoal,
-                riskTolerance: accountInfo.riskTolerance,
-                debt: accountInfo.debt,
-            },
-        });
+        // await prisma.accountInfo.upsert({
+        //     where: { user_id: user.id },
+        //     update: {
+        //         occupation: accountInfo.occupation,
+        //         age: Number(accountInfo.age) || 22,
+        //         monthlyIncome: Number(accountInfo.monthlyIncome),
+        //         totalExpense: accountInfo.totalExpense, 
+        //         currentInvestment: accountInfo.currentInvestment,
+        //         shortTermGoal: accountInfo.shortTermGoal,
+        //         longTermGoal: accountInfo.longTermGoal,
+        //         riskTolerance: accountInfo.riskTolerance,
+        //         debt: accountInfo.debt,
+        //     },
+        //     create: {
+        //         user_id: user.id,
+        //         occupation: accountInfo.occupation,
+        //         age: Number(accountInfo.age) || 22,
+        //         monthlyIncome: Number(accountInfo.monthlyIncome),
+        //         totalExpense: accountInfo.totalExpense,
+        //         currentInvestment: accountInfo.currentInvestment,
+        //         shortTermGoal: accountInfo.shortTermGoal,
+        //         longTermGoal: accountInfo.longTermGoal,
+        //         riskTolerance: accountInfo.riskTolerance,
+        //         debt: accountInfo.debt,
+        //     },
+        // });
 
         // Update or create the related termsAndCondition
-        const terms = await prisma.termsAndCondition.upsert({
-            where: { user_id: user.id },
-            update: {
-                acceptTerms: termsAndCondition.acceptTerms,
-            },
-            create: {
-                user_id: user.id,
-                acceptTerms: termsAndCondition.acceptTerms,
-            },
-        });
-        console.log(location, account, terms)
+        // await prisma.termsAndCondition.upsert({
+        //     where: { user_id: user.id },
+        //     update: {
+        //         acceptTerms: termsAndCondition.acceptTerms,
+        //     },
+        //     create: {
+        //         user_id: user.id,
+        //         acceptTerms: termsAndCondition.acceptTerms,
+        //     },
+        // });
         
+        const gptResponse = await generateFinancialAdvice(gptInput)
+
+        await prisma.financialAdvice.upsert({
+            where: { user_id: user.id },
+            update: gptResponse,
+            create: { user_id: user.id, ...gptResponse },
+        });
+
+        console.log(gptResponse.structuredPlan);
+        
+                
         res.status(201).json({
             success: true,
             message: 'User information created or updated successfully',

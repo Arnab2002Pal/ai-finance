@@ -26,14 +26,14 @@ const AccountInfo = ({ formData, handleChange }: any) => {
             value={formData.monthlyIncome}
             onChange={handleChange}
           />
-          <Label htmlFor="totalExpense">Total Expense</Label>
+          {/* <Label htmlFor="totalExpense">Total Expense</Label>
           <Input
             placeholder="Student, Fresher, etc..."
             type="number"
             name="totalExpense"
             value={formData.totalExpense}
             onChange={handleChange}
-          />
+          /> */}
           <Label htmlFor="currentInvestment">Current Investment</Label>
           <Input
             placeholder="Student, Fresher, etc..."
@@ -78,8 +78,8 @@ const AccountInfo = ({ formData, handleChange }: any) => {
       </div>
       <div>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="occupation">Total Expense</Label>
-          <Textarea placeholder="Enter" name='expense' value={formData.expense} onChange={handleChange} className='text-black'/>
+          <Label htmlFor="totalExpense">Total Expense</Label>
+          <Textarea placeholder="Enter" name='totalExpense' value={formData.totalExpense} onChange={handleChange} className='text-black'/>
    
         </LabelInputContainer>
       </div>

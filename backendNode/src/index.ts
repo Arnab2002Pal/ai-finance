@@ -15,8 +15,6 @@ app.use(cors());
 app.use('/api/v1', userRouter)
 app.use('/api/v1/question', questionRouter)
 
-
-
 // Start server
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
