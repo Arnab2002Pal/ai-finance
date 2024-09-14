@@ -24,7 +24,7 @@ interface NewRequest extends Request {
     };
 }
 
-export const googleUserToken = async (req: NewRequest, res: Response) => {
+const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
     const { user } = req;
 
     if (!user || !user.provider || !user.token) {
@@ -78,8 +78,7 @@ export const googleUserToken = async (req: NewRequest, res: Response) => {
 };
 
 
-
-export const credentialUser = async (req: Request, res: Response) => {
+const handleCredentialUserAuth = async (req: Request, res: Response) => {
     // implement user creation logic for credentials provider
     const { email, password } = req.body
 
@@ -114,7 +113,7 @@ export const credentialUser = async (req: Request, res: Response) => {
 } 
 
 
-export const userInfo = async (req: Request, res: Response) => {
+const createAndUpdateUserInfo = async (req: Request, res: Response) => {
     const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
     
     const gptInput: UserInput = {
@@ -145,58 +144,6 @@ export const userInfo = async (req: Request, res: Response) => {
         await updateOrCreateLocationInfo(user.id, locationInfo)
         await updateOrCreateAccountInfo(user.id, accountInfo)
         await updateOrCreateTermsAndCondition(user.id, termsAndCondition)
-
-        // Update or create the related locationInfo
-        // await prisma.locationInfo.upsert({
-        //     where: { user_id: user.id },
-        //     update: {
-        //         location: locationInfo.location,
-        //     },
-        //     create: {
-        //         user_id: user.id,
-        //         location: locationInfo.location,
-        //     },
-        // });
-
-        // Update or create the related accountInfo
-        // await prisma.accountInfo.upsert({
-        //     where: { user_id: user.id },
-        //     update: {
-        //         occupation: accountInfo.occupation,
-        //         age: Number(accountInfo.age) || 22,
-        //         monthlyIncome: Number(accountInfo.monthlyIncome),
-        //         totalExpense: accountInfo.totalExpense, 
-        //         currentInvestment: accountInfo.currentInvestment,
-        //         shortTermGoal: accountInfo.shortTermGoal,
-        //         longTermGoal: accountInfo.longTermGoal,
-        //         riskTolerance: accountInfo.riskTolerance,
-        //         debt: accountInfo.debt,
-        //     },
-        //     create: {
-        //         user_id: user.id,
-        //         occupation: accountInfo.occupation,
-        //         age: Number(accountInfo.age) || 22,
-        //         monthlyIncome: Number(accountInfo.monthlyIncome),
-        //         totalExpense: accountInfo.totalExpense,
-        //         currentInvestment: accountInfo.currentInvestment,
-        //         shortTermGoal: accountInfo.shortTermGoal,
-        //         longTermGoal: accountInfo.longTermGoal,
-        //         riskTolerance: accountInfo.riskTolerance,
-        //         debt: accountInfo.debt,
-        //     },
-        // });
-
-        // Update or create the related termsAndCondition
-        // await prisma.termsAndCondition.upsert({
-        //     where: { user_id: user.id },
-        //     update: {
-        //         acceptTerms: termsAndCondition.acceptTerms,
-        //     },
-        //     create: {
-        //         user_id: user.id,
-        //         acceptTerms: termsAndCondition.acceptTerms,
-        //     },
-        // });
         
         const gptResponse = await generateFinancialAdvice(gptInput)
 
@@ -204,10 +151,7 @@ export const userInfo = async (req: Request, res: Response) => {
             where: { user_id: user.id },
             update: gptResponse,
             create: { user_id: user.id, ...gptResponse },
-        });
-
-        console.log(gptResponse.structuredPlan);
-        
+        });        
                 
         res.status(201).json({
             success: true,
@@ -221,3 +165,15 @@ export const userInfo = async (req: Request, res: Response) => {
         });
     }
 };
+
+const getUserInfo = async (req: Request, res: Response) => {
+
+ }
+
+
+export {
+    handleGoogleUserAuth,
+    handleCredentialUserAuth,
+    createAndUpdateUserInfo,
+    getUserInfo
+}
