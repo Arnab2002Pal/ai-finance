@@ -64,9 +64,10 @@ export const NEXT_AUTH = {
         },
         session: ({ session, token }: any) => {
             // TODO
-
+        
             session.accessToken = token.accessToken
-            session.user.id = token.user
+            session.user.user_id = token.user_id
+            session.user.image = token.profile                        
             return session;
         }
     },

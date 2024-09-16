@@ -10,7 +10,7 @@ import { authenticateUser } from './middleware';
 const userRouter = express.Router();
 
 // GET
-userRouter.get('/userInfo', getUserInfo)
+userRouter.get('/userInfo/:id', getUserInfo)
 
 // POST 
 userRouter.post('/session', authenticateUser, handleGoogleUserAuth)

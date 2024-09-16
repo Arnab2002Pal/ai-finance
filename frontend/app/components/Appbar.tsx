@@ -1,9 +1,10 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 
 const Appbar = () => {
   const { data: session, status } = useSession()  
+  
   
   return (
     <header className=" mx-4 md:mx-12 mt-6 rounded-xl ">

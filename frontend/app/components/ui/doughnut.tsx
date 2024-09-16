@@ -5,13 +5,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, plugins } from 'chart.js
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = () => {
+const DoughnutChart = ({ expense }: any) => {
   const data = {
-    labels: ['EXPENSE', 'Blue', 'Yellow', 'Green', 'Purple'],
+    labels: ['Expense', 'Earning', 'Debt', "Total Investment", 'Balance'],
     datasets: [
       {
         label: 'Colors Distribution',
-        data: [12, 19, 3, 5, 2],
+        data: [expense.MonthlyExpenses, expense.MonthlyEarning, expense.TotalDebt, expense.TotalInvestedAmount, expense.TotalRemainingMoneySaved],
         backgroundColor: [
           'rgb(255, 99, 132)',
           'rgb(54, 162, 235)',

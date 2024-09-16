@@ -167,8 +167,48 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
 };
 
 const getUserInfo = async (req: Request, res: Response) => {
+    const { id: user_id } = req.params;
+    console.log(req.params);
+    console.log(typeof Number(user_id));
+    
+    try {
+        const userIdAsNumber = Number(user_id);
 
- }
+        // Ensure it's a valid number before making the Prisma query
+        if (isNaN(userIdAsNumber)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user ID'
+            });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: userIdAsNumber },  // Pass it as a number
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        const userFinancialInfo = await prisma.financialAdvice.findUnique({
+            where: { user_id: user.id },
+        });
+
+        res.status(200).json({
+            success: true,
+            userFinancialInfo
+        });
+    } catch (error) {
+        console.error('Error fetching user information:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+}
 
 
 export {

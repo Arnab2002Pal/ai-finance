@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080/api/v1/",
+    baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
     // headers: {
     //     Authorization: 
     // }
@@ -31,6 +31,16 @@ export const checkUserOrCreate = async (url: string, option: any) => {
 export const postUserInfo = async (url: string, option: any) => {
     try {
         const response = await axiosInstance.post(url, option);
+        return response.data;
+    } catch (error) {
+        console.error('Error retrieving data:', error);
+        throw new Error('Could not get data');
+    }
+}
+
+export const getUserInfo = async (url: string) => {    
+    try {
+        const response = await axiosInstance.get(url);
         return response.data;
     } catch (error) {
         console.error('Error retrieving data:', error);
