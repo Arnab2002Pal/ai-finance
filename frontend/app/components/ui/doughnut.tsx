@@ -10,28 +10,32 @@ const DoughnutChart = ({ expense }: any) => {
     labels: ['Expense', 'Earning', 'Debt', "Total Investment", 'Balance'],
     datasets: [
       {
-        label: 'Colors Distribution',
+        label: 'Rs',
         data: [expense.MonthlyExpenses, expense.MonthlyEarning, expense.TotalDebt, expense.TotalInvestedAmount, expense.TotalRemainingMoneySaved],
         backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 206, 86)',
-          'rgb(75, 192, 192)',
-          'rgb(153, 102, 255)',
+          'rgb(255,0,0)',
+          'rgb(34,139,34)',
+          'rgb(192,192,192)',
+          'rgb(255,215,0)',
+          'rgb(255,255,255)',
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
+          'rgb(0,0,0)',
+          'rgb(0,0,0)',
+          'rgb(0,0,0)',
+          'rgb(0,0,0)',
+          'rgb(0,0,0)',
         ],
-        borderWidth: 1,
+        borderWidth: 4,
+        hoverOffset: 20,
       },
     ],
   };
 
   const options = {
+    animation: {
+      animateScale: true,
+    },
     plugins: {
       legend: {
         display: false,
