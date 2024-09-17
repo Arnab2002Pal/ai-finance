@@ -43,6 +43,16 @@ const MultiStepForm = () => {
         }
     }, [userEmail]);
 
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/signin");
+        }
+    }, [status, router]);
+
+    if (status === "loading") {
+        return <p>Loading...</p>;
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
         const checked = (e.target as HTMLInputElement).checked;
@@ -73,14 +83,19 @@ const MultiStepForm = () => {
                 return <AccountInfo formData={formData.accountInfo} handleChange={handleChange} />;
             case 3:
                 return <TermsAndCondition formData={formData.termsAndCondition} handleChange={handleChange} />;
+            case 4:
+                return <div className="text-center">Submitting... Please wait.</div>;
             default:
                 return <Location formData={formData.locationInfo} handleChange={handleChange} />;
         }
     };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (formData.termsAndCondition.acceptTerms === true) {
+            setStep(4); // Go to the loading step
+            setLoading(true); 
 
             try {
                 const result = await postUserInfo('userInfo', formData);
@@ -95,12 +110,14 @@ const MultiStepForm = () => {
                 console.error('Error submitting form:', error);
                 alert('An error occurred. Please try again later.');
                 // router.push('/error'); // Optional: Handle API error by redirecting to a specific page
+            } finally {
+                setLoading(false); // Reset loading state
             }
         } else {
             alert('Please accept the Terms and Conditions to proceed.');
         }
     };
-    
+
     return (
         <form onSubmit={handleSubmit} className="container mx-auto p-4">
             <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
@@ -128,6 +145,7 @@ const MultiStepForm = () => {
                     </span>
                     Review
                 </li>
+                
             </ol >
 
             <div className="flex items-center justify-center mt-20">
@@ -139,21 +157,19 @@ const MultiStepForm = () => {
 
                     <div>
                         {
-                            step == 1 &&
+                            step === 1 &&
                             <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
                                 <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
                                 <BottomGradient />
                             </div>
-
                         }
                         {
-                            step == 2 &&
+                            step === 2 &&
                             <div className='flex justify-center items-center gap-20'>
                                 <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
                                     <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
                                     <BottomGradient />
                                 </div>
-
                                 <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
                                     <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
                                     <BottomGradient />
@@ -161,29 +177,24 @@ const MultiStepForm = () => {
                             </div>
                         }
                         {
-                            step == 3 &&
+                            step === 3 &&
                             <div className='flex justify-center items-center gap-20'>
                                 <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
                                     <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
                                     <BottomGradient />
                                 </div>
-
                                 <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
                                     <button type="submit" className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Submit</span></button>
-
                                     <BottomGradient />
                                 </div>
-
                             </div>
                         }
                     </div>
                 </div>
             </div>
         </form >
-
     )
 }
-
 
 const BottomGradient = () => {
     return (
