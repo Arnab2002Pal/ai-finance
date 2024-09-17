@@ -168,8 +168,6 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
 
 const getUserInfo = async (req: Request, res: Response) => {
     const { id: user_id } = req.params;
-    console.log(req.params);
-    console.log(typeof Number(user_id));
     
     try {
         const userIdAsNumber = Number(user_id);

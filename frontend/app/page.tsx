@@ -4,6 +4,7 @@ import { HeroTitle } from "./components/HeroTitle";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "./lib/auth";
 import { redirect } from "next/navigation";
+import FeatureSection from "./components/feature-section";
 
 export default async function Home() {
   const session = await getServerSession(NEXT_AUTH)
@@ -13,11 +14,14 @@ export default async function Home() {
   }
   
   return (
-    <AuroraBackground>
-      <div className="z-10">
-        <Appbar />
-        <HeroTitle/>
-      </div>
-    </AuroraBackground>
+    <div>
+      <AuroraBackground>
+        <div className="z-10">
+          <Appbar />
+          <HeroTitle/>
+        </div>
+      </AuroraBackground>
+    <FeatureSection/>
+    </div>
   );
 }

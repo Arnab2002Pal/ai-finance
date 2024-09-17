@@ -45,7 +45,7 @@ const MultiStepForm = () => {
 
     useEffect(() => {
         if (status === "unauthenticated") {
-            router.push("/signin");
+            router.push("/signup");
         }
     }, [status, router]);
 
@@ -120,6 +120,7 @@ const MultiStepForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className="container mx-auto p-4">
+            {step !== 4 && (
             <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
                 <li className={`flex items-center ${step === 1 ? 'text-green-500' : ''}`}>
                     <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 1 ? 'border-green-500' : 'border-gray-400'}`}>
@@ -147,6 +148,8 @@ const MultiStepForm = () => {
                 </li>
                 
             </ol >
+            )}
+            
 
             <div className="flex items-center justify-center mt-20">
                 <div className={`w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${step === 1 ? 'max-w-md' : step === 2 ? 'max-w-screen-md' : 'max-w-md'
