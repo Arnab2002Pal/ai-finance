@@ -1,92 +1,3 @@
-// "use client";
-// import React, { useEffect, useState } from "react";
-// import Appbar from "../../components/Appbar";
-// import Doughnut from "@/app/components/ui/doughnut";
-// import { useSession } from "next-auth/react";
-// import { getUserInfo } from "@/app/api/utility/api";
-// import { UserData } from "@/interface/userInterface";
-// import { useRouter } from "next/navigation";
-
-// const Home: React.FC = () => {
-//   const { data: session, status } = useSession();
-//   const router = useRouter();
-//   const [userData, setUserData] = useState<UserData>({});
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   const user_id = session?.user?.user_id;
-
-//   // Fetch user data
-//   const fetchData = async (id: number) => {
-//     try {
-//       const data = await getUserInfo(`userInfo/${id}`);
-//       setUserData(data);
-//     } catch (err) {
-//       console.error("Error fetching user info:", err);
-//       setError("Failed to fetch user data.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Fetch data when the user is available
-//   useEffect(() => {
-//     if (user_id) {
-//       fetchData(user_id);
-//     }
-//   }, [user_id]);
-
-
-//   // By using useEffect, the component can render initially, and then if the status is unauthenticated, it triggers the redirection. This prevents a blocking operation that could slow down or even prevent the page from loading.
-//   useEffect(() => {
-//     if (status === "unauthenticated") {
-//       router.push("/signin");
-//     }
-//   }, [status, router]);
-
-//   if (status === "loading") {
-//     return <p>Loading...</p>;
-//   }
-
-//   // Destructure user financial info for easier access
-//   const {
-//     userFinancialInfo: {
-//       expenseAnalysis = {},
-//       debtManagement = {},
-//       investmentAdvice = {},
-//       goalRoadmap = {},
-//       growth = {},
-//       savingPlan = {},
-//       structuredPlan = {},
-//       summary = "",
-//     } = {},
-//   } = userData;
-
-//   return (
-//     <div>
-//       <Appbar />
-//       <div className="mx-4 my-6 border-2 border-normal-500 border-solid rounded-xl h-screen">
-//         <div className="flex justify-center items-center">
-//           {loading ? (
-//             <p>Generating the report...</p>
-//           ) : loading && error ? (
-//             <p className="text-red-500">{error}</p>
-//           ) : (
-//             <Doughnut expense={expenseAnalysis} />
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
-
-
-
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
@@ -101,14 +12,76 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { getUserInfo } from "@/app/api/utility/api";
+import { useRouter } from "next/navigation";
+import { UserData } from "@/interface/userInterface";
+import { Dashboard } from "@/app/components/Dashboard";
 
 export default function Home() {
+  const router = useRouter();
+  const [userData, setUserData] = useState<UserData>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+
+  
   const { data: session, status } = useSession();
+  const user_id = session?.user?.user_id;
+
 
   const name = session?.user.name?.split(" ") || [];
   const firstNameInitial = name.length > 0 ? name[0][0] : "";
   const lastNameInitial = name.length > 1 ? name[1][0] : "";
   const initials = `${firstNameInitial}${lastNameInitial}`
+
+  // Fetch user data
+  const fetchData = async (id: number) => {
+    try {
+      const data = await getUserInfo(`userInfo/${id}`);
+      setUserData(data);
+    } catch (err) {
+      console.error("Error fetching user info:", err);
+      setError("Failed to fetch user data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch data when the user is available
+  useEffect(() => {
+    if (user_id) {
+      fetchData(user_id);
+    }
+  }, [user_id]);
+
+
+  // By using useEffect, the component can render initially, and then if the status is unauthenticated, it triggers the redirection. This prevents a blocking operation that could slow down or even prevent the page from loading.
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return <p>Verifying...</p>;
+  }
+
+  // Destructure user financial info for easier access
+  const {
+    userFinancialInfo: {
+      expenseAnalysis = {},
+      debtManagement = {},
+      investmentAdvice = {},
+      goalRoadmap = {},
+      growth = {},
+      savingPlan = {},
+      structuredPlan = {},
+      summary = "",
+    } = {},
+  } = userData;
+
+  console.log(userData);
+  
 
   const links = [
     {
@@ -134,15 +107,12 @@ export default function Home() {
     },
     {
       label: "Logout",
-      href: "#",
+      href: "logout",
       icon: (
         <IconArrowLeft className="text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
-      onClick: () =>
-        console.log("Cloented")
     },
   ];
-  const [open, setOpen] = useState(false);
   return (
     <div
       className={cn(
@@ -169,7 +139,7 @@ export default function Home() {
                   label: session.user.name!,
                   href: "#",
                   icon: (
-                    <img
+                    <Image
                       src={session?.user.image!}
                       className="h-7 w-7 flex-shrink-0 rounded-full"
                       width={50}
@@ -187,7 +157,7 @@ export default function Home() {
                 >
                   {initials}
                 </div>
-                {session?.user.name}
+                  {session?.user.name}
               </div>
             )}
           </div>
@@ -226,27 +196,3 @@ export const LogoIcon = () => {
 };
 
 // Dummy dashboard component with content
-const Dashboard = () => {
-  return (
-    <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-700 bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-        <div className="flex gap-2">
-          {[...new Array(4)].map((_, i) => (
-            <div
-              key={"first" + i}
-              className="h-20 w-full rounded-lg  bg-neutral-800 animate-pulse"
-            ></div>
-          ))}
-        </div>
-        <div className="flex gap-2 flex-1">
-          {[...new Array(2)].map((_, i) => (
-            <div
-              key={"second" + i}
-              className="h-full w-full rounded-lg bg-neutral-800 animate-pulse"
-            ></div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};

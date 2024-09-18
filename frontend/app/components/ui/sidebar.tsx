@@ -4,6 +4,7 @@ import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import { signOut } from "next-auth/react";
 
 interface Links {
   label: string;
@@ -166,7 +167,23 @@ export const SidebarLink = ({
 }) => {
   const { open, animate } = useSidebar();
   return (
-    <Link
+    <div>
+      {link.href === "logout" ? (
+        <div onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}` })} className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer"> 
+          {link.icon}
+            <motion.span
+              animate={{
+              display: animate ? (open ? "inline-block" : "none") : "inline-block",
+              opacity: animate ? (open ? 1 : 0) : 1,
+              }}
+              className="text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+              >
+              {link.label}
+            </motion.span>
+
+        </div>
+      ) : (
+          <Link
       href={link.href}
       className={cn(
         "flex items-center justify-start gap-2  group/sidebar py-2",
@@ -185,6 +202,9 @@ export const SidebarLink = ({
       >
         {link.label}
       </motion.span>
-    </Link>
+      </Link>
+      )}
+    </div>
+
   );
 };
