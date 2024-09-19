@@ -2,6 +2,7 @@
 import { TypewriterEffect } from "./ui/typewriter-effect";
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { InfiniteMovingCards } from "./ui/feature-card";
 
 export function HeroTitle() {
     const router = useRouter()
@@ -22,7 +23,7 @@ export function HeroTitle() {
         },
     ];
     return (
-        <div className="flex flex-col items-center justify-center h-[35rem] ">
+        <div className="flex flex-col items-center justify-center h-[35rem]">
             <p className="text-neutral-200 text-xl mb-3">
                 The road to freedom starts from here...
             </p>

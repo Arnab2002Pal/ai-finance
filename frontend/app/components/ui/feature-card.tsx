@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 export const InfiniteMovingCards = ({
     items,
     direction = "left",
-    speed = "fast",
+    speed = "slow",
     pauseOnHover = true,
     className,
 }: {
@@ -24,6 +24,7 @@ export const InfiniteMovingCards = ({
 
     useEffect(() => {
         addAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const [start, setStart] = useState(false);
     function addAnimation() {

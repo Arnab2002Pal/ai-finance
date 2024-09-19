@@ -38,12 +38,20 @@ export const postUserInfo = async (url: string, option: any) => {
     }
 }
 
-export const getUserInfo = async (url: string) => {    
+export const getUserInfo = async (url: string) => {
     try {
         const response = await axiosInstance.get(url);
-        return response.data;
-    } catch (error) {
-        console.error('Error retrieving data:', error);
-        throw new Error('Could not get data');
+        console.log('Response:', response); 
+        return response.data; 
+    } catch (error: any) {
+        if (error.response) {
+            return  error.response.data
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+            throw new Error('No response from server');
+        } else {
+            console.error('Error setting up request:', error.message);
+            throw new Error('Request setup failed');
+        }
     }
-}
+};

@@ -55,7 +55,6 @@ export default async function Home() {
           <HeroTitle/>
         </div>
       </AuroraBackground>
-        <InfiniteMovingCards items={sampleItems}/>
     {/* <FeatureSection/> */}
     </div>
   );

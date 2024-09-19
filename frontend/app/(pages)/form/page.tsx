@@ -1,18 +1,22 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Location from './location/page';
 import AccountInfo from './account/page';
 import TermsAndCondition from './termAndCondition/page';
 import { postUserInfo } from '@/app/api/utility/api';
 import { useSession } from 'next-auth/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MultiStepForm = () => {
     const router = useRouter()
-    const [step, setStep] = useState(1);
+    const searchedMessage = useSearchParams()
     const { data: session, status } = useSession()
     const userEmail = session?.user?.email
+    const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false)
+    const message = searchedMessage.get('message')
 
     const [formData, setFormData] = useState({
         email: "",
@@ -48,6 +52,14 @@ const MultiStepForm = () => {
             router.push("/signup");
         }
     }, [status, router]);
+
+     useEffect(() => {
+        if (message) {
+            toast.error(message, {
+                autoClose: 2000, 
+            });
+        }
+    }, [message]);
 
     if (status === "loading") {
         return <p>Loading...</p>;
@@ -114,11 +126,23 @@ const MultiStepForm = () => {
                 setLoading(false); // Reset loading state
             }
         } else {
-            alert('Please accept the Terms and Conditions to proceed.');
+            toast.warn('Please accept the terms and conditions to proceed.', {
+                autoClose: 4000,
+                position: 'top-center',
+            })
         }
     };
 
     return (
+        <>
+            <ToastContainer 
+                position="top-right"
+                hideProgressBar={false}
+                newestOnTop={false}
+                rtl={false}
+                pauseOnFocusLoss
+                theme="dark"
+/>
         <form onSubmit={handleSubmit} className="container mx-auto p-4">
             {step !== 4 && (
             <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
@@ -195,7 +219,8 @@ const MultiStepForm = () => {
                     </div>
                 </div>
             </div>
-        </form >
+            </form >
+        </>
     )
 }
 

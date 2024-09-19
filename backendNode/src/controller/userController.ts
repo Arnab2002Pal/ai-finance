@@ -193,7 +193,14 @@ const getUserInfo = async (req: Request, res: Response) => {
 
         const userFinancialInfo = await prisma.financialAdvice.findUnique({
             where: { user_id: user.id },
-        });
+        });        
+
+        if (!userFinancialInfo) {            
+            return res.status(404).json({
+                success: false,
+                message: 'Financial advice not found for the user'
+            });
+        }
 
         res.status(200).json({
             success: true,

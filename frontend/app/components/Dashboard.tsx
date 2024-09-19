@@ -42,12 +42,12 @@ export const Dashboard = ({ expense, debt, investment }: {
 
           {/* Placeholder for additional content on the left */}
           <div className="flex gap-2 flex-1 w-full ">
-            {[...new Array(2)].map((_, i) => (
-              <div
-                key={"second" + i}
-                className="h-full w-full rounded-lg bg-neutral-800 animate-pulse"
-              ></div>
-            ))}
+            <div className="h-full w-full flex justify-center items-center rounded-lg bg-neutral-800">
+              <DoughnutChart expense={expense ?? {}} />
+            </div>
+            <div className="h-full w-full rounded-lg bg-neutral-800 animate-pulse">
+
+            </div>
           </div>
 
         </div>

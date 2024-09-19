@@ -35,21 +35,28 @@ export default function Home() {
   const initials = `${firstNameInitial}${lastNameInitial}`
 
   // Fetch user data
-  const fetchData = async (id: number) => {
-    try {
-      const data = await getUserInfo(`userInfo/${id}`);
-      setUserData(data);
-    } catch (err) {
-      console.error("Error fetching user info:", err);
-      setError("Failed to fetch user data.");
-    } finally {
-      setLoading(false);
+ const fetchData = async (id: number) => {
+
+  try {
+    const data = await getUserInfo(`userInfo/${id}`);
+    if (data.success === false) {
+      router.push('/form?message=Incomplete Profile');
+      return;
     }
-  };
+
+    setUserData(data);
+  } catch (err) {
+    console.error("Error fetching user info:", err);
+    setError("Failed to fetch user data.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // Fetch data when the user is available
   useEffect(() => {
-    if (user_id) {
+    if (user_id) {      
       fetchData(user_id);
     }
   }, [user_id]);

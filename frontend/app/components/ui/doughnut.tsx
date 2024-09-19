@@ -12,27 +12,26 @@ const DoughnutChart = ({ expense }: {
   console.log(expense);
   
   const data = {
-    labels: ['Expense', 'Earning', 'Debt', "Total Investment", 'Balance'],
+    labels: ['Expense', 'Earning', , "Total Investment", 'Balance'],
     datasets: [
       {
         label: 'Rs',
-        data: [expense.MonthlyExpenses, expense.MonthlyEarning, expense.TotalDebt, expense.TotalInvestedAmount, expense.TotalRemainingMoneySaved],
+        data: [expense.MonthlyExpenses, expense.MonthlyEarning, expense.TotalInvestedAmount, expense.TotalRemainingMoneySaved],
         backgroundColor: [
           'rgb(255,0,0)',
           'rgb(34,139,34)',
-          'rgb(192,192,192)',
           'rgb(255,215,0)',
           'rgb(255,255,255)',
         ],
         borderColor: [
-          'rgb(0,0,0)',
-          'rgb(0,0,0)',
-          'rgb(0,0,0)',
-          'rgb(0,0,0)',
-          'rgb(0,0,0)',
+          'rgb(38 38 38)',
+          'rgb(38 38 38)',
+          'rgb(38 38 38)',
+          'rgb(38 38 38)',
         ],
-        borderWidth: 4,
-        hoverOffset: 20,
+        borderWidth: 5,
+        hoverOffset: 5,
+        borderRadius: 10, 
       },
     ],
   };
@@ -57,8 +56,8 @@ const DoughnutChart = ({ expense }: {
             <span
               style={{
                 display: 'inline-block',
-                width: '12px',
-                height: '12px',
+                width: '16px',
+                height: '16px',
                 backgroundColor: data.datasets[0].backgroundColor[index],
                 marginRight: '5px',
               }}
