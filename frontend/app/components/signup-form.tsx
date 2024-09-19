@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import {
   IconBrandGoogle,
 } from "@tabler/icons-react";
@@ -23,8 +23,8 @@ export default function SignupForm() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {name, value} = e.target
-    setFormData({...formData, [name]: value })
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
   }
 
   return (
@@ -40,48 +40,48 @@ export default function SignupForm() {
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
             <Label htmlFor="firstname">First name</Label>
-            <Input 
-              id="firstname" 
-              placeholder="Tyler" 
-              type="text" 
+            <Input
+              id="firstname"
+              placeholder="Tyler"
+              type="text"
               name="firstName"
-              value={formData.firstName} 
+              value={formData.firstName}
               onChange={handleChange}
-              />
+            />
           </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="lastname">Last name</Label>
-            <Input 
-              id="lastname" 
-              placeholder="Durden" 
-              type="text" 
+            <Input
+              id="lastname"
+              placeholder="Durden"
+              type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              />
+            />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
-          <Input 
-            id="email" 
-            placeholder="projectmayhem@fc.com" 
-            type="email" 
+          <Input
+            id="email"
+            placeholder="projectmayhem@fc.com"
+            type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            />
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
-          <Input 
-            id="password" 
-            placeholder="••••••••" 
-            type="password" 
+          <Input
+            id="password"
+            placeholder="••••••••"
+            type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
-            />
+          />
         </LabelInputContainer>
         <LabelInputContainer className="mb-8">
           <Label htmlFor="twitterpassword">Your Confirm password</Label>
@@ -107,8 +107,8 @@ export default function SignupForm() {
         <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-8 h-[1px] w-full" />
 
         <div className="flex flex-col space-y-4">
-       
-          <button 
+
+          <button
             onClick={() => signIn('google', { callbackUrl: 'http://localhost:3000/form' })}
             className="relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]"
             type="submit"

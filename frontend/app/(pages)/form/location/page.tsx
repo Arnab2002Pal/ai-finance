@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Label } from "../../../components/ui/label";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { useRouter } from 'next/navigation';
 import {
     Select,
@@ -15,8 +15,8 @@ import {
 import { locations } from "@/app/util/location";
 
 
-export default function Location({ formData, handleChange }:any) {
-    const handleLocation = (value: string) => {        
+export default function Location({ formData, handleChange }: any) {
+    const handleLocation = (value: string) => {
         handleChange({ target: { name: "location", value } });
     }
 
@@ -32,7 +32,7 @@ export default function Location({ formData, handleChange }:any) {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {locations.map(location => 
+                                {locations.map(location =>
                                     <SelectItem key={location} value={location}>
                                         {location}
                                     </SelectItem>

@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { getUserInfo } from "@/app/api/utility/api";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/interface/userInterface";
@@ -24,7 +24,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
-  
+
   const { data: session, status } = useSession();
   const user_id = session?.user?.user_id;
 
@@ -79,9 +79,6 @@ export default function Home() {
       summary = "",
     } = {},
   } = userData;
-
-  console.log(userData);
-  
 
   const links = [
     {
@@ -157,13 +154,17 @@ export default function Home() {
                 >
                   {initials}
                 </div>
-                  {session?.user.name}
+                {session?.user.name}
               </div>
             )}
           </div>
         </SidebarBody>
       </Sidebar>
-      <Dashboard />
+      <Dashboard
+        expense={userData.userFinancialInfo?.expenseAnalysis}
+        debt={userData.userFinancialInfo?.debtManagement}
+        investment={userData.userFinancialInfo?.investmentAdvice}
+      />
     </div>
   );
 }

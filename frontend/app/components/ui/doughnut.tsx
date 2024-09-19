@@ -2,10 +2,15 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, plugins } from 'chart.js';
+import { ExpenseAnalysis } from '@/interface/userInterface';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = ({ expense }: any) => {
+const DoughnutChart = ({ expense }: {
+  expense: ExpenseAnalysis
+}) => {
+  console.log(expense);
+  
   const data = {
     labels: ['Expense', 'Earning', 'Debt', "Total Investment", 'Balance'],
     datasets: [
@@ -44,7 +49,7 @@ const DoughnutChart = ({ expense }: any) => {
   }
 
   return (
-    <div className='w-[30rem] flex flex-col justify-center items-center'>
+    <div className='w-[20rem] flex flex-col justify-center items-center'>
       <Doughnut data={data} options={options} />
       <div className='mt-4'>
         {data.labels.map((label, index) => (

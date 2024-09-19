@@ -1,7 +1,7 @@
 import React from 'react'
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { Textarea } from "../../../components/ui/textarea"
 
 
@@ -62,7 +62,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           <Input
             placeholder="Student, Fresher, etc..."
             type="text"
-            name="riskTolerance" 
+            name="riskTolerance"
             value={formData.riskTolerance}
             onChange={handleChange}
           />
@@ -79,11 +79,11 @@ const AccountInfo = ({ formData, handleChange }: any) => {
       <div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="totalExpense">Total Expense</Label>
-          <Textarea placeholder="Enter" name='totalExpense' value={formData.totalExpense} onChange={handleChange} className='text-black'/>
-   
+          <Textarea placeholder="Enter" name='totalExpense' value={formData.totalExpense} onChange={handleChange} className='text-black' />
+
         </LabelInputContainer>
       </div>
-      
+
     </div>
   )
 }

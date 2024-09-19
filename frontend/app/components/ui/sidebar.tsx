@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -169,40 +169,40 @@ export const SidebarLink = ({
   return (
     <div>
       {link.href === "logout" ? (
-        <div onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}` })} className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer"> 
+        <div onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}` })} className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer">
           {link.icon}
-            <motion.span
-              animate={{
+          <motion.span
+            animate={{
               display: animate ? (open ? "inline-block" : "none") : "inline-block",
               opacity: animate ? (open ? 1 : 0) : 1,
-              }}
-              className="text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
-              >
-              {link.label}
-            </motion.span>
+            }}
+            className="text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+          >
+            {link.label}
+          </motion.span>
 
         </div>
       ) : (
-          <Link
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
-        className
-      )}
-      {...props}
-    >
-      {link.icon}
+        <Link
+          href={link.href}
+          className={cn(
+            "flex items-center justify-start gap-2  group/sidebar py-2",
+            className
+          )}
+          {...props}
+        >
+          {link.icon}
 
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
-      >
-        {link.label}
-      </motion.span>
-      </Link>
+          <motion.span
+            animate={{
+              display: animate ? (open ? "inline-block" : "none") : "inline-block",
+              opacity: animate ? (open ? 1 : 0) : 1,
+            }}
+            className="text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+          >
+            {link.label}
+          </motion.span>
+        </Link>
       )}
     </div>
 

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import {
     IconBrandGoogle,
 } from "@tabler/icons-react";
@@ -20,7 +20,7 @@ export default function SignInForm() {
     const handleCredentialSignIn = async (e: any) => {
         e.preventDefault();
         console.log(email, password);
-        
+
         const result = await signIn('credentials', {
             email,
             password,
