@@ -53,10 +53,10 @@ const MultiStepForm = () => {
         }
     }, [status, router]);
 
-     useEffect(() => {
+    useEffect(() => {
         if (message) {
             toast.error(message, {
-                autoClose: 2000, 
+                autoClose: 2000,
             });
         }
     }, [message]);
@@ -107,7 +107,7 @@ const MultiStepForm = () => {
 
         if (formData.termsAndCondition.acceptTerms === true) {
             setStep(4); // Go to the loading step
-            setLoading(true); 
+            setLoading(true);
 
             try {
                 const result = await postUserInfo('userInfo', formData);
@@ -135,90 +135,99 @@ const MultiStepForm = () => {
 
     return (
         <>
-            <ToastContainer 
+            <ToastContainer
                 position="top-right"
                 hideProgressBar={false}
                 newestOnTop={false}
                 rtl={false}
                 pauseOnFocusLoss
                 theme="dark"
-/>
-        <form onSubmit={handleSubmit} className="container mx-auto p-4">
-            {step !== 4 && (
-            <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
-                <li className={`flex items-center ${step === 1 ? 'text-green-500' : ''}`}>
-                    <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 1 ? 'border-green-500' : 'border-gray-400'}`}>
-                        1
-                    </span>
-                    Personal <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                    <svg className="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" />
-                    </svg>
-                </li >
-                <li className={`flex items-center ${step === 2 ? 'text-green-500' : ''}`}>
-                    <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 2 ? 'border-green-500' : 'border-gray-400'}`}>
-                        2
-                    </span>
-                    Account <span className="hidden sm:inline-flex sm:ms-2">Info</span>
-                    <svg className="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" />
-                    </svg>
-                </li>
-                <li className={`flex items-center ${step === 3 ? 'text-green-500' : ''}`}>
-                    <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 3 ? 'border-green-500' : 'border-gray-400'}`}>
-                        3
-                    </span>
-                    Review
-                </li>
-                
-            </ol >
-            )}
-            
+            />
+            <form onSubmit={handleSubmit} className="container mx-auto p-4">
+                {step !== 4 && (
+                    <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+                        <li className={`flex items-center ${step === 1 ? 'text-green-500' : ''}`}>
+                            <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 1 ? 'border-green-500' : 'border-gray-400'}`}>
+                                1
+                            </span>
+                            Personal <span className="hidden sm:inline-flex sm:ms-2">Info</span>
+                            <svg className="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" />
+                            </svg>
+                        </li >
+                        <li className={`flex items-center ${step === 2 ? 'text-green-500' : ''}`}>
+                            <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 2 ? 'border-green-500' : 'border-gray-400'}`}>
+                                2
+                            </span>
+                            Account <span className="hidden sm:inline-flex sm:ms-2">Info</span>
+                            <svg className="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" />
+                            </svg>
+                        </li>
+                        <li className={`flex items-center ${step === 3 ? 'text-green-500' : ''}`}>
+                            <span className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 3 ? 'border-green-500' : 'border-gray-400'}`}>
+                                3
+                            </span>
+                            Review
+                        </li>
 
-            <div className="flex items-center justify-center mt-20">
-                <div className={`w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${step === 1 ? 'max-w-md' : step === 2 ? 'max-w-screen-md' : 'max-w-md'
-                    }`}>
-                    <div className="">
-                        {renderStepContent()}
-                    </div>
+                    </ol >
+                )}
 
-                    <div>
-                        {
-                            step === 1 &&
-                            <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
-                                <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
-                                <BottomGradient />
-                            </div>
-                        }
-                        {
-                            step === 2 &&
-                            <div className='flex justify-center items-center gap-20'>
-                                <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
-                                    <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
-                                    <BottomGradient />
+
+                <div className="flex items-center justify-center mt-5">
+                    <div className={`w-full mx-60 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${step === 1 ? 'max-w-5xl' : step === 2 ? 'max-w-screen-5xl' : 'max-w-5xl'
+                        }`}>
+                        <div className="border-2 border-white border-solid h-96 flex justify-center items-center">
+                            {renderStepContent()}
+                        </div>
+
+                        <div>
+                            {
+                                step === 1 &&
+                                <div className='flex flex-col justify-center items-center'>
+                                    <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-6 h-[1px] w-full" />
+                                    <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-60 text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
+                                        <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
+                                        <BottomGradient />
+                                    </div>
                                 </div>
-                                <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
-                                    <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
-                                    <BottomGradient />
+                            }
+                            {
+                                step === 2 &&
+                                <div>
+                                    <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-6 h-[1px] w-full" />
+                                    <div className='flex justify-center items-center gap-20'>
+                                            <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-60 text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
+                                            <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
+                                            <BottomGradient />
+                                        </div>
+                                            <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-60 text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
+                                            <button type="button" onClick={nextStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Next</span></button>
+                                            <BottomGradient />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                        {
-                            step === 3 &&
-                            <div className='flex justify-center items-center gap-20'>
-                                <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
-                                    <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
-                                    <BottomGradient />
+                            }
+                            {
+                                step === 3 &&
+                                <div>
+                                    <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-6 h-[1px] w-full" />
+                                    <div className='flex justify-center items-center gap-20'>
+                                            <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-60 text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
+                                            <button type="button" onClick={prevStep} className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Previous</span></button>
+                                            <BottomGradient />
+                                        </div>
+                                            <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-60 text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
+                                            <button type="submit" className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Submit</span></button>
+                                            <BottomGradient />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className='relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]'>
-                                    <button type="submit" className="btn w-full h-full"><span className='text-neutral-300 text-sm'>Submit</span></button>
-                                    <BottomGradient />
-                                </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
             </form >
         </>
     )

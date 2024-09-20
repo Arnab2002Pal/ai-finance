@@ -46,7 +46,6 @@ export const Dashboard = ({ expense, debt, investment }: {
               <DoughnutChart expense={expense ?? {}} />
             </div>
             <div className="h-full w-full rounded-lg bg-neutral-800 animate-pulse">
-
             </div>
           </div>
 

@@ -1,8 +1,6 @@
 "use client";
-import React, { useState } from "react";
 import { Label } from "../../../components/ui/label";
 import { cn } from "@/app/lib/utils";
-import { useRouter } from 'next/navigation';
 import {
     Select,
     SelectContent,
@@ -15,17 +13,16 @@ import {
 import { locations } from "@/app/util/location";
 
 
-export default function Location({ formData, handleChange }: any) {
+export default function Location({ handleChange }: any) {
     const handleLocation = (value: string) => {
         handleChange({ target: { name: "location", value } });
     }
 
     return (
-        <div className="">
-
+        <div className=" ">
             <div className="mt-7">
-                <LabelInputContainer className="mb-4">
-                    <Label htmlFor="location">Where are you from?</Label>
+                <LabelInputContainer className="mb-4 flex justify-center items-center">
+                    <Label htmlFor="location" className="text-md mb-2">Where are you from?</Label>
                     <Select onValueChange={handleLocation}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a Location" />
@@ -41,13 +38,6 @@ export default function Location({ formData, handleChange }: any) {
                         </SelectContent>
                     </Select>
                 </LabelInputContainer>
-                <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-8 h-[1px] w-full" />
-
-                <div className="flex flex-col space-y-4">
-
-
-
-                </div>
             </div>
         </div>
     );

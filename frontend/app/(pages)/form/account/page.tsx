@@ -3,12 +3,19 @@ import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import { cn } from "@/app/lib/utils";
 import { Textarea } from "../../../components/ui/textarea"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select';
+
+const options = ['High', 'Low', 'Medium']
 
 
 const AccountInfo = ({ formData, handleChange }: any) => {
+  const handleRisk = (value: string) => {
+    handleChange({ target: { name: "riskTolerance", value } });
+
+  }
   return (
     <div className='grid grid-cols-2 gap-20'>
-      <div>
+      {/* <div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="occupation">Occupation</Label>
           <Input
@@ -34,7 +41,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
             value={formData.totalExpense}
             onChange={handleChange}
           /> */}
-          <Label htmlFor="currentInvestment">Current Investment</Label>
+      {/* <Label htmlFor="currentInvestment">Current Investment</Label>
           <Input
             placeholder="Student, Fresher, etc..."
             type="text"
@@ -57,15 +64,37 @@ const AccountInfo = ({ formData, handleChange }: any) => {
             name="longTermGoal"
             value={formData.longTermGoal}
             onChange={handleChange}
-          />
-          <Label htmlFor="riskTolerance">How much risk can you take?</Label>
+          />  */}
+
+
+
+
+      {/* <Label htmlFor="riskTolerance">How much risk can you take?</Label>
           <Input
             placeholder="Student, Fresher, etc..."
             type="text"
             name="riskTolerance"
             value={formData.riskTolerance}
             onChange={handleChange}
-          />
+          /> */}
+
+
+
+
+      {/* <Select onValueChange={handleRisk}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Choose your Risk" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {options.map(option =>
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  )}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           <Label htmlFor="debt">Any debt?</Label>
           <Input
             placeholder="Student, Fresher, etc..."
@@ -82,7 +111,21 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           <Textarea placeholder="Enter" name='totalExpense' value={formData.totalExpense} onChange={handleChange} className='text-black' />
 
         </LabelInputContainer>
+      </div> */}
+
+
+      <div>
+        <div className="flex flex-col items-center gap-2 w-3/4 bg-neutral-800 rounded-lg p-10">
+          <div className="text-3xl font-semibold text-white">
+            Big Box Content
+          </div>
+          <div className="text-white text-center">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis cumque reiciendis enim deleniti ex ullam?
+            {/* <DoughnutChart expense={expense ?? {}}/> */}
+          </div>
+        </div>
       </div>
+
 
     </div>
   )
