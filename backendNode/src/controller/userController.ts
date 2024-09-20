@@ -118,7 +118,7 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
     
     const gptInput: UserInput = {
         country: locationInfo.location,
-        age: Number(locationInfo.age) || 22,
+        age: Number(accountInfo.age),
         occupation: accountInfo.occupation,
         monthly_salary: Number(accountInfo.monthlyIncome),
         total_expenses: accountInfo.totalExpense,
@@ -133,14 +133,15 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
         const user = await prisma.user.findUnique({
             where: { email },
         });
-
-        if (!user) {
+        console.log(user);
+        
+        if (!user) {            
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
             });
         }
-
+        
         await updateOrCreateLocationInfo(user.id, locationInfo)
         await updateOrCreateAccountInfo(user.id, accountInfo)
         await updateOrCreateTermsAndCondition(user.id, termsAndCondition)
@@ -153,7 +154,7 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
             create: { user_id: user.id, ...gptResponse },
         });        
                 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             message: 'User information created or updated successfully',
         });

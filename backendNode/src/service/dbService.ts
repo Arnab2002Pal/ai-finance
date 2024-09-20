@@ -12,12 +12,12 @@ export const updateOrCreateLocationInfo = async (userId: number, locationInfo: a
 
 export const updateOrCreateAccountInfo = async (userId: number, accountInfo: any) => {
     const prisma = new PrismaClient();
-
+    
     return prisma.accountInfo.upsert({
         where: { user_id: userId },
         update: {
             occupation: accountInfo.occupation,
-            age: Number(accountInfo.age) || 22,
+            age: Number(accountInfo.age),
             monthlyIncome: Number(accountInfo.monthlyIncome),
             totalExpense: accountInfo.totalExpense,
             currentInvestment: accountInfo.currentInvestment,

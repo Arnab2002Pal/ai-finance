@@ -59,6 +59,7 @@ export default function Home() {
     if (user_id) {      
       fetchData(user_id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user_id]);
 
 
