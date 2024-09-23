@@ -96,3 +96,24 @@ export interface Growth {
     OverallCurrentGrowthPercentage: string;
     PotentialGrowthPercentage: string;
 }
+
+export interface Location {
+    location: string;
+}
+
+export interface Account {
+    age: number;
+    occupation: string;
+    monthlyIncome: number;
+    totalExpense: string;
+    currentInvestment: number;
+    shortTermGoal: string;
+    longTermGoal: string;
+    riskTolerance: string;
+    debt: string;
+
+}
+
+export interface TermsAndCondition {
+    acceptTerms: boolean;
+}

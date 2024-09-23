@@ -1,28 +1,13 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { genSaltSync, hashSync } from "bcrypt-ts";
-import { gptCall } from '../service/gpt';
-import { InvestmentAdvice, UserInput } from '../interface/inputInterface';
-import { responseCleanUp } from '../service/responseFormatter';
+import { UserInput } from '../interface/inputInterface';
 import { updateOrCreateAccountInfo, updateOrCreateLocationInfo, updateOrCreateTermsAndCondition } from '../service/dbService';
 import { generateFinancialAdvice } from '../service/gptService';
+import { NewRequest } from '../interface/requestInterface';
 
 // TODO: create a user sign in page
 
 const prisma = new PrismaClient();
-
-interface NewRequest extends Request {
-    user?: {
-        provider?: string;
-        token?: {
-            sub: string;
-            email: string;
-            name: string;
-            password: string;
-            picture: string
-        }
-    };
-}
 
 const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
     const { user } = req;
@@ -114,7 +99,7 @@ const handleCredentialUserAuth = async (req: Request, res: Response) => {
 
 
 const createAndUpdateUserInfo = async (req: Request, res: Response) => {
-    const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
+    const { email, locationInfo, accountInfo, termsAndCondition } = req.body;    
     
     const gptInput: UserInput = {
         country: locationInfo.location,
@@ -133,7 +118,6 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
         const user = await prisma.user.findUnique({
             where: { email },
         });
-        console.log(user);
         
         if (!user) {            
             return res.status(404).json({
@@ -146,6 +130,8 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
         await updateOrCreateAccountInfo(user.id, accountInfo)
         await updateOrCreateTermsAndCondition(user.id, termsAndCondition)
         
+        
+
         const gptResponse = await generateFinancialAdvice(gptInput)
 
         await prisma.financialAdvice.upsert({
@@ -158,9 +144,9 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
             success: true,
             message: 'User information created or updated successfully',
         });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'An error occurred while creating or updating user information',
         });
@@ -203,13 +189,13 @@ const getUserInfo = async (req: Request, res: Response) => {
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             userFinancialInfo
         });
     } catch (error) {
         console.error('Error fetching user information:', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Internal server error'
         });

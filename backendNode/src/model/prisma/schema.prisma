@@ -47,7 +47,7 @@ model AccountInfo {
   age               Int
   monthlyIncome     Int
   totalExpense      String
-  currentInvestment String
+  totalInvestment   Int
   shortTermGoal     String
   longTermGoal      String
   riskTolerance     String

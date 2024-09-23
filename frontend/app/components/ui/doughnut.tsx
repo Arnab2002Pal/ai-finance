@@ -13,7 +13,6 @@ import { ExpenseAnalysis } from "@/interface/userInterface";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = ({ expense }: { expense: ExpenseAnalysis }) => {
-  console.log(expense);
 
   const data = {
     labels: ["Expense", "Earning", "Total Investment", "Balance"],

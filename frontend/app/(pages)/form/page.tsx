@@ -146,7 +146,8 @@ const MultiStepForm = () => {
 
     try {
       const result = await postUserInfo("userInfo", formData);
-
+      console.log("Result----------:",result);
+      
       if (result.success) {
         router.push("/home"); // Redirect to home page on success
       } else {

@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import { Account, Location, TermsAndCondition } from '../interface/inputInterface';
 
-export const updateOrCreateLocationInfo = async (userId: number, locationInfo: any) => {
+export const updateOrCreateLocationInfo = async (userId: number, locationInfo: Location) => {
     const prisma = new PrismaClient();
 
     return prisma.locationInfo.upsert({
@@ -10,17 +11,18 @@ export const updateOrCreateLocationInfo = async (userId: number, locationInfo: a
     });
 };
 
-export const updateOrCreateAccountInfo = async (userId: number, accountInfo: any) => {
+export const updateOrCreateAccountInfo = async (userId: number, accountInfo: Account) => {
     const prisma = new PrismaClient();
     
     return prisma.accountInfo.upsert({
         where: { user_id: userId },
         update: {
-            occupation: accountInfo.occupation,
             age: Number(accountInfo.age),
+            occupation: accountInfo.occupation,
             monthlyIncome: Number(accountInfo.monthlyIncome),
             totalExpense: accountInfo.totalExpense,
-            currentInvestment: accountInfo.currentInvestment,
+            totalInvestment: Number
+            (accountInfo.currentInvestment),
             shortTermGoal: accountInfo.shortTermGoal,
             longTermGoal: accountInfo.longTermGoal,
             riskTolerance: accountInfo.riskTolerance,
@@ -29,10 +31,10 @@ export const updateOrCreateAccountInfo = async (userId: number, accountInfo: any
         create: {
             user_id: userId,
             occupation: accountInfo.occupation,
-            age: Number(accountInfo.age) || 22,
+            age: Number(accountInfo.age),
             monthlyIncome: Number(accountInfo.monthlyIncome),
             totalExpense: accountInfo.totalExpense,
-            currentInvestment: accountInfo.currentInvestment,
+            totalInvestment: Number(accountInfo.currentInvestment),
             shortTermGoal: accountInfo.shortTermGoal,
             longTermGoal: accountInfo.longTermGoal,
             riskTolerance: accountInfo.riskTolerance,
@@ -42,7 +44,7 @@ export const updateOrCreateAccountInfo = async (userId: number, accountInfo: any
 };
 
 
-export const updateOrCreateTermsAndCondition = async (userId: number, termsAndCondition: any) => {
+export const updateOrCreateTermsAndCondition = async (userId: number, termsAndCondition: TermsAndCondition) => {
     const prisma = new PrismaClient();
 
     return prisma.termsAndCondition.upsert({
