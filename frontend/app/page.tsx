@@ -5,10 +5,9 @@ import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "./lib/auth";
 import { redirect } from "next/navigation";
 import FeatureSection from "./components/feature-section";
-import { InfiniteMovingCards } from "./components/ui/feature-card";
 
 export default async function Home() {
-  const session = await getServerSession(NEXT_AUTH)
+  const session = await getServerSession(NEXT_AUTH);
 
   if (session) {
     redirect("/home");
@@ -46,16 +45,14 @@ export default async function Home() {
       title: "Director, Startup X",
     },
   ];
-  
   return (
     <div>
       <AuroraBackground>
         <div className="z-10">
           <Appbar />
-          <HeroTitle/>
+          <HeroTitle />
         </div>
       </AuroraBackground>
-    {/* <FeatureSection/> */}
     </div>
   );
 }

@@ -169,6 +169,7 @@ export default function Home() {
         </SidebarBody>
       </Sidebar>
       <Dashboard
+        category={userData.userFinancialInfo}
         expense={userData.userFinancialInfo?.expenseAnalysis}
         debt={userData.userFinancialInfo?.debtManagement}
         investment={userData.userFinancialInfo?.investmentAdvice}

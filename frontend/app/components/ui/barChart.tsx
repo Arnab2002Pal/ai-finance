@@ -1,41 +1,60 @@
-import { Bar } from "react-chartjs-2";
+import React, { PureComponent } from "react";
+import {
+  BarChart,
+  Bar,
+  Rectangle,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-function App() {
+const data = [
+  {
+    name: "Growth",
+    Current: 10,
+    Potential: 30,
+    // amt: 100,
+  },
+  
+];
+
+export default class Example extends PureComponent {
+
+  render() {
     return (
-        <div className="">
-            <div className="max-w-96">
-                <Bar
-                    data={{
-                        // Name of the variables on x-axies for each bar
-                        labels: ["1st bar", "2nd bar"],
-                        datasets: [
-                            {
-                                // Label for bars
-                                // Data or value of your each variable
-                                data: [20, 40],
-                                // Color of each bar
-                                backgroundColor:
-                                    ["red", "yellow"],
-                                // Border color of each bar
-                                borderColor: ["aqua", "green", "red", "yellow"],
-                                borderWidth: 0.5,
-                            },
-                        ],
-                    }}
-                    // Height of graph
-                    height={400}
-                    options={{
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        },
-                    }}
-                />
-            </div>
-        </div>
+      <ResponsiveContainer width="60%" height="100%">
+        <BarChart
+          width={50}
+          height={50}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          {/* <CartesianGrid strokeDasharray="2 2" /> */}
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip /> 
+          {/* <Legend /> */}
+          <Bar
+            dataKey="Current"
+            fill="#de1a24"
+            
+            // activeBar={<Rectangle fill="pink" stroke="blue" />}
+          />
+          <Bar
+            dataKey="Potential"
+            fill="#3f8f29"
+            // activeBar={<Rectangle fill="gold" stroke="purple" />}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     );
+  }
 }
-
-export default App;
