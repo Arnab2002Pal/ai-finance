@@ -39,7 +39,6 @@ export const postUserInfo = async (url: string, option: any) => {
 export const getUserInfo = async (url: string) => {
   try {
     const response = await axiosInstance.get(url);
-    console.log("Response:", response);
     return response.data;
   } catch (error: any) {
     if (error.response) {

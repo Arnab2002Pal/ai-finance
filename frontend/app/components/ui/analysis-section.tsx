@@ -16,7 +16,10 @@ export function AnalysisSection({
   category,
 }: {
   category?: UserFinancialInfo;
-}) {
+  }) {
+  
+  
+  
   const analyses = [
     {
       title: "Expense Analysis",
@@ -87,6 +90,8 @@ export function AnalysisSection({
 
   
   const onAnalysisClick = (title: string) => {
+    console.log(title);
+    
     // Modal should open here
     if (title === "Expense Analysis") {
 

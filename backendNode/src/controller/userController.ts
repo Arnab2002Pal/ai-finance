@@ -24,7 +24,7 @@ const prisma = new PrismaClient();
 const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
   const { user } = req;
 
-  if (!user || !user.provider || !user.token) {
+  if (!user || !user.token) {
     return res.status(400).json({
       success: false,
       message: "Invalid user data",
