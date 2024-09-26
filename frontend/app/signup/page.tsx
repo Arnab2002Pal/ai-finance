@@ -1,12 +1,12 @@
-import React from 'react'
-import SignupForm from '../components/signup-form'
+import React from "react";
+import SignupForm from "../components/Form-Components/signup-form";
 
 const SignUp = () => {
-    return (
-        <div className='flex flex-col justify-center items-center min-h-screen'>
-            <SignupForm />
-        </div>
-    )
-}
+  return (
+    <div className="flex flex-col justify-center items-center min-h-screen">
+      <SignupForm />
+    </div>
+  );
+};
 
-export default SignUp
+export default SignUp;

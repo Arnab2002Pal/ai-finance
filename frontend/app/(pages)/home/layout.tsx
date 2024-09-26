@@ -16,7 +16,8 @@ import { getUserInfo } from "@/app/api/utility/api";
 import { useRouter } from "next/navigation";
 import { UserData } from "@/interface/userInterface";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { useFinancialInfo } from "@/app/api/hooks/financialInfo";
 
 export default function HomeLayout({
   children,
@@ -27,17 +28,12 @@ export default function HomeLayout({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [userFinancialInfo, setUserFinancialInfo] = useRecoilState(
-    userFinancialInfoState
-  );
-
+  const setUserFinancialInfo = useSetRecoilState(userFinancialInfoState);
   const { data: session, status } = useSession();
-  const user_id = session?.user?.user_id;
 
-  const name = session?.user.name?.split(" ") || [];
-  const firstNameInitial = name.length > 0 ? name[0][0] : "";
-  const lastNameInitial = name.length > 1 ? name[1][0] : "";
-  const initials = `${firstNameInitial}${lastNameInitial}`;
+  const user_id = session?.user?.user_id;
+  const { userFinancialInfo, isLoading, isError } = useFinancialInfo(user_id!);
+  const initials = fetchInitials(session);
 
   const links = [
     {
@@ -66,42 +62,41 @@ export default function HomeLayout({
     },
   ];
 
-  // Fetch user data
-  const fetchData = async (id: number) => {
-    try {
-      const data = await getUserInfo(`userInfo/${id}`);
-      if (data.success === false) {
-        router.push("/form?message=Incomplete Profile");
-        return;
-      }
-
-      setUserFinancialInfo(data.userFinancialInfo);
-    } catch (err) {
-      console.error("Error fetching user info:", err);
-      setError("Failed to fetch user data.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fetch data when the user is available
+  // If user financial info is fetched, set it in Recoil state
   useEffect(() => {
-    if (user_id) {
-      fetchData(user_id);
+    if (userFinancialInfo) {
+      setUserFinancialInfo(userFinancialInfo);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user_id]);
+  }, [userFinancialInfo, setUserFinancialInfo]);
 
-  // By using useEffect, the component can render initially, and then if the status is unauthenticated, it triggers the redirection. This prevents a blocking operation that could slow down or even prevent the page from loading.
-//   useEffect(() => {
-//     if (status === "unauthenticated") {
-//       router.push("/signin");
-//     }
-//   }, [status, router]);
+  // By using useEffect, the component renders initially, and then if the status is unauthenticated, it triggers the redirection.
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/signin");
+    }
+  }, [status, router]);
 
-//   if (status === "loading") {
-//     return <p>Verifying...</p>;
-//   }
+  // Handle loading and error states after hooks have been called
+  if (status === "loading" || isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError || !session) {
+    console.log(isError.response.data);
+    if (isError.response.data.errorType === "USER_NOT_FOUND") {
+      router.push("/signup?message=User doesn't exist. Please sign up.");
+      return;
+    } else if (
+      isError.response.data.errorType === "FINANCIAL_ADVICE_NOT_FOUND"
+    ) {
+      router.push(
+        "/signup?message=Financial advice doesn't exist. Please sign up."
+      );
+      return;
+    } else {
+      return <p>Error fetching user data</p>;
+    }
+  }
 
   return (
     <div
@@ -175,6 +170,7 @@ export const Logo = () => {
     </Link>
   );
 };
+
 export const LogoIcon = () => {
   return (
     <Link
@@ -184,4 +180,12 @@ export const LogoIcon = () => {
       <div className="h-5 w-6 bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
     </Link>
   );
+};
+
+const fetchInitials = (session: any) => {
+  const name = session?.user.name?.split(" ") || [];
+  const firstNameInitial = name.length > 0 ? name[0][0] : "";
+  const lastNameInitial = name.length > 1 ? name[1][0] : "";
+  const initials = `${firstNameInitial}${lastNameInitial}`;
+  return initials;
 };

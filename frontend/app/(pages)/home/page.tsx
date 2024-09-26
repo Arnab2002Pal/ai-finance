@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { HomeDashboard } from "@/app/components/Dashboard-Components/HomeDashboard";
+import { Overview } from "@/app/components/Dashboard-Components/Overview";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
 import { useRecoilValue } from "recoil";
 import { selectedDashboardState } from "@/app/store/atoms/dashboardAtom";
@@ -12,12 +12,12 @@ import GoalDashboard from "@/app/components/Dashboard-Components/GoalDashboard";
 
 export default function Home() {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
-  const dashboardConfig = useRecoilValue(selectedDashboardState)
+  const dashboardConfig = useRecoilValue(selectedDashboardState);
   console.log(dashboardConfig);
-  
+
   return (
     <>
-      {dashboardConfig === "Expense Analysis" ? (
+      {/* {dashboardConfig === "Expense Analysis" ? (
         <ExpenseDashboard />
       ) : dashboardConfig === "Investment Analysis" ? (
         <InvestmentDashboard />
@@ -27,15 +27,14 @@ export default function Home() {
         <SavingDashboard />
       ) : dashboardConfig === "Goal Roadmap" ? (
         <GoalDashboard />
-      ) : (
-        <HomeDashboard
-          category={userFinancialInfo}
-          expense={userFinancialInfo.expenseAnalysis}
-          debt={userFinancialInfo.debtManagement}
-          investment={userFinancialInfo.investmentAdvice}
-        />
-      )}
+      ) : ( */}
+      <Overview
+        category={userFinancialInfo}
+        expense={userFinancialInfo.expenseAnalysis}
+        debt={userFinancialInfo.debtManagement}
+        investment={userFinancialInfo.investmentAdvice}
+      />
+      {/* )} */}
     </>
   );
 }
-

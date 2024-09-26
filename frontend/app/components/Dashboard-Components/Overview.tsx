@@ -5,12 +5,11 @@ import {
   UserFinancialInfo,
 } from "@/interface/userInterface";
 import DoughnutChart from "../ui/doughnut";
-import { NavbarBox } from "../Navbar";
 import BarChart from "../ui/barChart";
 import ApexChart from "../ui/barChart";
 import { AnalysisSection } from "../ui/analysis-section";
 
-export const HomeDashboard = ({
+export const Overview = ({
   category,
   expense,
   debt,

@@ -1,25 +1,20 @@
 import { cn } from "@/app/lib/utils";
 import { UserFinancialInfo } from "@/interface/userInterface";
 import {
-  IconAdjustmentsBolt,
-  IconCloud,
   IconCurrencyDollar,
   IconEaseInOut,
-  IconHeart,
-  IconHelp,
   IconRouteAltLeft,
-  IconTerminal2,
 } from "@tabler/icons-react";
-import { AnimatedModalDemo } from "../ModalButton";
 import { useSetRecoilState } from "recoil";
 import { selectedDashboardState } from "@/app/store/atoms/dashboardAtom";
+import { useRouter } from "next/navigation";
 
 export function AnalysisSection({
   category,
 }: {
   category?: UserFinancialInfo;
   }) {
-  
+  const router = useRouter()
   const setDashboardContent = useSetRecoilState(selectedDashboardState)
   
   const analyses = [
@@ -35,9 +30,9 @@ export function AnalysisSection({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="icon icon-tabler icons-tabler-outline icon-tabler-license"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -70,9 +65,9 @@ export function AnalysisSection({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="icon icon-tabler icons-tabler-outline icon-tabler-pig-money"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -92,8 +87,12 @@ export function AnalysisSection({
 
   
   const onAnalysisClick = (title: string) => {
-    console.log(title);
-    setDashboardContent(title)
+    const firstWord = title.split(' ')[0].toLowerCase()
+    console.log(firstWord);
+    
+    router.push(`/home/dashboard/${firstWord}`);
+    // setDashboardContent(title)
+
   };
 
   return (

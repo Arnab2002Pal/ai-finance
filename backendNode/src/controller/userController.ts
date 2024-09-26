@@ -8,6 +8,7 @@ import {
 } from "../service/dbService";
 import { generateFinancialAdvice } from "../service/gptService";
 import { NewRequest } from "../interface/requestInterface";
+import { error } from "console";
 
 // TODO: create a user sign in page
 
@@ -202,6 +203,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({
         success: false,
+        errorType: "USER_NOT_FOUND",
         message: "User not found",
       });
     }
@@ -213,6 +215,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     if (!userFinancialInfo) {
       return res.status(404).json({
         success: false,
+        errorType: "FINANCIAL_ADVICE_NOT_FOUND",
         message: "Financial advice not found for the user",
       });
     }

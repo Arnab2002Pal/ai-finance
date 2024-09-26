@@ -1,4 +1,5 @@
 import axios from "axios";
+import useSWR from "swr";
 
 const axiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
@@ -41,7 +42,7 @@ export const getUserInfo = async (url: string) => {
     const response = await axiosInstance.get(url);
     return response.data;
   } catch (error: any) {
-    if (error.response) {
+    if (error.response) {      
       return error.response.data;
     } else if (error.request) {
       console.error("No response received:", error.request);
@@ -51,4 +52,13 @@ export const getUserInfo = async (url: string) => {
       throw new Error("Request setup failed");
     }
   }
+};
+
+
+
+
+// SWR fetcher function
+export const fetcher = async (url: string) => {
+  const response = await axiosInstance.get(url);
+  return response.data;
 };

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import { cn } from "@/app/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
@@ -43,7 +43,7 @@ export default function SignupForm() {
 
   return (
     <>
-      <ToastContainer theme="dark"/>
+      <ToastContainer theme="dark" />
       <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black border-gray-700 border-2">
         <h2 className="font-bold text-xl text-neutral-200">Welcome to Vault</h2>
         <p className="text-sm max-w-sm mt-2 text-neutral-300">

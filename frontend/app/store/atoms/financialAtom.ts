@@ -1,6 +1,7 @@
+import { UserFinancialInfo } from "@/interface/userInterface";
 import { atom } from "recoil";
 
-export const userFinancialInfoState = atom({
+export const userFinancialInfoState = atom<UserFinancialInfo>({
   key: "userFinancialInfoState", 
   default: {
     expenseAnalysis: {},
