@@ -11,6 +11,8 @@ import {
   IconTerminal2,
 } from "@tabler/icons-react";
 import { AnimatedModalDemo } from "../ModalButton";
+import { useSetRecoilState } from "recoil";
+import { selectedDashboardState } from "@/app/store/atoms/dashboardAtom";
 
 export function AnalysisSection({
   category,
@@ -18,7 +20,7 @@ export function AnalysisSection({
   category?: UserFinancialInfo;
   }) {
   
-  
+  const setDashboardContent = useSetRecoilState(selectedDashboardState)
   
   const analyses = [
     {
@@ -91,16 +93,7 @@ export function AnalysisSection({
   
   const onAnalysisClick = (title: string) => {
     console.log(title);
-    
-    // Modal should open here
-    if (title === "Expense Analysis") {
-
-    } else if (title === "Investment Analysis") {
-    } else if (title === "Debt Managment") {
-    } else if (title === "Saving Plan") {
-    } else if (title === "Goal Roadmap") {
-    }
-
+    setDashboardContent(title)
   };
 
   return (

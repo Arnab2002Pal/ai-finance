@@ -1,22 +1,41 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { UserData } from "@/interface/userInterface";
-import { Dashboard } from "@/app/components/Dashboard";
+import { HomeDashboard } from "@/app/components/Dashboard-Components/HomeDashboard";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
 import { useRecoilValue } from "recoil";
+import { selectedDashboardState } from "@/app/store/atoms/dashboardAtom";
+import ExpenseDashboard from "@/app/components/Dashboard-Components/ExpenseDashboard";
+import InvestmentDashboard from "@/app/components/Dashboard-Components/InvestmentDashboard";
+import DebtDashboard from "@/app/components/Dashboard-Components/DebtDashboard";
+import SavingDashboard from "@/app/components/Dashboard-Components/SavingDashboard";
+import GoalDashboard from "@/app/components/Dashboard-Components/GoalDashboard";
 
 export default function Home() {
-  const router = useRouter();
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
+  const dashboardConfig = useRecoilValue(selectedDashboardState)
+  console.log(dashboardConfig);
   
   return (
-    <Dashboard
-      category={userFinancialInfo}
-      expense={userFinancialInfo.expenseAnalysis}
-      debt={userFinancialInfo.debtManagement}
-      investment={userFinancialInfo.investmentAdvice}
-    />
+    <>
+      {dashboardConfig === "Expense Analysis" ? (
+        <ExpenseDashboard />
+      ) : dashboardConfig === "Investment Analysis" ? (
+        <InvestmentDashboard />
+      ) : dashboardConfig === "Debt Management" ? (
+        <DebtDashboard />
+      ) : dashboardConfig === "Saving Plan" ? (
+        <SavingDashboard />
+      ) : dashboardConfig === "Goal Roadmap" ? (
+        <GoalDashboard />
+      ) : (
+        <HomeDashboard
+          category={userFinancialInfo}
+          expense={userFinancialInfo.expenseAnalysis}
+          debt={userFinancialInfo.debtManagement}
+          investment={userFinancialInfo.investmentAdvice}
+        />
+      )}
+    </>
   );
 }
 

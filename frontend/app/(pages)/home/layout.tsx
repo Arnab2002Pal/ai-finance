@@ -93,15 +93,15 @@ export default function HomeLayout({
   }, [user_id]);
 
   // By using useEffect, the component can render initially, and then if the status is unauthenticated, it triggers the redirection. This prevents a blocking operation that could slow down or even prevent the page from loading.
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/signin");
-    }
-  }, [status, router]);
+//   useEffect(() => {
+//     if (status === "unauthenticated") {
+//       router.push("/signin");
+//     }
+//   }, [status, router]);
 
-  if (status === "loading") {
-    return <p>Verifying...</p>;
-  }
+//   if (status === "loading") {
+//     return <p>Verifying...</p>;
+//   }
 
   return (
     <div

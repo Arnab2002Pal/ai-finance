@@ -4,13 +4,13 @@ import {
   InvestmentAdvice,
   UserFinancialInfo,
 } from "@/interface/userInterface";
-import DoughnutChart from "./ui/doughnut";
-import { NavbarBox } from "./Navbar";
-import BarChart from "./ui/barChart";
-import ApexChart from "./ui/barChart";
-import { AnalysisSection } from "./ui/analysis-section";
+import DoughnutChart from "../ui/doughnut";
+import { NavbarBox } from "../Navbar";
+import BarChart from "../ui/barChart";
+import ApexChart from "../ui/barChart";
+import { AnalysisSection } from "../ui/analysis-section";
 
-export const Dashboard = ({
+export const HomeDashboard = ({
   category,
   expense,
   debt,
@@ -21,7 +21,6 @@ export const Dashboard = ({
   debt?: DebtManagement;
   investment?: InvestmentAdvice;
 }) => {
-  console.log(category?.structuredPlan);
 
   return (
     <>
