@@ -82,16 +82,11 @@ export default function HomeLayout({
   }
 
   if (isError || !session) {
-    console.log(isError.response.data);
     if (isError.response.data.errorType === "USER_NOT_FOUND") {
       router.push("/signup?message=User doesn't exist. Please sign up.");
       return;
-    } else if (
-      isError.response.data.errorType === "FINANCIAL_ADVICE_NOT_FOUND"
-    ) {
-      router.push(
-        "/signup?message=Financial advice doesn't exist. Please sign up."
-      );
+    } else if (isError.response.data.errorType === "FINANCIAL_ADVICE_NOT_FOUND") {
+      router.push("/signup?message=Financial advice doesn't exist. Please sign up.");
       return;
     } else {
       return <p>Error fetching user data</p>;

@@ -9,32 +9,23 @@ import InvestmentDashboard from "@/app/components/Dashboard-Components/Investmen
 import DebtDashboard from "@/app/components/Dashboard-Components/DebtDashboard";
 import SavingDashboard from "@/app/components/Dashboard-Components/SavingDashboard";
 import GoalDashboard from "@/app/components/Dashboard-Components/GoalDashboard";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
   const dashboardConfig = useRecoilValue(selectedDashboardState);
-  console.log(dashboardConfig);
+  const pathName = usePathname()
 
+  console.log(pathName);
+  
   return (
     <>
-      {/* {dashboardConfig === "Expense Analysis" ? (
-        <ExpenseDashboard />
-      ) : dashboardConfig === "Investment Analysis" ? (
-        <InvestmentDashboard />
-      ) : dashboardConfig === "Debt Management" ? (
-        <DebtDashboard />
-      ) : dashboardConfig === "Saving Plan" ? (
-        <SavingDashboard />
-      ) : dashboardConfig === "Goal Roadmap" ? (
-        <GoalDashboard />
-      ) : ( */}
       <Overview
         category={userFinancialInfo}
         expense={userFinancialInfo.expenseAnalysis}
         debt={userFinancialInfo.debtManagement}
         investment={userFinancialInfo.investmentAdvice}
       />
-      {/* )} */}
     </>
   );
 }

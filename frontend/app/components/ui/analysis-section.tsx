@@ -88,8 +88,7 @@ export function AnalysisSection({
   
   const onAnalysisClick = (title: string) => {
     const firstWord = title.split(' ')[0].toLowerCase()
-    console.log(firstWord);
-    
+        
     router.push(`/home/dashboard/${firstWord}`);
     // setDashboardContent(title)
 
