@@ -1,10 +1,11 @@
 import useSWR from "swr";
 import { fetcher } from "../utility/api";
+import { UserFinancialInfo } from "@/interface/userInterface";
 
 export const useFinancialInfo = (userId: number | null) => {
 
   // Use SWR to fetch user information
-  const { data, error, isValidating } = useSWR(
+  const { data, error, isValidating }:SWRResponse<{ userFinancialInfo: UserFinancialInfo }> = useSWR(
     userId ? `/userInfo/${userId}` : null, 
     fetcher,
     {

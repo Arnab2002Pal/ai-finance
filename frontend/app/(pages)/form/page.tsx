@@ -8,6 +8,7 @@ import { postUserInfo } from "@/app/api/utility/api";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { mutate } from "swr";
 
 const MultiStepForm = () => {
   const router = useRouter();
@@ -138,26 +139,28 @@ const MultiStepForm = () => {
         autoClose: 4000,
         position: "top-center",
       });
-      return; 
+      return;
     }
 
-    setStep(4); // Go to the loading step
+    setStep(4)
     setLoading(true);
 
     try {
       const result = await postUserInfo("userInfo", formData);
-      console.log("Result----------:",result);
-      
+
       if (result.success) {
-        router.push("/home"); // Redirect to home page on success
+        // Optimistically updates the cached user info for the current user without refetching.
+        // This helps ensure the UI immediately reflects changes (like profile updates) based on the cache.
+        // Later, we can refetch the latest user info from the server to keep the data in sync.
+        mutate(`userInfo/${session?.user.user_id}`);
+        router.push("/home"); 
       } else {
         router.push(`/signup?message=User doesn't exist. Please sign up.`);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again later.");
+      toast.warn("An error occurred. Please try again later.");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 

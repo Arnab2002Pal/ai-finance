@@ -1,11 +1,26 @@
-"use client"
-import ExpenseDashboard from '@/app/components/Dashboard-Components/ExpenseDashboard'
-import React from 'react'
+"use client";
+import ExpenseDashboard from "@/app/components/Dashboard-Components/ExpenseDashboard";
+import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { useRecoilValue } from "recoil";
+
 
 const Expense = () => {
+  const userFinancialInfo = useRecoilValue(userFinancialInfoState);
+    
   return (
-    <div className=''><ExpenseDashboard/></div>
-  )
-}
+    <>
+      
 
-export default Expense
+      <ExpenseDashboard
+        category={userFinancialInfo}
+        expense={userFinancialInfo.expenseAnalysis}
+        debt={userFinancialInfo.debtManagement}
+        investment={userFinancialInfo.investmentAdvice}
+      />
+    </>
+  );
+};
+
+export default Expense;

@@ -86,7 +86,7 @@ export default function HomeLayout({
       router.push("/signup?message=User doesn't exist. Please sign up.");
       return;
     } else if (isError.response.data.errorType === "FINANCIAL_ADVICE_NOT_FOUND") {
-      router.push("/signup?message=Financial advice doesn't exist. Please sign up.");
+      router.push("/form?message=Financial advice doesn't exist. Please sign up.");
       return;
     } else {
       return <p>Error fetching user data</p>;
