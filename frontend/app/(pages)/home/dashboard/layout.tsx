@@ -11,7 +11,6 @@ export default function OverviewLayout({
 
   return (
     <div className="w-full overflow-y-auto">
-     
       {children}
     </div>
   );

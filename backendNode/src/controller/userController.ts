@@ -155,6 +155,9 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
     await updateOrCreateTermsAndCondition(user.id, termsAndCondition);
 
     const gptResponse = await generateFinancialAdvice(gptInput);
+    console.log("Response:-----------",gptResponse);
+    console.log("Invesmtnet:-----------",gptResponse.investmentAdvice);
+    
 
     await prisma.financialAdvice.upsert({
       where: { user_id: user.id },
