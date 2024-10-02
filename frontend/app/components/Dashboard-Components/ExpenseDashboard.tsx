@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Overview } from "./Overview";
 import BarChart from "../ui/barChart";
-
 import { useRecoilValue } from "recoil";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
 import { useRouter } from "next/navigation";
@@ -27,6 +26,7 @@ const ExpenseDashboard = ({
 }) => {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
   const router = useRouter();
+console.log(userFinancialInfo);
 
   const backClick = () => {
     router.push("/home");

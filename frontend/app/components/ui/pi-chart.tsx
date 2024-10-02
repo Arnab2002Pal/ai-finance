@@ -1,81 +1,67 @@
-// components/CustomActiveShapePieChart.js
-import React, { useState } from 'react';
-import {
-  PieChart, Pie, Sector, Cell, ResponsiveContainer,
-} from 'recharts';
+import { userFinancialInfoState } from '@/app/store/atoms/financialAtom';
+import React from 'react';
+import { Pie, PieChart, Tooltip, Legend, Cell } from 'recharts';
+import { useRecoilValue } from 'recoil';
 
-const renderActiveShape = (props) => {
-  const RADIAN = Math.PI / 180;
-  const {
-    cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-    fill, payload, percent, value,
-  } = props;
-  const sin = Math.sin(-RADIAN * midAngle);
-  const cos = Math.cos(-RADIAN * midAngle);
-  const sx = cx + (outerRadius + 10) * cos;
-  const sy = cy + (outerRadius + 20) * sin;
-  const mx = cx + (outerRadius + 30) * cos;
-  const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end';
+const PiChart = () => {
+  const investment = useRecoilValue(userFinancialInfoState) 
+  const {WhereToInvest} = useRecoilValue(userFinancialInfoState).investmentAdvice  
+  console.log(investment);
+  
+  if (WhereToInvest == undefined) return null
+  
+  const data01 = [
+    { name: WhereToInvest.Option1.Name, value: WhereToInvest.Option1.Amount },
+    { name: WhereToInvest.Option2.Name, value: WhereToInvest.Option2.Amount },
+  
+  ];
 
-  return (
-    <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>{payload.name}</text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 6}
-        outerRadius={outerRadius + 10}
-        fill={fill}
-      />
-      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="">{`${value}`}</text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-        {`(${(percent * 100).toFixed(2)}%)`}
-      </text>
-    </g>
-  );
-};
+  const data02 = [
+    {name: "Percentage" ,  value: parseInt(WhereToInvest.Option1.PercentageAllocation) },
+    { name: "Percentage",  value: parseInt(WhereToInvest.Option2.PercentageAllocation) },
+    
+  ];
 
-const CustomActiveShapePieChart = ({ data }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const onPieEnter = (_: any, index: React.SetStateAction<number>) => {
-    setActiveIndex(index);
-  };
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28AE5', '#F85F73'];
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <PieChart>
+    <div style={{ textAlign: 'center' }}>
+      <h2>Investment Distribution</h2>
+      <PieChart width={730} height={400}>
         <Pie
-          activeIndex={activeIndex}
-          activeShape={renderActiveShape}
-          data={data}
+          data={data01}
+          dataKey="value"
+          nameKey="name"
           cx="50%"
           cy="50%"
-          innerRadius={60}
           outerRadius={80}
-          fill="#FF5733"
+          fill="#8884d8"
+          label
+        >
+          {data01.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Pie
+          data={data02}
           dataKey="value"
-          onMouseEnter={onPieEnter}
-        />
+          nameKey="name"
+          cx="50%"
+          cy="50%"
+          innerRadius={90}
+          outerRadius={110}
+          fill="#82ca9d"
+          // label
+        >
+          {data02.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+        {/* <Legend verticalAlign="top" height={36} /> */}
       </PieChart>
-    </ResponsiveContainer>
+    </div>
   );
 };
 
-export default CustomActiveShapePieChart;
+export default PiChart;
