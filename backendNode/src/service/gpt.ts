@@ -30,8 +30,38 @@ export async function gptCall({
     messages: [
       {
         role: "system",
+        content: `List me best Movies`,
+      },
+      {
+        role: "user",
         content: `
-                Role: Financial Advisor
+                  Location: ${country}
+                  Occupation: ${occupation}
+                  Age: ${age}
+                  In-Hand Salary: ${monthly_salary}
+                  Monthly Expenses: ₹${total_expenses}
+                  Total Investments: ₹${total_investment}
+                  Short-term goal: ${short_term_goal} (e.g., travel, purchasing a phone, etc.)
+                  Long-term goal: ${long_term_goal} (e.g., wealth building, retirement fund, etc.)
+                  Risk tolerance: ${risk_tolerance} (e.g., low, medium, high)
+                  Monthly-Debt: ₹${debt} (Specify debt type: student loan, credit card, etc. with duration.)
+                `,
+      },
+    ],
+    response_format: zodResponseFormat(UserResponse, "UserResponse"),
+  });
+  console.log("---------GPT call completed---------");
+  
+  return {
+    result: completion,
+    response: completion.choices[0].message.parsed,
+  }
+}
+
+
+/*
+
+Role: Financial Advisor
                 Task: You will be given set of user data. Based on the input, analyze and provide financial report based on there risk tolerance. This will give user a detailed report on how to invest, where to invest, how much to invest, and more.
 
                 - Expense Analysis: Provide the following: Monthly Earning, Total Invested Amount, Monthly Expense(exclude monthly debt), Monthly debt(exclude monthly expense), Total remaining money saved, Advice.
@@ -127,30 +157,6 @@ export async function gptCall({
                         "PotentialGrowthPercentage": "<Provide a single percentage value, e.g., 15% or 20%>"
                     },
                     "Summary": "<Summary advice tailored to the user's financial situation and goals>"
-                }`,
-      },
-      {
-        role: "user",
-        content: `
-                  Location: ${country}
-                  Occupation: ${occupation}
-                  Age: ${age}
-                  In-Hand Salary: ${monthly_salary}
-                  Monthly Expenses: ₹${total_expenses}
-                  Total Investments: ₹${total_investment}
-                  Short-term goal: ${short_term_goal} (e.g., travel, purchasing a phone, etc.)
-                  Long-term goal: ${long_term_goal} (e.g., wealth building, retirement fund, etc.)
-                  Risk tolerance: ${risk_tolerance} (e.g., low, medium, high)
-                  Monthly-Debt: ₹${debt} (Specify debt type: student loan, credit card, etc. with duration.)
-                `,
-      },
-    ],
-    response_format: zodResponseFormat(UserResponse, "UserResponse"),
-  });
-  console.log("---------GPT call completed---------");
-  
-  return {
-    result: completion,
-    response: completion.choices[0].message.parsed,
-  }
-}
+                }
+
+*/
