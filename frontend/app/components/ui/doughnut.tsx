@@ -1,83 +1,69 @@
-"use client";
-import React from "react";
-import { Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  plugins,
-} from "chart.js";
-import { ExpenseAnalysis } from "@/interface/userInterface";
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { WhereToInvest } from '@/app/interface/userInterface';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = ({ expense }: { expense: ExpenseAnalysis }) => {
+const InvestmentChart = ({ investment }: { investment: WhereToInvest }) => {
+  const allocations = [
+    investment?.Allocation1,
+    investment?.Allocation2,
+    investment?.Allocation3,
+    investment?.Allocation4,
+  ];
 
   const data = {
-    labels: ["Expense", "Earning", "Total Investment", "Balance"],
+    labels: allocations.map((item) => item?.Name),
     datasets: [
       {
-        label: "Rs",
-        data: [
-          expense.MonthlyExpenses,
-          expense.MonthlyEarning,
-          expense.TotalInvestedAmount,
-          expense.TotalRemainingMoneySaved,
-        ],
+        label: "Investment Allocation",
+        data: allocations.map((item) => parsedPercentage(item?.PercentageAllocation || "0%")),
         backgroundColor: [
-          "rgb(255,0,0)",
-          "rgb(34,139,34)",
-          "rgb(255,215,0)",
-          "rgb(255,255,255)",
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
         ],
         borderColor: [
-          "rgb(38 38 38)",
-          "rgb(38 38 38)",
-          "rgb(38 38 38)",
-          "rgb(38 38 38)",
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
         ],
-        borderWidth: 5,
-        hoverOffset: 5,
-        borderRadius: 10,
+        borderWidth: 1,
       },
     ],
   };
 
   const options = {
-    animation: {
-      animateScale: true,
-    },
     plugins: {
       legend: {
         display: false,
       },
-    },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem: { raw: any; label: string, dataIndex: number }) {
+            const percentage = tooltipItem.raw; // Get the percentage value
+            const label = tooltipItem.label || ''; // Get the investment name
+            const amount = allocations[tooltipItem.dataIndex]?.Amount || 0; // Get the corresponding amount
+            return `${label}: ${percentage}% \nAmount: ₹${amount}`; // Return the custom tooltip with both percentage and amount
+          }
+        }
+      },
+    }
   };
 
   return (
-    <div className="w-[20rem] flex flex-col justify-center items-center">
+    <div>
       <Doughnut data={data} options={options} />
-      <div className="mt-4">
-        {data.labels.map((label, index) => (
-          <div key={index} className="inline-block mx-2">
-            <span
-              style={{
-                display: "inline-block",
-                width: "16px",
-                height: "16px",
-                backgroundColor: data.datasets[0].backgroundColor[index],
-                marginRight: "5px",
-              }}
-            />
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
 
-export default DoughnutChart;
+const parsedPercentage = (percentage: string) => {
+  const numberValue = parseFloat(percentage.replace('%', ''));
+  return numberValue;
+};
 
-// style={{ display: 'inline-block', margin: '0 10px' }}
+export default InvestmentChart;

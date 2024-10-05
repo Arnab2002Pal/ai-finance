@@ -1,12 +1,12 @@
 import useSWR from "swr";
 import { fetcher } from "../utility/api";
-import { UserFinancialInfo } from "@/interface/userInterface";
+import { UserFinancialInfo } from "@/app/interface/userInterface";
 
 export const useFinancialInfo = (userId: number | null) => {
 
   // Use SWR to fetch user information
-  const { data, error, isValidating }:SWRResponse<{ userFinancialInfo: UserFinancialInfo }> = useSWR(
-    userId ? `/userInfo/${userId}` : null, 
+  const { data, error, isValidating }: SWRResponse<{ userFinancialInfo: UserFinancialInfo }> = useSWR(
+    userId ? `/userInfo/${userId}` : null,
     fetcher,
     {
       revalidateOnFocus: false, // Optionally disable revalidation on window focus

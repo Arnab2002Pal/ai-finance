@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Overview } from "./Overview";
-import BarChart from "../ui/barChart";
 import { useRecoilValue } from "recoil";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
 import { useRouter } from "next/navigation";
@@ -11,7 +9,7 @@ import {
   ExpenseAnalysis,
   InvestmentAdvice,
   UserFinancialInfo,
-} from "@/interface/userInterface";
+} from "@/app/interface/userInterface";
 
 const ExpenseDashboard = ({
   category,
@@ -26,7 +24,6 @@ const ExpenseDashboard = ({
 }) => {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
   const router = useRouter();
-console.log(userFinancialInfo);
 
   const backClick = () => {
     router.push("/home");
@@ -46,7 +43,7 @@ console.log(userFinancialInfo);
           {/* Left Side (3/5 width) */}
           <div className="flex flex-col gap-2 flex-1 w-3/5">
             <div className="flex gap-2 w-full">
-              
+
               <div className="flex flex-col justify-center items-start px-10 h-32 w-full rounded-lg bg-gradient-to-t from-red-950 to-neutral-900 ">
                 {/* <div>Monthly Expense:</div>
                   <div className="w-full h-14 flex flex-row justify-start items-center text-5xl font-medium ">
@@ -79,7 +76,7 @@ console.log(userFinancialInfo);
                   {/* <h1>Structured Investment Plan</h1> */}
                 </div>
                 <div className="mt-6 max-h-64 overflow-auto scrollbar-hide">
-                  
+
                 </div>
               </div>
             </div>

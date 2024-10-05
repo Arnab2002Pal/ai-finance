@@ -138,8 +138,6 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
     risk_tolerance: accountInfo.riskTolerance || "High",
   };
 
-  console.log("GPT Input---------------:", gptInput);
-  
   try {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -151,34 +149,18 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
         message: "User not found",
       });
     }
-    console.log("HERE------------1");
     
     await updateOrCreateLocationInfo(user.id, locationInfo);
-    console.log("HERE------------2");
     await updateOrCreateAccountInfo(user.id, accountInfo);
-    console.log("HERE------------3");
     await updateOrCreateTermsAndCondition(user.id, termsAndCondition);
-    console.log("HERE------------4");
-
-    // Log the require cache for the specific module
-    console.log('Before cache deletion:', require.cache[require.resolve('../service/gpt.ts')]);
-
-    // Clear the cache
-    delete require.cache[require.resolve('../service/gpt.ts')];
-
-    // Log the require cache after deletion to confirm it's removed
-    console.log('After cache deletion:', require.cache[require.resolve('../service/gpt.ts')]);
 
     const gptResponse = await generateFinancialAdvice(gptInput);
-    console.log("HERE------------5");
-    
     
     await prisma.financialAdvice.upsert({
       where: { user_id: user.id },
       update: gptResponse,
       create: { user_id: user.id, ...gptResponse },
     });
-    console.log("HERE------------6");
 
     return res.status(201).json({
       success: true,

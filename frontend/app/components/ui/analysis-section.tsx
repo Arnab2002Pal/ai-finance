@@ -1,5 +1,5 @@
 import { cn } from "@/app/lib/utils";
-import { UserFinancialInfo } from "@/interface/userInterface";
+import { UserFinancialInfo } from "@/app/interface/userInterface";
 import {
   IconCurrencyDollar,
   IconEaseInOut,
@@ -13,10 +13,10 @@ export function AnalysisSection({
   category,
 }: {
   category?: UserFinancialInfo;
-  }) {
+}) {
   const router = useRouter()
   const setDashboardContent = useSetRecoilState(selectedDashboardState)
-  
+
   const analyses = [
     {
       title: "Expense Analysis",
@@ -85,10 +85,10 @@ export function AnalysisSection({
     },
   ];
 
-  
+
   const onAnalysisClick = (title: string) => {
     const firstWord = title.split(' ')[0].toLowerCase()
-        
+
     router.push(`/home/dashboard/${firstWord}`);
     // setDashboardContent(title)
 

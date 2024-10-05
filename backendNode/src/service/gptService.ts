@@ -1,5 +1,5 @@
 import { UserInput } from "../interface/inputInterface";
-import { gptCall } from "./gpt";
+import { gptCall } from "./openai";
 
 export const generateFinancialAdvice = async (gptInput: UserInput) => {
     try {

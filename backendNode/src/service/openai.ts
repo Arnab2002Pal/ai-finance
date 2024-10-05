@@ -1,72 +1,41 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
-import dotenv from "dotenv";
-import { UserInput } from "../interface/inputInterface";
 import { UserResponse } from "./responseFormatter";
+import { UserInput } from "../interface/inputInterface";
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+    apiKey: process.env.OPENAI_API_KEY!,
 });
 
-
-
 export async function gptCall({
-  country,
-  age,
-  occupation,
-  monthly_salary,
-  total_expenses,
-  total_investment,
-  short_term_goal,
-  long_term_goal,
-  debt,
-  risk_tolerance,
+    country,
+    age,
+    occupation,
+    monthly_salary,
+    total_expenses,
+    total_investment,
+    short_term_goal,
+    long_term_goal,
+    debt,
+    risk_tolerance,
 }: UserInput) {
-  console.log("---------GPT call initiated---------");
-  
-  const completion = await client.beta.chat.completions.parse({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content: `List me best Movies`,
-      },
-      {
-        role: "user",
-        content: `
-                  Location: ${country}
-                  Occupation: ${occupation}
-                  Age: ${age}
-                  In-Hand Salary: ${monthly_salary}
-                  Monthly Expenses: ₹${total_expenses}
-                  Total Investments: ₹${total_investment}
-                  Short-term goal: ${short_term_goal} (e.g., travel, purchasing a phone, etc.)
-                  Long-term goal: ${long_term_goal} (e.g., wealth building, retirement fund, etc.)
-                  Risk tolerance: ${risk_tolerance} (e.g., low, medium, high)
-                  Monthly-Debt: ₹${debt} (Specify debt type: student loan, credit card, etc. with duration.)
-                `,
-      },
-    ],
-    response_format: zodResponseFormat(UserResponse, "UserResponse"),
-  });
-  console.log("---------GPT call completed---------");
-  
-  return {
-    result: completion,
-    response: completion.choices[0].message.parsed,
-  }
-}
+    console.log("---------GPT call initiated---------");
 
-
-/*
-
-Role: Financial Advisor
+    const completion = await client.beta.chat.completions.parse({
+        model: "gpt-4o-mini",
+        messages: [
+            {
+                role: "system",
+                content: `
+                Role: Financial Advisor
                 Task: You will be given set of user data. Based on the input, analyze and provide financial report based on there risk tolerance. This will give user a detailed report on how to invest, where to invest, how much to invest, and more.
 
                 - Expense Analysis: Provide the following: Monthly Earning, Total Invested Amount, Monthly Expense(exclude monthly debt), Monthly debt(exclude monthly expense), Total remaining money saved, Advice.
                 - Investment Advice: Provide the following:
-                    - Where to invest: Diversify and allocate the saved money to different investments across different assest class. Diversification strategy should be based on the user's risk tolerance and should be made after analyzing the user's  savings. make sure calculate amount accurately according to the percentage
+                    - Where to invest: Diversify and allocate the saved money to different investments across different assest class. Diversification strategy should be based on the user's risk tolerance and should be made after analyzing the user's savings only. Make sure calculate amount accurately according to the percentage and should not exceed the total amount saved.
                     - Include Name of the investment and asset class, percentage allocation, and amount.
                 - Saving Plan: Provide the following: Total Monthly Saving, Annual Saving, Percentage of salary saved. Include advice which explains on how to save more and in efficient way.
                 - Debt Management: Provide the following: Total Debt, Money to Set Aside, Advice
@@ -159,4 +128,31 @@ Role: Financial Advisor
                     "Summary": "<Summary advice tailored to the user's financial situation and goals>"
                 }
 
-*/
+                `,
+            },
+            {
+                role: "user",
+                content: `
+                  Location: ${country}
+                  Occupation: ${occupation}
+                  Age: ${age}
+                  In-Hand Salary: ${monthly_salary}
+                  Monthly Expenses: ₹${total_expenses}
+                  Total Investments: ₹${total_investment}
+                  Short-term goal: ${short_term_goal} (e.g., travel, purchasing a phone, etc.)
+                  Long-term goal: ${long_term_goal} (e.g., wealth building, retirement fund, etc.)
+                  Risk tolerance: ${risk_tolerance} (e.g., low, medium, high)
+                  Monthly-Debt: ₹${debt} (Specify debt type: student loan, credit card, etc. with duration.)
+                `,
+            },
+        ],
+        response_format: zodResponseFormat(UserResponse, "UserResponse"),
+        temperature: 0.7,
+    });
+    
+    return {
+        result: completion,
+        response: completion.choices[0].message.parsed,
+    }
+}
+

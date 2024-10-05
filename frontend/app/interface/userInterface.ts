@@ -1,17 +1,9 @@
-export interface UserInput {
-    country: string;
-    age: number;
-    occupation: string;
-    monthly_salary: number;
-    total_expenses: number | string;
-    total_investment: number | string;
-    short_term_goal: string;
-    long_term_goal: string;
-    debt: string;
-    risk_tolerance: string;
+export interface UserData {
+    success?: boolean;
+    userFinancialInfo?: UserFinancialInfo;
 }
 
-export interface UserOutput {
+export interface UserFinancialInfo {
     expenseAnalysis: ExpenseAnalysis;
     investmentAdvice: InvestmentAdvice;
     savingPlan: SavingPlan;
@@ -109,25 +101,4 @@ export interface StructuredPlan {
 export interface Growth {
     OverallCurrentGrowthPercentage: string;
     PotentialGrowthPercentage: string;
-}
-
-export interface Location {
-    location: string;
-}
-
-export interface Account {
-    age: number;
-    occupation: string;
-    monthlyIncome: number;
-    totalExpense: string;
-    currentInvestment: number;
-    shortTermGoal: string;
-    longTermGoal: string;
-    riskTolerance: string;
-    debt: string;
-
-}
-
-export interface TermsAndCondition {
-    acceptTerms: boolean;
 }
