@@ -67,6 +67,7 @@ export interface SavingPlan {
 export interface DebtManagement {
     TotalDebt: number;
     MoneyToSetAside: {
+        TimePeriod: string;
         SuggestedAmount: number;
         AvailableFundsConsideration: string | number
     }

@@ -92,6 +92,7 @@ export async function gptCall({
                     "DebtManagement": {
                         "TotalDebt": "₹<Total Debt>",
                         "MoneyToSetAside": {
+                            "Time Period": "<For how long>"
                           "SuggestedAmount": "₹<Amount>",
                           "AvailableFundsConsideration": "Based on your current funds and cash flow, <Amount> is set aside without impacting other financial goals."
                         },
@@ -149,7 +150,7 @@ export async function gptCall({
         response_format: zodResponseFormat(UserResponse, "UserResponse"),
         temperature: 0.7,
     });
-    
+
     return {
         result: completion,
         response: completion.choices[0].message.parsed,

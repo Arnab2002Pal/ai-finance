@@ -88,6 +88,7 @@ export const UserResponse = z.object({
     DebtManagement: z.object({
         TotalDebt: z.number(),
         MoneyToSetAside: z.object({
+            TimePeriod: z.string(),
             SuggestedAmount: z.number(),
             AvailableFundsConsideration: z.union([z.string(), z.number()]),
         }),

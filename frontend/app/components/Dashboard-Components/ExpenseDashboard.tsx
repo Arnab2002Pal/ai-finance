@@ -22,7 +22,6 @@ const ExpenseDashboard = ({
   debt?: DebtManagement;
   investment?: InvestmentAdvice;
 }) => {
-  const userFinancialInfo = useRecoilValue(userFinancialInfoState);
   const router = useRouter();
 
   const backClick = () => {

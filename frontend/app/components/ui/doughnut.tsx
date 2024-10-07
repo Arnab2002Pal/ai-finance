@@ -2,6 +2,7 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { WhereToInvest } from '@/app/interface/userInterface';
+import { parsedPercentage } from '@/app/lib/utils';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -20,50 +21,57 @@ const InvestmentChart = ({ investment }: { investment: WhereToInvest }) => {
         label: "Investment Allocation",
         data: allocations.map((item) => parsedPercentage(item?.PercentageAllocation || "0%")),
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
+          '#B8860B', // Dark Gold for Precious Metals (Gold)
+          '#1E3A8A', // Dark Blue for Equities (Stocks)
+          '#228B22', // Dark Green for Bonds
+          '#A0522D', // Dark Brown/Orange for Real Estate
         ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
+        hoverBackgroundColor: [
+          '#DAA520', // Lighter Gold
+          '#4682B4', // Lighter Blue
+          '#32CD32', // Lighter Green
+          '#D2691E', // Lighter Orange/Brown
         ],
         borderWidth: 1,
+        hoverBorderWidth: 2,
+        borderColor: "black"
       },
     ],
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        position: 'bottom',
+        labels: {
+          color: 'white', // Make legend text color white
+        },
       },
       tooltip: {
         callbacks: {
           label: function (tooltipItem: { raw: any; label: string, dataIndex: number }) {
-            const percentage = tooltipItem.raw; // Get the percentage value
-            const label = tooltipItem.label || ''; // Get the investment name
-            const amount = allocations[tooltipItem.dataIndex]?.Amount || 0; // Get the corresponding amount
-            return `${label}: ${percentage}% \nAmount: ₹${amount}`; // Return the custom tooltip with both percentage and amount
-          }
-        }
+            const percentage = tooltipItem.raw;
+            const label = tooltipItem.label || '';
+            const amount = allocations[tooltipItem.dataIndex]?.Amount || 0;
+            return `${label}: ${percentage}% \nAmount: ₹${amount}`;
+          },
+        },
       },
-    }
+    },
+    layout: {
+      
+      padding: 30,
+    },
   };
 
   return (
-    <div>
-      <Doughnut data={data} options={options} />
+    <div className="relative w-full h-full">
+      <Doughnut data={data} options={options as any} />
     </div>
   );
 };
 
-const parsedPercentage = (percentage: string) => {
-  const numberValue = parseFloat(percentage.replace('%', ''));
-  return numberValue;
-};
 
 export default InvestmentChart;
