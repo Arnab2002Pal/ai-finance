@@ -90,7 +90,6 @@ export function AnalysisSection({
     const firstWord = title.split(' ')[0].toLowerCase()
 
     router.push(`/home/dashboard/${firstWord}`);
-    // setDashboardContent(title)
 
   };
 
