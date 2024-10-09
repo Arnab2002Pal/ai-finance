@@ -6,7 +6,7 @@ import {
   updateOrCreateLocationInfo,
   updateOrCreateTermsAndCondition,
 } from "../service/dbService";
-import { generateFinancialAdvice } from "../service/gptService";
+// import { generateFinancialAdvice } from "../service/gptService";
 import { NewRequest } from "../interface/requestInterface";
 import { error } from "console";
 
@@ -154,13 +154,13 @@ const createAndUpdateUserInfo = async (req: Request, res: Response) => {
     await updateOrCreateAccountInfo(user.id, accountInfo);
     await updateOrCreateTermsAndCondition(user.id, termsAndCondition);
 
-    const gptResponse = await generateFinancialAdvice(gptInput);
+    // const gptResponse = await generateFinancialAdvice(gptInput);
     
-    await prisma.financialAdvice.upsert({
-      where: { user_id: user.id },
-      update: gptResponse,
-      create: { user_id: user.id, ...gptResponse },
-    });
+    // await prisma.financialAdvice.upsert({
+    //   where: { user_id: user.id },
+    //   update: gptResponse,
+    //   create: { user_id: user.id, ...gptResponse },
+    // });
 
     return res.status(201).json({
       success: true,
