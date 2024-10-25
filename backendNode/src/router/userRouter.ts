@@ -1,9 +1,11 @@
 import express from 'express';
 import {
     handleGoogleUserAuth,
+    registerCredentialUser,
     handleCredentialUserAuth,
-    createAndUpdateUserInfo,
-    getUserInfo
+    generateAdvice,
+    getUserInfo,
+    checkFinancialReport
 } from '../controller/userController';
 import { authenticateUser } from './middleware';
 
@@ -11,11 +13,13 @@ const userRouter = express.Router();
 
 // GET
 userRouter.get('/userInfo/:id', getUserInfo)
+userRouter.get('/checkFinancialReport/:email', checkFinancialReport)
 
 // POST 
 userRouter.post('/session', authenticateUser, handleGoogleUserAuth)
+userRouter.post('/userCreate', registerCredentialUser)
 userRouter.post('/credentials', handleCredentialUserAuth)
-userRouter.post('/userInfo', createAndUpdateUserInfo)
+userRouter.post('/generateAdvice', generateAdvice)
 
 
 export { userRouter };

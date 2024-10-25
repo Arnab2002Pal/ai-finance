@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-import { googleAuthentication, checkUserOrCreate } from "../api/utility/api";
+import { googleAuthentication, credentialAuthentication } from "../api/utility/api";
 
 
 export const NEXT_AUTH = {
@@ -12,22 +12,32 @@ export const NEXT_AUTH = {
                 email: { label: "Email", type: "text", placeholder: "example@example.com" },
                 password: { label: "Password", type: "password", placeholder: "password" }
             },
-            async authorize(credentials) {                
-                const userData = {
-                    email: credentials?.email,
-                    password: credentials?.password
-                }
+            async authorize(credentials) {
+                if (!credentials) return null;
                 
-                const user = await checkUserOrCreate('credentials', userData)                
-                return {
-                    id: user.userData.id,
-                    name: user.userData.name,
-                    email: user.userData.email,
-                    profile: user.userData.profile,
-                    token: user.userData.token
+                try {
+                    const user = await credentialAuthentication('credentials', {
+                        email: credentials.email,
+                        password: credentials.password
+                    });
+                    
+                    if (!user || !user.userData) {
+                        return null;
+                    }
+                    
+                    return {
+                        id: user.userData.id,
+                        name: user.userData.name,
+                        email: user.userData.email,
+                        profile: user.userData.profile,
+                    };
+                } catch (error) {
+                    console.error("Error in authorize:", error);
+                    return null;
                 }
-            },
+            }
         }),
+        
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID! || "",
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
@@ -35,17 +45,18 @@ export const NEXT_AUTH = {
         })
     ],
     secret: process.env.NEXTAUTH_SECRET,
-
+    
     callbacks: {
         signIn: async ({ account, user }: any) => {
             if (account.provider === 'google') {
                 const userData = {
                     provider: account.provider,
-                    token: account.token_type + " " + account.id_token
+                    token: `${account.token_type} ${account.id_token}`
                 }              
-                user.accessToken = await googleAuthentication('session', { userData })
+                user.accessToken = await googleAuthentication('session', { userData }).then(result => result.data)
                 return true;
             }else if(account.provider === "credentials"){
+                user.accessToken = user
                 return true
             }
             return false
@@ -53,18 +64,15 @@ export const NEXT_AUTH = {
         jwt: async ({ token, user }: any) => {
             if (user) {                
                 token = { 
-                    access_token: user.accessToken.token,
-                    user_id: user.accessToken.data.id,
-                    name: user.accessToken.data.name,
-                    email: user.accessToken.data.email,
-                    profile: user.accessToken.data.profile_image
-                 }
+                    user_id: user.accessToken.id,
+                    name: user.accessToken.name,
+                    email: user.accessToken.email,
+                    profile: user.accessToken.profile_image
+                }
             }
             return token
         },
         session: ({ session, token }: any) => {
-            // TODO
-        
             session.accessToken = token.accessToken
             session.user.user_id = token.user_id
             session.user.image = token.profile                        

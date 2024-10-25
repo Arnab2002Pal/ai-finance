@@ -1,3 +1,17 @@
+export interface UserInput {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
+
+export interface UserInfo {
+    user_id?: number;
+    name: string;
+    email: string;
+    profile_image?: string;
+}
+
 export interface UserData {
     success?: boolean;
     userFinancialInfo?: UserFinancialInfo;

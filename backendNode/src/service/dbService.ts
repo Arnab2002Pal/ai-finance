@@ -1,8 +1,25 @@
 import { PrismaClient } from '@prisma/client';
 import { Account, Location, TermsAndCondition } from '../interface/inputInterface';
+import bcrypt from 'bcrypt'
+const prisma = new PrismaClient();
+
+export const hashPassword = async (password: string): Promise<string> => {
+    const saltRound = 10
+    return await bcrypt.hash(password, saltRound)
+}
+
+export const comparePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+    return await bcrypt.compare(password, hashedPassword)
+}
+
+export const updateUserFlag = async(userId: number, user_active: boolean) => {
+    return prisma.user.update({
+        where: { id: userId },
+        data: { first_timer: user_active },
+    })
+}
 
 export const updateOrCreateLocationInfo = async (userId: number, locationInfo: Location) => {
-    const prisma = new PrismaClient();
 
     return prisma.locationInfo.upsert({
         where: { user_id: userId },

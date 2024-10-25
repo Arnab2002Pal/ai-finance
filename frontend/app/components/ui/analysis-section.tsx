@@ -5,8 +5,6 @@ import {
   IconEaseInOut,
   IconRouteAltLeft,
 } from "@tabler/icons-react";
-import { useSetRecoilState } from "recoil";
-import { selectedDashboardState } from "@/app/store/atoms/dashboardAtom";
 import { useRouter } from "next/navigation";
 
 export function AnalysisSection({
@@ -15,7 +13,6 @@ export function AnalysisSection({
   category?: UserFinancialInfo;
 }) {
   const router = useRouter()
-  const setDashboardContent = useSetRecoilState(selectedDashboardState)
 
   const analyses = [
     {

@@ -6,27 +6,28 @@ import { cn } from "@/app/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { signInValidationScema, SignInValidationSchema } from "@/app/validator/userValidation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function SignInForm() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInValidationSchema>({
+    resolver: zodResolver(signInValidationScema),
+  });
 
-  const handleCredentialSignIn = async (e: any) => {
-    e.preventDefault();
-    console.log(email, password);
 
-    const result = await signIn("credentials", {
+  const handleCredentialSignIn = async (data: SignInValidationSchema) => {
+    const {email, password} = data
+    await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/home",
     });
-    if (result?.ok) {
-      router.push("/");
-    } else {
-      console.error("Sign-in error", result?.error);
-    }
   };
 
   return (
@@ -36,17 +37,15 @@ export default function SignInForm() {
         Login yourself to access your Vault
       </p>
 
-      <form className="mt-7" onSubmit={handleCredentialSignIn}>
+      <form className="mt-7" onSubmit={handleSubmit(handleCredentialSignIn)}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
-            placeholder="projectmayhem@fc.com"
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@example.com"
+            {...register('email')}
           />
+          {errors?.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="password">Password</Label>
@@ -54,12 +53,10 @@ export default function SignInForm() {
             id="password"
             placeholder="••••••••"
             type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register('password')}
           />
+          {errors?.password && <span className="text-red-500 text-xs">{errors.password.message}</span>}
         </LabelInputContainer>
-
         <button
           className="bg-gradient-to-br relative group/btn from-zinc-900 to-zinc-900 block bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
@@ -80,10 +77,10 @@ export default function SignInForm() {
         <div className="flex flex-col space-y-4">
           <button
             onClick={() =>
-              signIn("google", { callbackUrl: "http://localhost:3000/home" })
+              signIn("google", { callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/home` })
             }
             className="relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-            type="submit"
+            type="button"
           >
             <IconBrandGoogle className="h-4 w-4 text-neutral-300 flex" />
             <span className="text-neutral-300 text-sm">Google</span>

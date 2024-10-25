@@ -18,7 +18,7 @@ const Appbar = () => {
               <div className="flex items-center space-x-4">
                 <span className="text-white">Hello, {session.user?.name}</span>
                 <button
-                  onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}` })}
+                  onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}`})}
                   className="bg-gray-800 text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Sign Out

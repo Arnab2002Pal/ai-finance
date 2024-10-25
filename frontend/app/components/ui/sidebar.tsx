@@ -169,7 +169,7 @@ export const SidebarLink = ({
   return (
     <div>
       {link.href === "logout" ? (
-        <div onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}` })} className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer">
+        <div onClick={() => signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}` })} className="flex items-center justify-start gap-2 group/sidebar py-2 cursor-pointer">
           {link.icon}
           <motion.span
             animate={{

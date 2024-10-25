@@ -4,19 +4,19 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Location from "./location/page";
 import AccountInfo from "./account/page";
 import TermsAndCondition from "./termAndCondition/page";
-import { postUserInfo } from "@/app/api/utility/api";
-import { useSession } from "next-auth/react";
+import { checkFinancialReport, generateFinancialAdvice } from "@/app/api/utility/api";
+import { signOut, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { mutate } from "swr";
+import Loading from "@/app/components/Loader";
 
 const MultiStepForm = () => {
   const router = useRouter();
-  const searchedMessage = useSearchParams();
   const { data: session, status } = useSession();
   const userEmail = session?.user?.email;
   const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const searchedMessage = useSearchParams();
   const message = searchedMessage.get("message");
 
   const [formData, setFormData] = useState({
@@ -41,6 +41,44 @@ const MultiStepForm = () => {
   });
 
   useEffect(() => {
+    if (status === "authenticated" && userEmail) {
+      const checkReport = async () => {
+        try {
+          const result = await checkFinancialReport(`/checkFinancialReport/${userEmail}`);
+
+          if (result.status === 200 && result.first_time === false) {
+            router.push("/home?message=Access Denied");
+            return;
+          } else if (result.status === 200 && result.first_time === true) {
+            setLoading(false);
+          } else if (result.status === 404) {
+            if (result.errorType == "USER_NOT_EXIST") {
+              await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/signin?message=User Not Registered` })
+              return;
+            } else if (result.errorType == "FINANCIAL_RESULT_NOT_FOUND") {
+              toast.error(message, {
+                pauseOnHover: false,
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+              })
+              setLoading(false);
+            }
+          }
+        } catch (error) {
+          console.error("Error checking report:", error);
+          setLoading(false);
+        }
+      };
+
+      checkReport();
+    } else if (status === "unauthenticated") {
+      router.push("/signup");
+    }
+  }, [status, userEmail, router]);
+
+  useEffect(() => {
     if (userEmail) {
       setFormData((prevData) => ({
         ...prevData,
@@ -51,7 +89,7 @@ const MultiStepForm = () => {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/signup");
+      router.push("/signin");
     }
   }, [status, router]);
 
@@ -63,8 +101,10 @@ const MultiStepForm = () => {
     }
   }, [message]);
 
-  if (status === "loading") {
-    return <p>Loading...</p>;
+  if (status === "loading" || loading) {
+    return <div className="w-full h-screen flex justify-center items-center">
+      <Loading />
+    </div>;
   }
 
   const handleChange = (
@@ -80,8 +120,8 @@ const MultiStepForm = () => {
         name === "acceptTerms"
           ? "termsAndCondition"
           : step === 1
-          ? "locationInfo"
-          : "accountInfo";
+            ? "locationInfo"
+            : "accountInfo";
 
       return {
         ...prevData,
@@ -120,7 +160,7 @@ const MultiStepForm = () => {
           />
         );
       case 4:
-        return <div className="text-center">Submitting... Please wait.</div>;
+        return <div className="text-center">Submitting...</div>;
       default:
         return (
           <Location
@@ -143,17 +183,13 @@ const MultiStepForm = () => {
     }
 
     setStep(4)
-    setLoading(true);
+    // setLoading(true);
 
     try {
-      const result = await postUserInfo("userInfo", formData);
+      const result = await generateFinancialAdvice("generateAdvice", formData);
 
       if (result.success) {
-        // Optimistically updates the cached user info for the current user without refetching.
-        // This helps ensure the UI immediately reflects changes (like profile updates) based on the cache.
-        // Later, we can refetch the latest user info from the server to keep the data in sync.
-        mutate(`userInfo/${session?.user.user_id}`);
-        router.push("/home"); 
+        router.push("/home");
       } else {
         router.push(`/signup?message=User doesn't exist. Please sign up.`);
       }
@@ -178,14 +214,12 @@ const MultiStepForm = () => {
         {step !== 4 && (
           <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
             <li
-              className={`flex items-center ${
-                step === 1 ? "text-green-500" : ""
-              }`}
+              className={`flex items-center ${step === 1 ? "text-green-500" : ""
+                }`}
             >
               <span
-                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${
-                  step === 1 ? "border-green-500" : "border-gray-400"
-                }`}
+                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 1 ? "border-green-500" : "border-gray-400"
+                  }`}
               >
                 1
               </span>
@@ -208,14 +242,12 @@ const MultiStepForm = () => {
               </svg>
             </li>
             <li
-              className={`flex items-center ${
-                step === 2 ? "text-green-500" : ""
-              }`}
+              className={`flex items-center ${step === 2 ? "text-green-500" : ""
+                }`}
             >
               <span
-                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${
-                  step === 2 ? "border-green-500" : "border-gray-400"
-                }`}
+                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 2 ? "border-green-500" : "border-gray-400"
+                  }`}
               >
                 2
               </span>
@@ -238,14 +270,12 @@ const MultiStepForm = () => {
               </svg>
             </li>
             <li
-              className={`flex items-center ${
-                step === 3 ? "text-green-500" : ""
-              }`}
+              className={`flex items-center ${step === 3 ? "text-green-500" : ""
+                }`}
             >
               <span
-                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${
-                  step === 3 ? "border-green-500" : "border-gray-400"
-                }`}
+                className={`flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0 ${step === 3 ? "border-green-500" : "border-gray-400"
+                  }`}
               >
                 3
               </span>
@@ -256,13 +286,12 @@ const MultiStepForm = () => {
 
         <div className="flex items-center justify-center mt-5">
           <div
-            className={`w-full mx-28 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${
-              step === 1
-                ? "max-w-5xl"
-                : step === 2
+            className={`w-full mx-28 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black  ${step === 1
+              ? "max-w-5xl"
+              : step === 2
                 ? "max-w-screen-5xl"
                 : "max-w-5xl"
-            }`}
+              }`}
           >
             <div className="h-96 overflow-y-auto flex justify-center items-center scrollbar-hide">
               {renderStepContent()}

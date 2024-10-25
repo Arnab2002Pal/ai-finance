@@ -1,23 +1,30 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/app/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { signUpValidationSchema, SignUpValidationSchema } from "@/app/validator/userValidation";
+import { credentialUserRegistration } from "@/app/api/utility/api";
 
 export default function SignupForm() {
+  const router = useRouter()
   const searchedMessage = useSearchParams();
+
   const message = searchedMessage.get("message");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpValidationSchema>({
+    resolver: zodResolver(signUpValidationSchema),
   });
 
   useEffect(() => {
@@ -32,13 +39,39 @@ export default function SignupForm() {
     }
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const submitForm = async (data: SignUpValidationSchema) => {
+    /*
+    Rest operator: When used in destructuring (...rest), it collects the remaining properties into a new object or array.
+    */
+    const {confirmPassword, ...updatedFormData} = data
+    try {
+      const result = await credentialUserRegistration('userCreate', updatedFormData)
+      if (!result.success) {
+        switch (result.providerId) {
+          case "google":
+            router.push('/singin?message=Already registered with google')
+            break;
+          case "credential":
+            router.push('/signin?message=Already registered.')    
+            break;
+          default:
+            toast.error("An error occurred while registering", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+            })
+            break;
+        }
+      }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+      if (result.success) {
+        router.push('/signin?message=User Registration Successfully')            
+      }
+    } catch (error) {
+      throw new Error("Invalid user registration");
+    } 
   };
 
   return (
@@ -50,29 +83,26 @@ export default function SignupForm() {
           Register yourself to access your Vault
         </p>
 
-        <form className="mt-7" onSubmit={handleSubmit}>
+        <form className="mt-7" onSubmit={handleSubmit(submitForm)}>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
             <LabelInputContainer>
-              <Label htmlFor="firstname">First name</Label>
+              <Label htmlFor="firstName">First name</Label>
               <Input
-                id="firstname"
+                id="firstName"
                 placeholder="Tyler"
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
+                {...register('firstName')}
               />
+              {errors?.firstName && <span className="text-red-500 text-xs">{errors.firstName.message}</span>}
+
             </LabelInputContainer>
             <LabelInputContainer>
-              <Label htmlFor="lastname">Last name</Label>
+              <Label htmlFor="lastName">Last name</Label>
               <Input
-                id="lastname"
+                id="lastName"
                 placeholder="Durden"
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
+                {...register('lastName')}
               />
+              {errors?.lastName && <span className="text-red-500 text-xs">{errors.lastName.message}</span>}
             </LabelInputContainer>
           </div>
           <LabelInputContainer className="mb-4">
@@ -80,30 +110,30 @@ export default function SignupForm() {
             <Input
               id="email"
               placeholder="projectmayhem@fc.com"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              {...register('email', { required: "email Required" })}
             />
+            {errors?.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
-              placeholder="••••••••"
               type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
+              placeholder="••••••••"
+              {...register('password', { required: true })}
             />
+            {errors?.password && <span className="text-red-500 text-xs">{errors.password.message}</span>}
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
             <Label htmlFor="twitterpassword">Your Confirm password</Label>
             <Input
-              id="confirmpassword"
+              id="confirmPassword"
               placeholder="••••••••"
               type="password"
+              {...register('confirmPassword', { required: true })}
             />
+            {errors?.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword.message}</span>}
+
           </LabelInputContainer>
 
           <button
@@ -124,9 +154,11 @@ export default function SignupForm() {
           <div className="bg-gradient-to-r from-transparent via-neutral-300 to-transparent my-8 h-[1px] w-full" />
 
           <div className="flex flex-col space-y-4">
+          </div>
+        </form>
             <button
               onClick={() =>
-                signIn("google", { callbackUrl: "http://localhost:3000/form" })
+                signIn("google", { callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/form` })
               }
               className="relative group/btn flex items-center justify-center space-x-2 px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-zinc-900 shadow-[0px_0px_1px_1px_var(--neutral-800)]"
               type="submit"
@@ -135,8 +167,6 @@ export default function SignupForm() {
               <span className="text-neutral-300 text-sm">Google</span>
               <BottomGradient />
             </button>
-          </div>
-        </form>
       </div>
     </>
   );

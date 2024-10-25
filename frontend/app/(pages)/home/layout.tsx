@@ -11,11 +11,15 @@ import {
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/app/lib/utils";
-import { useRouter } from "next/navigation";
+import { cn, fetchInitials } from "@/app/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useFinancialInfo } from "@/app/api/hooks/financialInfo";
+import { useSetRecoilState } from "recoil";
+import { fetchData } from "@/app/api/utility/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/app/components/Loader";
+
 
 export default function HomeLayout({
   children,
@@ -24,15 +28,14 @@ export default function HomeLayout({
 }>) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const setUserFinancialInfo = useSetRecoilState(userFinancialInfoState);
   const { data: session, status } = useSession();
+  const searchedMessage = useSearchParams();
+  const message = searchedMessage.get("message");
 
   const user_id = session?.user?.user_id;
-  const { userFinancialInfo, isLoading, isError } = useFinancialInfo(user_id!);
   const initials = fetchInitials(session);
-
   const links = [
     {
       label: "Dashboard",
@@ -60,12 +63,42 @@ export default function HomeLayout({
     },
   ];
 
-  // If user financial info is fetched, set it in Recoil state
   useEffect(() => {
-    if (userFinancialInfo) {
-      setUserFinancialInfo(userFinancialInfo);
-    }
-  }, [userFinancialInfo, setUserFinancialInfo]);
+    if (status !== "authenticated" || !user_id) return; // Early return if conditions are not met
+
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetchData(`/userInfo/${user_id}`);
+
+        // Redirect based on error types for better readability
+        if (response.status === 404) {
+          if (response.errorType === "USER_NOT_FOUND") {
+            await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/signin?message=User Not Registered` })
+            return;
+          }
+
+          if (response.errorType === "FINANCIAL_RESULT_NOT_FOUND") {
+            if (response.first_timer) {
+              router.push("/form");
+              return;
+            } else {
+              router.push("/form?message=Form is incomplete.");
+              return;
+            }
+          }
+        }
+
+        // Successful response handling
+        if (response.status === 200) {
+          setUserFinancialInfo(response.userFinancialInfo);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+    fetchUserInfo();
+  }, [status, user_id, router, message, setUserFinancialInfo]);
 
   // By using useEffect, the component renders initially, and then if the status is unauthenticated, it triggers the redirection.
   useEffect(() => {
@@ -74,75 +107,85 @@ export default function HomeLayout({
     }
   }, [status, router]);
 
+  useEffect(() => {
+    if (message) {
+      toast.warn(message, {
+        autoClose: 2000,
+      });
+    }
+  }, [message]);
+
   // Handle loading and error states after hooks have been called
-  if (status === "loading" || isLoading) {
-    return <p>Loading...</p>;
+  if (status === "loading" || loading) {
+    return <div className="w-full h-screen flex justify-center items-center">
+      <Loading />
+    </div>;
   }
 
-  if (isError || !session) {
-    if (isError.response.data.errorType === "USER_NOT_FOUND") {
-      router.push("/signup?message=User doesn't exist. Please sign up.");
-      return;
-    } else if (isError.response.data.errorType === "FINANCIAL_ADVICE_NOT_FOUND") {
-      router.push("/form?message=Financial advice doesn't exist. Please sign up.");
-      return;
-    } else {
-      return <p>Error fetching user data</p>;
-    }
-  }
+
 
   return (
-    <div
-      className={cn(
-        " flex flex-col md:flex-row bg-neutral-800 w-full flex-1 max-w-8xl mx-auto border border-neutral-700 overflow-hidden",
-        "h-screen" // for your use case, use `h-screen` instead of `h-[60vh]`
-      )}
-    >
-      <Sidebar open={open} setOpen={setOpen} animate={true}>
-        <SidebarBody className="justify-between gap-10">
-          <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-            <>
-              <Logo />
-            </>
-            <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
-              ))}
-            </div>
-          </div>
-          <div>
-            {session?.user.image ? (
-              <SidebarLink
-                link={{
-                  label: session.user.name!,
-                  href: "#",
-                  icon: (
-                    <Image
-                      src={session?.user.image!}
-                      className="h-7 w-7 flex-shrink-0 rounded-full"
-                      width={50}
-                      height={50}
-                      alt="Avatar"
-                    />
-                  ),
-                }}
-              />
-            ) : (
-              <div className="">
-                <div
-                  className="h-7 w-7 flex items-center justify-center bg-gray-500 text-white text-sm font-semibold rounded-full"
-                  style={{ width: 30, height: 30 }}
-                >
-                  {initials}
-                </div>
-                {session?.user.name}
+    <>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        closeOnClick={true}
+        pauseOnHover={false}
+        theme="dark"
+      />
+      <div
+        className={cn(
+          " flex flex-col md:flex-row bg-neutral-800 w-full flex-1 max-w-8xl mx-auto border border-neutral-700 overflow-hidden",
+          "h-screen" // for your use case, use `h-screen` instead of `h-[60vh]`
+        )}
+      >
+        <Sidebar open={open} setOpen={setOpen} animate={true}>
+          <SidebarBody className="justify-between gap-10">
+            <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+              <>
+                <Logo />
+              </>
+              <div className="mt-8 flex flex-col gap-2">
+                {links.map((link, idx) => (
+                  <SidebarLink key={idx} link={link} />
+                ))}
               </div>
-            )}
-          </div>
-        </SidebarBody>
-      </Sidebar>
-      {children}
-    </div>
+            </div>
+            <div>
+              {session?.user.image ? (
+                <SidebarLink
+                  link={{
+                    label: session.user.name!,
+                    href: "#",
+                    icon: (
+                      <Image
+                        src={session?.user.image!}
+                        className="h-7 w-7 flex-shrink-0 rounded-full"
+                        width={50}
+                        height={50}
+                        alt="Avatar"
+                      />
+                    ),
+                  }}
+                />
+              ) : (
+                <div className="">
+                  <div
+                    className="h-7 w-7 flex items-center justify-center bg-gray-500 text-white text-sm font-semibold rounded-full"
+                    style={{ width: 30, height: 30 }}
+                  >
+                    {initials}
+                  </div>
+                  {session?.user.name}
+                </div>
+              )}
+            </div>
+          </SidebarBody>
+        </Sidebar>
+        {children}
+      </div>
+    </>
   );
 }
 
@@ -175,10 +218,3 @@ export const LogoIcon = () => {
   );
 };
 
-const fetchInitials = (session: any) => {
-  const name = session?.user.name?.split(" ") || [];
-  const firstNameInitial = name.length > 0 ? name[0][0] : "";
-  const lastNameInitial = name.length > 1 ? name[1][0] : "";
-  const initials = `${firstNameInitial}${lastNameInitial}`;
-  return initials;
-};

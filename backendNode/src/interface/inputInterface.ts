@@ -1,3 +1,10 @@
+export interface UserCreation {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
+
 export interface UserInput {
     country: string;
     age: number;
