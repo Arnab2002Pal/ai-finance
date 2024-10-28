@@ -49,7 +49,7 @@ export default function SignupForm() {
       if (!result.success) {
         switch (result.providerId) {
           case "google":
-            router.push('/singin?message=Already registered with google')
+            router.push('/signin?message=Already registered with google')
             break;
           case "credential":
             router.push('/signin?message=Already registered.')    

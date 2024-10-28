@@ -22,8 +22,6 @@ export async function gptCall({
     debt,
     risk_tolerance,
 }: UserInput) {
-    console.log("---------GPT call initiated---------");
-
     const completion = await client.beta.chat.completions.parse({
         model: "gpt-4o-mini",
         messages: [
@@ -150,88 +148,9 @@ export async function gptCall({
         response_format: zodResponseFormat(UserResponse, "UserResponse"),
         temperature: 0.7,
     });
-    console.log("---------GPT call Completed---------");
-
     
     return {
         result: completion,
         response: completion.choices[0].message.parsed,
     }
 }
-
-// const expenseCompletion = await client.beta.chat.completions.parse({
-//     model: "gpt-4o",
-//     messages: [
-//         {
-//             role: "system",
-//             content: `
-//             You are an expert financial adviser. Based on the data, follow the following steps:
-//             - Analyses the data
-//                 - create an expense analysis with current data
-//                 - 
-//                 - create an optimised expense analysis focusing on
-//                     1. reduce expense if possible
-//                     2. 
-//                     2. create a plan and focus on emergency fund first but if there is optional in priority then focus on that.
-//                     3. once emergency fund is saved after that only create a plan for saving and investment simultaneously if possible otherwise keep it seperate one after the another.
-                    
-
-//             - Initial Focus on Emergency Fund: Build a small emergency fund first.
-//             - Pay Down High-Interest Debt: Prioritize paying down  debt while making minimum payments on others.
-//             - Balance Savings and Investments: Once debt is under control, focus on savings and investments simultaneously.
-//             `
-//         },
-//         {
-//             role: "user",
-//             content: `
-//                 Location: India
-//                 Age: 22
-//                 Occupation: Software Developer
-//                 In-Hand Monthly Salary: 26000
-//                 Total Invested Amount: 40000
-//                 Goals:
-//                 - Short-Term: Buy bike for 2 lakh within 1 year
-//                 - Long-Term: Create Wealth by age 40 
-//                 Risk Tolerance: Medium 
-//                 Expenses:
-//                     - Monthly Fixed Expenses:  14000
-//                     - Monthly Variable Expenses: 6000
-//                     - Debt: ₹5,000 per month for 4 months
-//                     - Debt Repaid: 3 EMI
-//                Current Savings:
-//                     - Total Savings:  0
-//                     - Savings Duration:  NA
-//               Emergency Fund:
-//                     - Total Fund Saved:  0
-//                     - Fund saving Duration:  NA
-//             Optional(includes instruction if something is at priority): null
-//             `,
-//         }
-//     ],
-//     response_format: zodResponseFormat(UserResponse, "UserResponse"),
-
-// })
-// console.log("Response:------------- ", expenseCompletion.choices[0].message);
-
-
-                //   Location: ${country} || India
-                //     Age: ${age} || 22
-                //     Occupation: ${occupation} || Software Developer
-                //     In-Hand Monthly Salary: ₹${monthly_salary} || 26000
-                //     Total Investments: ₹${total_investment} || 40000
-                //     Goals:
-                //     - Short-Term: ${short_term_goal} 
-                //     - Long-Term: ${long_term_goal} 
-                //     Risk Tolerance: ${risk_tolerance} 
-                //     Expenses:
-                //         - Monthly Fixed Expenses: ₹${fixed_expenses} || 14000
-                //         - Monthly Variable Expenses: ₹${variable_expenses} || 6000
-                //         - Debt: ₹5,000 per month for 15 months
-                //         - Debt Repaid: 3 months
-                //    Current Savings:
-                //         - Total Savings: ₹${total_savings} || 0
-                //         - Savings Duration: ${savings_duration} months || nil
-                //   Emergency Fund:
-                //         - Total Fund Saved: ₹${emergency_fund_saved} || 0
-                //         - Fund saving Duration: ${emergency_fund_duration} months || 0
-                // Optional(includes instruction if something is at priority): ${optional_instruction} || null

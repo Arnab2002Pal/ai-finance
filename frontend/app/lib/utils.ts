@@ -1,4 +1,7 @@
+"use client"
 import { ClassValue, clsx } from "clsx";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -20,4 +23,16 @@ export const fetchInitials = (session: any) => {
   const lastNameInitial = name.length > 1 ? name[1][0] : "";
   const initials = `${firstNameInitial}${lastNameInitial}`;
   return initials;
+};
+
+
+export const MessageFetcher = ({ setMessage }: any) => {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const messageParam = searchParams.get("message");
+    setMessage(messageParam || "");
+  }, [searchParams, setMessage]);
+
+  return null;
 };

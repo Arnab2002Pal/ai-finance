@@ -1,7 +1,6 @@
 "use client";
 import ExpenseDashboard from "@/app/components/Dashboard-Components/ExpenseDashboard";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { useRecoilValue } from "recoil";
 
@@ -11,8 +10,6 @@ const Expense = () => {
     
   return (
     <>
-      
-
       <ExpenseDashboard
         category={userFinancialInfo}
         expense={userFinancialInfo.expenseAnalysis}

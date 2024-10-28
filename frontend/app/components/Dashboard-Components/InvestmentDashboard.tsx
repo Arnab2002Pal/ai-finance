@@ -2,13 +2,11 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil';
 import { userFinancialInfoState } from '@/app/store/atoms/financialAtom';
-import { useRouter } from 'next/navigation';
 import DoughnutChart from '../ui/doughnut';
 
 
 const InvestmentDashboard = () => {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
-  const router = useRouter();
   const { WhereToInvest } = userFinancialInfo.investmentAdvice
 
   return (

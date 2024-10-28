@@ -213,16 +213,16 @@ const generateAdvice = async (req: Request, res: Response) => {
   const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
 
   const gptInput: UserInput = {
-    country: locationInfo.location || "India",
-    age: Number(accountInfo.age) || 22,
-    occupation: accountInfo.occupation || "Software Engineer",
-    monthly_salary: Number(accountInfo.monthlyIncome) || 50000,
-    total_expenses: accountInfo.totalExpense || 35000,
-    total_investment: accountInfo.currentInvestment || 150000,
-    short_term_goal: accountInfo.shortTermGoal || "Buy Phone",
-    long_term_goal: accountInfo.longTermGoal || "Buy House",
-    debt: accountInfo.debt || "3000/m for 3 months",
-    risk_tolerance: accountInfo.riskTolerance || "High",
+    country: locationInfo.location,
+    age: Number(accountInfo.age),
+    occupation: accountInfo.occupation,
+    monthly_salary: Number(accountInfo.monthlyIncome),
+    total_expenses: accountInfo.totalExpense,
+    total_investment: accountInfo.currentInvestment,
+    short_term_goal: accountInfo.shortTermGoal,
+    long_term_goal: accountInfo.longTermGoal,
+    debt: accountInfo.debt,
+    risk_tolerance: accountInfo.riskTolerance,
   };
 
   try {
@@ -304,7 +304,6 @@ const getUserInfo = async (req: Request, res: Response) => {
     const userFinancialInfo = await prisma.financialAdvice.findUnique({
       where: { user_id: user.id },
     });
-    console.log(user);
     
     if (!userFinancialInfo) {      
       return res.status(404).json({

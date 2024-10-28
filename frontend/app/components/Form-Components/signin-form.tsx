@@ -6,7 +6,7 @@ import { cn } from "@/app/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { signInValidationScema, SignInValidationSchema } from "@/app/validator/userValidation";
+import { signInValidationSchema, SignInValidationSchema } from "@/app/validator/userValidation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,7 +16,7 @@ export default function SignInForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInValidationSchema>({
-    resolver: zodResolver(signInValidationScema),
+    resolver: zodResolver(signInValidationSchema),
   });
 
 
@@ -66,7 +66,7 @@ export default function SignInForm() {
         </button>
 
         <div className="pt-4 text-sm font-light text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <span className="font-semibold">
             <Link href="/signup">Register</Link>
           </span>

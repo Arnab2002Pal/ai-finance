@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
@@ -12,7 +13,7 @@ import {
   SelectValue,
 } from "@/app/components/ui/select";
 
-const options = ["High", "Low", "Medium"];
+const options = ["High", "Medium", "Low"];
 
 const AccountInfo = ({ formData, handleChange }: any) => {
   const handleRisk = (value: string) => {
@@ -25,14 +26,13 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           Personal Information
         </div>
         <div className="bg-black w-full h-full p-10">
-          <div></div>
           <LabelInputContainer className="mb-6">
             <Label htmlFor="age">Your current age</Label>
             <Input
               placeholder="Your current age"
               type="number"
               name="age"
-              value={formData.age}
+              value={formData?.age}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -42,7 +42,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="Student, Fresher, etc..."
               type="text"
               name="occupation"
-              value={formData.occupation}
+              value={formData?.occupation}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -52,7 +52,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="eg. 25000"
               type="number"
               name="monthlyIncome"
-              value={formData.monthlyIncome}
+              value={formData?.monthlyIncome}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -70,7 +70,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="Total Investment till date"
               type="number"
               name="currentInvestment"
-              value={formData.currentInvestment}
+              value={formData?.currentInvestment}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -96,7 +96,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="Within 1-2 years"
               type="text"
               name="shortTermGoal"
-              value={formData.shortTermGoal}
+              value={formData?.shortTermGoal}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -123,7 +123,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="More then 2 years"
               type="text"
               name="longTermGoal"
-              value={formData.longTermGoal}
+              value={formData?.longTermGoal}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -159,7 +159,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               placeholder="eg. 5000/month for 2 years"
               type="text"
               name="debt"
-              value={formData.debt}
+              value={formData?.debt}
               onChange={handleChange}
             />
           </LabelInputContainer>
@@ -168,29 +168,13 @@ const AccountInfo = ({ formData, handleChange }: any) => {
             <Textarea
               placeholder="Enter"
               name="totalExpense"
-              value={formData.totalExpense}
+              value={formData?.totalExpense}
               onChange={handleChange}
               className="text-black"
             />
           </LabelInputContainer>
-
         </div>
       </div>
-      {/* <div>
-        <LabelInputContainer className="mb-4">
-          
-         
-      {/* 
-          
-          */}
-      {/* */}
-      {/* 
-          
-        </LabelInputContainer>
-      </div>
-      <div>
-       
-      </div> */}
     </div>
   );
 };

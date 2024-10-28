@@ -105,7 +105,6 @@ export const fetchData = async (url: string) => {
     if (status === 400 || status === 404) {
       return error.response.data;  // Handle 400 and 404 gracefully
     }
-
     throw new Error(`Server Error: ${error.response?.data?.message || "Unknown Error"}`);
   }
 };

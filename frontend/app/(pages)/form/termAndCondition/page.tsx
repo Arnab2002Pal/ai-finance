@@ -1,8 +1,8 @@
+"use client"
 import React, { useState } from 'react';
-import { Checkbox } from "../../../components/ui/checkbox";
 
 const TermsAndCondition = ({ formData, handleChange }: any) => {
-  const [checkedTerm, setCheckedTerm] = useState(formData.acceptTerms);
+  const [checkedTerm, setCheckedTerm] = useState(formData?.acceptTerms);
 
   const handleTermsAndCondition = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
