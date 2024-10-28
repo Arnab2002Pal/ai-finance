@@ -80,6 +80,19 @@ const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
   }
 };
 
+/**
+ * Registers a new user using the provided credentials.
+ *
+ * @param {Request} req - The request object containing the user's details in the request body.
+ * @param {Response} res - The response object to send the HTTP response.
+ *
+ * @remarks
+ * This function extracts the user's details from the request body, validates them, and checks if a user with the same email already exists.
+ * If the validation fails or the user already exists, an appropriate HTTP response is sent with the corresponding status code and error message.
+ * If the user is successfully registered, a new user record is created in the database, and an HTTP response with a success status code is sent.
+ *
+ * @returns {Promise<void>}
+ */
 const registerCredentialUser = async (req: Request, res: Response) => {
   const userDetails: UserCreation = req.body
   const { success, data } = credentialUserRegistration.safeParse(userDetails)
@@ -137,6 +150,7 @@ const registerCredentialUser = async (req: Request, res: Response) => {
     })
   }
 }
+
 
 /**
  * Handles user authentication using the credentials provider
