@@ -330,6 +330,19 @@ const getUserInfo = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Checks if a financial report exists for a user based on their email.
+ *
+ * @param {Request} req - The request object containing the user's email in the request parameters.
+ * @param {Response} res - The response object to send the HTTP response.
+ *
+ * @remarks
+ * This function retrieves the user's email from the request parameters, checks if a user with the given email exists,
+ * and then checks if a financial report exists for that user. If the user or financial report is not found,
+ * an appropriate HTTP response is sent with the corresponding status code and error message.
+ * If both the user and financial report are found, the function sends an HTTP response with a success status code
+ * and includes the user's first-time flag.
+ */
 const checkFinancialReport = async (req: Request, res: Response) => {
   const { email } = req.params;
 
@@ -345,7 +358,7 @@ const checkFinancialReport = async (req: Request, res: Response) => {
       message: "User not found",
     });
   } 
-  
+
   const financialReport = await prisma.financialAdvice.findUnique({
     where: { user_id: userExist.id },
   })
@@ -364,8 +377,8 @@ const checkFinancialReport = async (req: Request, res: Response) => {
       first_time: userExist.first_timer
     });
   }
-
 }
+
 
 export {
   handleGoogleUserAuth,
