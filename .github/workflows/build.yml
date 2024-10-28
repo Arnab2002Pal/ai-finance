@@ -31,4 +31,6 @@ jobs:
       - name: Build backend
         run: |
           cd backendNode
+          npm run db:generate
+          cd ../../..
           npm run build
