@@ -2,7 +2,7 @@ name: Build succeeds on PR
 
 on:
   pull_request:
-    branch: 
+    branches:
       - main
 
 jobs:
@@ -11,26 +11,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: |
-          cd frontend
-          npm install
-          cd ../backendNode
-          npm install
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Install backend dependencies
+        working-directory: backendNode
+        run: npm install
       
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
+        run: npm run build
 
+      - name: Generate Prisma client for backend
+        working-directory: backendNode
+        run: npm run db:generate
+      
       - name: Build backend
-        run: |
-          cd backendNode
-          npm run db:generate
-          cd ../../..
-          npm run build
+        working-directory: backendNode
+        run: npm run build
