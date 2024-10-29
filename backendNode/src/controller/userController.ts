@@ -178,7 +178,6 @@ const handleCredentialUserAuth = async (req: Request, res: Response) => {
       });
     }
 
-    // Compare the provided password with the stored hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     
     if (!isPasswordValid) {
