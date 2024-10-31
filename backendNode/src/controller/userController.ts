@@ -10,7 +10,7 @@ import {
 } from "../service/dbService";
 import { NewRequest } from "../interface/requestInterface";
 import { generateFinancialAdvice } from "../service/gptService";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { credentialUserRegistration } from "../validation/userValidation";
 
 const prisma = new PrismaClient();

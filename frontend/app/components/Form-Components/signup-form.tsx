@@ -69,8 +69,8 @@ export default function SignupForm() {
       if (result.success) {
         router.push('/signin?message=User Registration Successfully')            
       }
-    } catch (error) {
-      throw new Error("Invalid user registration");
+    } catch (error: any) {
+      throw new Error("Invalid user registration:", error);
     } 
   };
 
