@@ -3,7 +3,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { userRouter } from './router/userRouter'
-import questionRouter from './router/questionRouter'
 
 dotenv.config();
 
@@ -19,7 +18,6 @@ app.use(cors({
 }));
 
 app.use('/api/v1', userRouter)
-app.use('/api/v1/question', questionRouter)
 
 // Start server
 const port = process.env.PORT || 3001;

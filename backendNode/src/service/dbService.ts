@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Account, Location, TermsAndCondition } from '../interface/inputInterface';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient();
 
 export const hashPassword = async (password: string): Promise<string> => {
