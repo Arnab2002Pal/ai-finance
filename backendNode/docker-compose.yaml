@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  postgres_database:
+    image: 'postgres:latest'
+    container_name: postgresdb
+    ports:
+        - 6500:5432
+    volumes:
+      - postgresdb_data:/data/db
+    env_file:
+        - .env
+
+  backend:
+    # image: 'backend-ai-finance'
+    build: .
+    container_name: backend_application
+    ports:
+        - 3001:3001
+        - 5555:5555
+    env_file:
+        - .env
+    depends_on:
+      - postgres_database
+
+  migrate:
+    build: .
+    command: ["npm", "run", "db:deploy"]
+    depends_on:
+      - postgres_database
+    
+volumes:
+  postgresdb_data:
