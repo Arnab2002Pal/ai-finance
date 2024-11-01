@@ -24,7 +24,7 @@ jobs:
         context: ./backendNode
         file: ./backendNode/Dockerfile
         push: true
-        tags: arnabpal342002/ai-finance-application:latest
+        tags: arnabpal342002/ai-finance-backend-application:latest
 
     - name: Verify Pushed Image
-      run: docker pull arnabpal342002/ai-finance-application:latest
+      run: docker pull arnabpal342002/ai-finance-backend-application:latest
