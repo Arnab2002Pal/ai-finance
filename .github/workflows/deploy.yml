@@ -28,3 +28,14 @@ jobs:
 
     - name: Verify Pushed Image
       run: docker pull arnabpal342002/ai-finance-backend-application:latest
+
+    - name: Deplot to EC2
+      uses: appleboy/ssh-action@master # Master specifies the version
+      with:
+        host: ${{ secrets.SSH_HOST }} # Need to add to github action
+        username: ${{ secrets.SSH_USERNAME }} # Need to add to github action
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          docker-compose down     # Stop existing containers
+          docker-compose pull     # Pull latest images from Docker Hub
+          docker-compose up -d    # Start containers in detached mode

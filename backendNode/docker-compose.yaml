@@ -11,8 +11,7 @@ services:
         - .env
 
   backend:
-    # image: 'backend-ai-finance'
-    build: .
+    image: 'arnabpal342002/ai-finance-backend-application'
     container_name: backend_application
     ports:
         - 3001:3001
