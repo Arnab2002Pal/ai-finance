@@ -29,6 +29,25 @@ jobs:
     - name: Verify Pushed Image
       run: docker pull arnabpal342002/ai-finance-backend-application:latest
 
+    - name: Copy docker-compose.yml to EC2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "backendNode/docker-compose.yaml"
+        target: "/home/ubuntu/backend"
+
+    - name: Copy .env to EC2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "backendNode/.env"
+        target: "/home/ubuntu/backend"
+
+
     - name: Deplot to EC2
       uses: appleboy/ssh-action@master # Master specifies the version
       with:
@@ -36,9 +55,9 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }} # Need to add to github action
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /home/ubuntu/  
-          pwd       
+          cd /home/ubuntu/backend
+          pwd
           ls
-          docker-compose down     # Stop existing containers
-          docker-compose pull     # Pull latest images from Docker Hub
-          docker-compose up -d    # Start containers in detached mode
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
