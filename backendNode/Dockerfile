@@ -14,5 +14,5 @@ RUN npm run db:generate
 RUN npm run build
 
 # Expose the application port and start the app
-EXPOSE 3001
+EXPOSE 3001 5555
 CMD ["npm", "start"]

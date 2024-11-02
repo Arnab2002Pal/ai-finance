@@ -38,7 +38,7 @@ jobs:
         source: "backendNode/docker-compose.yaml"
         target: "/home/ubuntu/backend"
 
-    - name: Deplot to EC2
+    - name: Deploy to EC2
       uses: appleboy/ssh-action@master # Master specifies the version
       with:
         host: ${{ secrets.SSH_HOST }} # Need to add to github action

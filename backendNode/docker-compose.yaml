@@ -21,7 +21,9 @@ services:
       - postgres_database
 
   migrate:
-    build: .
+    image: 'arnabpal342002/ai-finance-backend-application'
+    env_file:
+      - .env
     command: ["npm", "run", "db:deploy"]
     depends_on:
       - postgres_database
