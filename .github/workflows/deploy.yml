@@ -45,7 +45,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }} # Need to add to github action
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /home/ubuntu/backend
+          cd /backend/backendNode
           pwd
           ls
           docker-compose down
