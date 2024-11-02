@@ -38,16 +38,6 @@ jobs:
         source: "backendNode/docker-compose.yaml"
         target: "/home/ubuntu/backend"
 
-    - name: Copy .env to EC2
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}
-        source: "backendNode/.env"
-        target: "/home/ubuntu/backend"
-
-
     - name: Deplot to EC2
       uses: appleboy/ssh-action@master # Master specifies the version
       with:
