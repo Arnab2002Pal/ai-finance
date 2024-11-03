@@ -42,9 +42,6 @@ export function HeroTitle() {
             SignIn
           </button>
         </div>
-        <div className="text-white hover:text-gray-300">
-          <button>Join as a guest</button>
-        </div>
       </div>
     </div>
   );

@@ -11,7 +11,6 @@ const Loading = () => {
                 size={10}
                 speedMultiplier={1}
             />
-            {/* <HashLoader color='#00d332'/> */}
         </div>
     )
 }
