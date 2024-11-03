@@ -7,6 +7,7 @@ import TermsAndCondition from '@/app/(pages)/form/termAndCondition/page';
 import { checkFinancialReport, generateFinancialAdvice } from '@/app/api/utility/api';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { PulseLoader } from "react-spinners";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -49,14 +50,11 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
 
                 try {
                     const result = await checkFinancialReport(`/checkFinancialReport/${email}`);
-                    console.log(result);
                     
                     if (result.status === 200) {
                         if (!result.first_time) {
                             router.push("/home?message=Access Denied");
                         } else {
-                            console.log("Inside the checkFinancialReport");
-                            
                             setLoading(false);
                         }
                     } else if (result.status === 404 && result.errorType === "USER_NOT_EXIST") {
@@ -141,7 +139,14 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
                     />
                 );
             case 4:
-                return <div className="text-center">Submitting...</div>;
+                return (
+                    <div className="flex flex-col items-center justify-center h-screen mt-10">
+                        <Loading/>
+                        <p className="text-lg font-semibold text-white mt-4">
+                            Generating your report, please wait.
+                        </p>
+                    </div>
+                )
             default:
                 return (
                     <Location
