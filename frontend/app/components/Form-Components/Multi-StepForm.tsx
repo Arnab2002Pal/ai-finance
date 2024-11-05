@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { PulseLoader } from "react-spinners";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { FormData, UserAccountInfo } from '@/app/interface/userInterface';
 
 
 const MultiStepForm = ({ email, message, status }: { email: string, message: string, status: string }) => {
@@ -17,7 +18,7 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(true);
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         email: "",
         locationInfo: {
             location: "",
@@ -50,7 +51,7 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
 
                 try {
                     const result = await checkFinancialReport(`/checkFinancialReport/${email}`);
-                    
+
                     if (result.status === 200) {
                         if (!result.first_time) {
                             router.push("/home?message=Access Denied");
@@ -140,9 +141,9 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
                 );
             case 4:
                 return (
-                    <div className="flex flex-col items-center justify-center h-screen mt-10">
-                        <Loading/>
-                        <p className="text-lg font-semibold text-white mt-4">
+                    <div className="flex flex-col items-center justify-center h-screen mt-10 p-4 md:p-8 lg:p-10">
+                        <Loading />
+                        <p className="text-lg font-semibold text-white mt-4 text-center">
                             Generating your report, please wait.
                         </p>
                     </div>
@@ -157,8 +158,21 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
         }
     };
 
+    const areAccountInfoFieldsFilled = (accountInfo: UserAccountInfo): boolean => {
+        return Object.values(accountInfo).every((field: any) => field.trim() !== "");
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!areAccountInfoFieldsFilled(formData.accountInfo)) {
+            toast.warn("Please fill out all the required fields to proceed.", {
+                autoClose: 4000,
+                position: "top-center",
+            });
+            setStep(2)
+            return;
+        }
 
         if (!formData.termsAndCondition.acceptTerms) {
             toast.warn("Please accept the terms and conditions to proceed.", {
@@ -198,7 +212,7 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
 
             <form onSubmit={handleSubmit} className="container mx-auto p-4">
                 {step !== 4 && (
-                    <ol className="flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+                    <ol className="hidden md:flex items-center w-full p-3 space-x-2 text-sm font-medium text-center border-2 rounded-lg shadow-sm text-gray-400 sm:text-base bg-black border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
                         <li
                             className={`flex items-center ${step === 1 ? "text-green-500" : ""
                                 }`}
