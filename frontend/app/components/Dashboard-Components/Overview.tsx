@@ -4,7 +4,6 @@ import {
   UserFinancialInfo,
 } from "@/app/interface/userInterface";
 import BarChart from "../ui/barChart";
-import { AnalysisSection } from "../ui/analysis-section";
 import InvestmentDashboard from "./InvestmentDashboard";
 import SavingDashboard from "./SavingDashboard";
 import GoalDashboard from "./GoalDashboard";

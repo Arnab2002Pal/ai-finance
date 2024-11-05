@@ -11,9 +11,9 @@ const TermsAndCondition = ({ formData, handleChange }: any) => {
   };
 
   return (
-    <div className='flex flex-col gap-4 mb-4 justify-center items-center'>
-      <div className='w-screen-md text-wrap text-center'>
-        By submitting your data, you agree that the information provided will be securely stored and used solely for AI analysis purposes. We prioritize the protection of your data and ensure it will not be shared with third parties or used for any other purpose outside of AI analysis. All reasonable measures are taken to safeguard your data and maintain confidentiality in compliance with applicable data protection laws. You retain ownership of your data and can request its deletion at any time.
+    <div className="flex flex-col gap-4 mb-4 justify-center items-center px-4">
+      <div className="w-full max-w-md text-center text-sm lg:text-base">
+        By submitting your data, you agree that it will be securely stored for AI analysis only. We prioritize confidentiality and data security, ensuring no unauthorized sharing. You can request data deletion anytime.
       </div>
       <div className="flex items-center space-x-2">
         <input
@@ -21,6 +21,7 @@ const TermsAndCondition = ({ formData, handleChange }: any) => {
           name="acceptTerms"
           checked={checkedTerm}
           onChange={handleTermsAndCondition}
+          className="h-4 w-4"
         />
         <label
           htmlFor="acceptTerms"

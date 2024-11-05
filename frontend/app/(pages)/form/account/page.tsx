@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
@@ -19,13 +19,14 @@ const AccountInfo = ({ formData, handleChange }: any) => {
   const handleRisk = (value: string) => {
     handleChange({ target: { name: "riskTolerance", value } });
   };
+
   return (
-    <div className="flex justify-between h-full w-full">
-      <div className="w-full flex flex-col justify-start items-center ">
+    <div className="flex flex-col md:flex-row md:justify-between h-full w-full overflow-auto">
+      <div className="w-full md:w-1/3 flex flex-col justify-start items-center mb-8 md:mb-0">
         <div className="text-2xl pt-6 w-full text-center font-medium">
           Personal Information
         </div>
-        <div className="bg-black w-full h-full p-10">
+        <div className="bg-black w-full h-full p-6 md:p-10">
           <LabelInputContainer className="mb-6">
             <Label htmlFor="age">Your current age</Label>
             <Input
@@ -58,12 +59,12 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           </LabelInputContainer>
         </div>
       </div>
-      <div className="w-full flex flex-col justify-start items-center ">
+
+      <div className="w-full md:w-1/3 flex flex-col justify-start items-center mb-8 md:mb-0">
         <div className="text-2xl pt-6 w-full text-center font-medium">
           Financial Information
         </div>
-        <div className="bg-black w-full h-full p-10">
-          <div></div>
+        <div className="bg-black w-full h-full p-6 md:p-10">
           <LabelInputContainer className="mb-6">
             <Label htmlFor="currentInvestment">Current Investment</Label>
             <Input
@@ -77,20 +78,7 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           <LabelInputContainer className="mb-6 relative">
             <Label htmlFor="shortTermGoal" className="flex items-end justify-between">
               Short Term Goal
-              <button
-                className="relative group"
-                type="button"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-info-small">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 9h.01" />
-                  <path d="M11 12h1v4h1" />
-                </svg>
-
-                {/* Tooltip */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-sm rounded-md shadow-lg z-10">
-                  Short-term goals are objectives you plan to achieve within 1-2 years, like saving for a vacation, buying a gadget, or investing in a small business with a target amount set.</div>
-              </button>
+              <Tooltip text="Short-term goals are objectives you plan to achieve within 1-2 years, like saving for a vacation, buying a gadget, or investing in a small business with a target amount set." />
             </Label>
             <Input
               placeholder="Within 1-2 years"
@@ -100,34 +88,19 @@ const AccountInfo = ({ formData, handleChange }: any) => {
               onChange={handleChange}
             />
           </LabelInputContainer>
-
           <LabelInputContainer className="mb-6">
-            <Label htmlFor="longTermGoal" className="flex items-end justify-between">Long Term Goal
-              <button
-                className="relative group"
-                type="button"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-info-small">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 9h.01" />
-                  <path d="M11 12h1v4h1" />
-                </svg>
-
-                {/* Tooltip */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-sm rounded-md shadow-lg z-10">
-                  Long-term goals are objectives over 5+ years, like saving for retirement, buying a home, or building an investment portfolio, with or without a target amount set.</div>
-              </button>
+            <Label htmlFor="longTermGoal" className="flex items-end justify-between">
+              Long Term Goal
+              <Tooltip text="Long-term goals are objectives over 5+ years, like saving for retirement, buying a home, or building an investment portfolio, with or without a target amount set." />
             </Label>
-
             <Input
-              placeholder="More then 2 years"
+              placeholder="More than 2 years"
               type="text"
               name="longTermGoal"
               value={formData?.longTermGoal}
               onChange={handleChange}
             />
           </LabelInputContainer>
-
           <LabelInputContainer className="mb-4">
             <Label htmlFor="riskTolerance">How much risk can you take?</Label>
             <Select onValueChange={handleRisk}>
@@ -147,12 +120,12 @@ const AccountInfo = ({ formData, handleChange }: any) => {
           </LabelInputContainer>
         </div>
       </div>
-      <div className="w-full flex flex-col justify-start items-center ">
+
+      <div className="w-full md:w-1/3 flex flex-col justify-start items-center">
         <div className="text-2xl pt-6 w-full text-center font-medium">
           Expense Information
         </div>
-        <div className="bg-black w-full h-full p-10">
-          <div></div>
+        <div className="bg-black w-full h-full p-6 md:p-10">
           <LabelInputContainer className="mb-6">
             <Label htmlFor="debt">Any debt?</Label>
             <Input
@@ -194,3 +167,16 @@ const LabelInputContainer = ({
     </div>
   );
 };
+
+const Tooltip = ({ text }: { text: string }) => (
+  <button className="relative group " type="button" disabled>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-info-small">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 9h.01" />
+      <path d="M11 12h1v4h1" />
+    </svg>
+    <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-64 p-2 bg-gray-700 text-white text-sm rounded-md shadow-lg z-10">
+      {text}
+    </div>
+  </button>
+);

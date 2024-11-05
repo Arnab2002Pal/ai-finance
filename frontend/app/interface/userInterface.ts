@@ -5,6 +5,33 @@ export interface UserInput {
     password: string;
 }
 
+export interface UserAccountInfo {
+    age: string;
+    occupation: string;
+    monthlyIncome: string;
+    totalExpense: string;
+    currentInvestment: string;
+    shortTermGoal: string;
+    longTermGoal: string;
+    riskTolerance: string;
+    debt: string;
+}
+
+export interface LocationInfo {
+    location: string;
+}
+
+export interface TermsAndCondition {
+    acceptTerms: boolean;
+}
+
+export interface FormData {
+    email: string;
+    locationInfo: LocationInfo;
+    accountInfo: UserAccountInfo;
+    termsAndCondition: TermsAndCondition;
+}
+
 export interface UserInfo {
     user_id?: number;
     name: string;
