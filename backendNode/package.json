@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "prisma": "cd ./src/model/prisma && npx prisma studio",
     "db:generate": "cd ./src/model/prisma && npx prisma generate",
-    "db:migrate": "cd ./src/model/prisma && npx prisma migrate",
+    "db:migrate": "cd ./src/model/prisma && npx prisma migrate dev",
     "db:deploy": "cd ./src/model/prisma && npx prisma migrate deploy"
   },
   "keywords": [],
