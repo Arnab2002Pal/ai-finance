@@ -1,32 +1,15 @@
 services:
-  postgres_database:
-    image: 'postgres:latest'
-    container_name: postgresdb
-    ports:
-        - 6500:5432
-    volumes:
-      - postgresdb_data:/data/db
-    env_file:
-        - .env
-
   backend:
-    image: 'arnabpal342002/ai-finance-backend-application'
+    build: .
     container_name: backend_application
     ports:
         - 3001:3001
         - 5555:5555
     env_file:
         - .env
-    depends_on:
-      - postgres_database
 
   migrate:
-    image: 'arnabpal342002/ai-finance-backend-application'
+    build: .
     env_file:
       - .env
     command: ["npm", "run", "db:deploy"]
-    depends_on:
-      - postgres_database
-    
-volumes:
-  postgresdb_data:

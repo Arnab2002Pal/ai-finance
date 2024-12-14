@@ -198,14 +198,17 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
 
         try {
             const result = await generateFinancialAdvice("generateAdvice", formData);
-
+            console.log("Result:",result);
+            
             if (result.success) {
                 router.push("/home");
             } else {
-                router.push(`/signup?message=User doesn't exist. Please sign up.`);
+                router.push('/error')
+                // router.push(`/signup?message=User doesn't exist. Please sign up.`);
             }
         } catch (error) {
-            router.push("/error")
+            // toast.warn("An error occurred. Please try again later.")
+            router.push('/error')
         } finally {
             setLoading(false);
         }

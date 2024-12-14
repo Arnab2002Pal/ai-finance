@@ -15,6 +15,12 @@ import { credentialUserRegistration } from "../validation/userValidation";
 
 const prisma = new PrismaClient();
 
+const testRouter = async (req: Request, res: Response) => {
+    res.status(200).json({
+      message: "Backend server working successfully",
+    })
+}
+
 /**
  * Handles Google user authentication
  *
@@ -394,6 +400,7 @@ const checkFinancialReport = async (req: Request, res: Response) => {
 
 
 export {
+  testRouter,
   handleGoogleUserAuth,
   registerCredentialUser,
   handleCredentialUserAuth,
