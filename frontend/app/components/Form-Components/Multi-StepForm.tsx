@@ -205,7 +205,7 @@ const MultiStepForm = ({ email, message, status }: { email: string, message: str
                 router.push(`/signup?message=User doesn't exist. Please sign up.`);
             }
         } catch (error) {
-            toast.warn("An error occurred. Please try again later.");
+            router.push("/error")
         } finally {
             setLoading(false);
         }

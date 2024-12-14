@@ -1,3 +1,4 @@
+import { Error_Message } from "../interface/enum";
 import { UserInput } from "../interface/inputInterface";
 import { gptCall } from "./openai";
 
@@ -15,6 +16,6 @@ export const generateFinancialAdvice = async (gptInput: UserInput) => {
             summary: response?.Summary || "",
         };
     } catch (error) {
-        throw new Error("GPT call failed");
+        throw new Error(Error_Message.GPT_ERROR);
     }
 };
