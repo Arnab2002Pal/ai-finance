@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+    testRouter,
     handleGoogleUserAuth,
     registerCredentialUser,
     handleCredentialUserAuth,
@@ -12,6 +13,7 @@ import { authenticateUser } from './middleware';
 const userRouter = express.Router();
 
 // GET
+userRouter.get('/', testRouter)
 userRouter.get('/userInfo/:id', getUserInfo)
 userRouter.get('/checkFinancialReport/:email', checkFinancialReport)
 
