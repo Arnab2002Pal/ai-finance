@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    image: "arnabpal342002/ai-finance-backend-application"
     container_name: backend_application
     ports:
         - 3001:3001
@@ -9,7 +9,7 @@ services:
         - .env
 
   migrate:
-    build: .
+    image: "arnabpal342002/ai-finance-backend-application"
     env_file:
       - .env
     command: ["npm", "run", "db:deploy"]
