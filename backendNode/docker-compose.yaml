@@ -1,15 +1,41 @@
 services:
   backend:
     image: "arnabpal342002/ai-finance-backend-application"
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     container_name: backend_application
     ports:
         - 3001:3001
         - 5555:5555
     env_file:
         - .env
+    networks:
+      - backend
+    
+  redis:
+    image: redis:alpine  
+    container_name: redis-server
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-server_data:/data/server
+    command: ["redis-server", "--appendonly", "yes"]
+    env_file:
+      - .env
+    networks:
+      - backend
 
   migrate:
     image: "arnabpal342002/ai-finance-backend-application"
+    # build: .
     env_file:
       - .env
     command: ["npm", "run", "db:deploy"]
+
+volumes:
+  redis-server_data:
+
+networks:
+  backend:
+    driver: bridge

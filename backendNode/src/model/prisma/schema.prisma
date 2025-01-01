@@ -42,19 +42,21 @@ model LocationInfo {
 }
 
 model AccountInfo {
-  id                Int      @id @default(autoincrement())
-  user_id           Int      @unique
-  occupation        String
-  age               Int
-  monthlyIncome     Int
-  totalExpense      String
-  totalInvestment   Int
-  shortTermGoal     String
-  longTermGoal      String
-  riskTolerance     String
-  debt              String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  id                      Int      @id @default(autoincrement())
+  user_id                 Int      @unique
+  age                     Int
+  occupation              String
+  monthly_income          Int
+  monthly_expense         Int
+  monthly_debt            Int?     // Made optional
+  total_remaining_debt    Int?     // Made optional
+  risk_tolerance          RiskTolerance // Enum type for risk tolerance
+  goal_priorities         String
+  current_amount_savings  String?
+  short_term              String
+  long_term               String
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
 
   User User @relation(fields: [user_id], references: [id])
 }
@@ -70,20 +72,25 @@ model TermsAndCondition {
 }
 
 model FinancialAdvice {
-  id               Int        @id @default(autoincrement())
-  user_id          Int        @unique
-  expenseAnalysis  Json 
-  investmentAdvice Json 
-  savingPlan       Json 
-  debtManagement   Json
-  goalRoadmap      Json 
-  structuredPlan   Json 
-  growth           Json 
-  summary          String 
-  created_at       DateTime   @default(now())
-  updated_at       DateTime   @updatedAt
+  id                Int        @id @default(autoincrement())
+  user_id           Int        @unique
+  expenseAnalysis   Json
+  investmentAdvice  Json
+  savingPlan        Json
+  debtManagement    Json
+  goalRoadmap       Json
+  structuredPlan    Json
+  growthAnalysis    Json
+  reEvaluation      Json
+  summary           Json
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
   
   User             User       @relation(fields: [user_id], references: [id])
 }
 
-
+enum RiskTolerance {
+  Conservative
+  Moderate
+  Aggressive
+}
