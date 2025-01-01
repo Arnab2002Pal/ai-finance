@@ -13,3 +13,9 @@ export enum Error_Message {
     LENGTH_REQUIRED = "The request body must contain a valid content length",
     PRECONDITION_FAILED = "One or more precondition requirements for this request were not met",
 }
+
+export enum RiskTolerance {
+    Conservative = "Conservative",
+    Moderate = "Moderate",
+    Aggressive = "Aggressive",
+}

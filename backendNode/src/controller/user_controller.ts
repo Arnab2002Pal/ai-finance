@@ -1,24 +1,25 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { UserCreation, UserInput } from "../interface/inputInterface";
+import { UserCreation, UserInput } from "../interface/input_interface";
 import {
   hashPassword,
   updateOrCreateAccountInfo,
   updateOrCreateLocationInfo,
   updateOrCreateTermsAndCondition,
   updateUserFlag,
-} from "../service/dbService";
-import { NewRequest } from "../interface/requestInterface";
-import { generateFinancialAdvice } from "../service/gptService";
+} from "../services/db_service";
+import { NewRequest } from "../interface/request_interface";
+import { generateFinancialAdvice } from "../services/ai_service";
 import bcrypt from 'bcryptjs'
 import { credentialUserRegistration } from "../validation/userValidation";
+import { redis } from "../configs/redis";
 
 const prisma = new PrismaClient();
 
 const testRouter = async (req: Request, res: Response) => {
-    res.status(200).json({
-      message: "Backend server working successfully",
-    })
+  res.status(200).json({
+    message: "Backend server working successfully",
+  })
 }
 
 /**
@@ -51,8 +52,8 @@ const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
   try {
     const userExist = await prisma.user.findUnique({
       where: { email: user.token.email },
-    });    
-    
+    });
+
     if (userExist) {
       return res.status(409).json({
         status: 409,
@@ -68,7 +69,7 @@ const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
       create: { ...userData, password: "" },
     });
 
-    const {password, ...newResult} = result;
+    const { password, ...newResult } = result;
     return res.status(200).json({
       status: 200,
       success: true,
@@ -101,6 +102,7 @@ const handleGoogleUserAuth = async (req: NewRequest, res: Response) => {
  */
 const registerCredentialUser = async (req: Request, res: Response) => {
   const userDetails: UserCreation = req.body
+
   const { success, data } = credentialUserRegistration.safeParse(userDetails)
 
   if (!success) {
@@ -174,7 +176,7 @@ const handleCredentialUserAuth = async (req: Request, res: Response) => {
     const user = await prisma.user.findUnique({
       where: { email },
     });
-    
+
     // If user is not found, return 404
     if (!user) {
       return res.status(404).json({
@@ -185,7 +187,7 @@ const handleCredentialUserAuth = async (req: Request, res: Response) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    
+
     if (!isPasswordValid) {
       return res.status(401).json({
         status: 401,
@@ -218,72 +220,6 @@ const handleCredentialUserAuth = async (req: Request, res: Response) => {
   }
 };
 
-
-/**
- * Create or update user information, including location, account and terms and condition information,
- * and generate a financial advice using the GPT service.
- *
- * @param {Request} req The request object.
- * @param {Response} res The response object.
- *
- * @returns {Promise<void>}
- */
-const generateAdvice = async (req: Request, res: Response) => {
-  const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
-
-  const gptInput: UserInput = {
-    country: locationInfo.location,
-    age: Number(accountInfo.age),
-    occupation: accountInfo.occupation,
-    monthly_salary: Number(accountInfo.monthlyIncome),
-    total_expenses: accountInfo.totalExpense,
-    total_investment: accountInfo.currentInvestment,
-    short_term_goal: accountInfo.shortTermGoal,
-    long_term_goal: accountInfo.longTermGoal,
-    debt: accountInfo.debt,
-    risk_tolerance: accountInfo.riskTolerance,
-  };
-
-  try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: 404,
-        success: false,
-        message: "User not found",
-      });
-    }
-    
-    await updateOrCreateLocationInfo(user.id, locationInfo);
-    await updateOrCreateAccountInfo(user.id, accountInfo);
-    await updateOrCreateTermsAndCondition(user.id, termsAndCondition);
-    await updateUserFlag(user.id, false)
-
-    const gptResponse = await generateFinancialAdvice(gptInput);
-    
-    await prisma.financialAdvice.upsert({
-      where: { user_id: user.id },
-      update: gptResponse,
-      create: { user_id: user.id, ...gptResponse },
-    });
-    
-    return res.status(201).json({
-      status: 201,
-      success: true,
-      message: "User information created or updated successfully",
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 500,
-      success: false,
-      message: "An error occurred while creating or updating user information",
-    });
-  }
-};
-
 /**
  * Handles a GET request to fetch user information, including financial advice.
  *
@@ -292,13 +228,13 @@ const generateAdvice = async (req: Request, res: Response) => {
  *
  * @returns {Promise<void>}
  */
-const getUserInfo = async (req: Request, res: Response) => {
+const getUserFinancialReport = async (req: Request, res: Response) => {
   const { id: user_id } = req.params;
-  
+
   try {
     const userIdAsNumber = Number(user_id);
-    
-    // Ensure it's a valid number before making the Prisma query
+
+    // Validate user ID
     if (isNaN(userIdAsNumber)) {
       return res.status(400).json({
         status: 400,
@@ -306,12 +242,30 @@ const getUserInfo = async (req: Request, res: Response) => {
         message: "Invalid user ID",
       });
     }
-    
+
+    // Check Redis cache
+    const cacheKey = `cached_job:${userIdAsNumber}`;
+    const cachedJob = await redis.get(cacheKey);
+    console.log(`[SERVER] Checking Redis cache`);
+
+    if (cachedJob) {
+      console.log(`[SERVER] Using Redis Cache`);
+      const parsedData = JSON.parse(cachedJob);
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        data: parsedData,
+      });
+    }
+
+    console.log(`[SERVER] Cache Not Found, Searching DB`);
+    // Fetch user from the database
     const user = await prisma.user.findUnique({
       where: { id: userIdAsNumber },
-    });    
- 
+    });
+
     if (!user) {
+      console.log(`[SERVER] User not found`);
       return res.status(404).json({
         status: 404,
         success: false,
@@ -319,12 +273,15 @@ const getUserInfo = async (req: Request, res: Response) => {
         message: "User not found",
       });
     }
-    
-    const userFinancialInfo = await prisma.financialAdvice.findUnique({
+
+    // Fetch user financial advice
+    console.log(`[SERVER] User found, Checking for Financial Result`);
+    const userFinancialDetails = await prisma.financialAdvice.findUnique({
       where: { user_id: user.id },
     });
-    
-    if (!userFinancialInfo) {      
+
+    if (!userFinancialDetails) {
+      console.log(`[SERVER] User found, But no Financial Result`);
       return res.status(404).json({
         status: 404,
         success: false,
@@ -334,13 +291,17 @@ const getUserInfo = async (req: Request, res: Response) => {
       });
     }
 
+    // Cache the financial advice in Redis
+    await redis.setEx(cacheKey, 2 * 60, JSON.stringify(userFinancialDetails));
+    console.log(`[SERVER] Added Resutt to cache`);
+
     return res.status(200).json({
       status: 200,
       success: true,
-      userFinancialInfo,
+      data: userFinancialDetails,
     });
   } catch (error) {
-    console.error("Error fetching user information:", error);
+    console.error("Error fetching user financial report:", error);
     return res.status(500).json({
       status: 500,
       success: false,
@@ -348,6 +309,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 /**
  * Checks if a financial report exists for a user based on their email.
@@ -376,7 +338,7 @@ const checkFinancialReport = async (req: Request, res: Response) => {
       errorType: "USER_NOT_EXIST",
       message: "User not found",
     });
-  } 
+  }
 
   const financialReport = await prisma.financialAdvice.findUnique({
     where: { user_id: userExist.id },
@@ -404,7 +366,6 @@ export {
   handleGoogleUserAuth,
   registerCredentialUser,
   handleCredentialUserAuth,
-  generateAdvice,
-  getUserInfo,
+  getUserFinancialReport,
   checkFinancialReport
 };

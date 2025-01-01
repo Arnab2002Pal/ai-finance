@@ -1,3 +1,5 @@
+import { RiskTolerance } from "./enum";
+
 export interface UserCreation {
     firstName: string;
     lastName: string;
@@ -9,14 +11,17 @@ export interface UserInput {
     country: string;
     age: number;
     occupation: string;
-    monthly_salary: number;
-    total_expenses: number | string;
-    total_investment: number | string;
-    short_term_goal: string;
-    long_term_goal: string;
-    debt: string;
+    monthly_income: number;
+    monthly_expense: number;
+    monthly_debt?: number;
+    total_remaining_debt?: number;
     risk_tolerance: string;
+    goal_priorities: string;
+    current_amount_savings: string;
+    short_term: string;
+    long_term: string;
 }
+
 
 export interface UserOutput {
     expenseAnalysis: ExpenseAnalysis;
@@ -120,19 +125,21 @@ export interface Growth {
 }
 
 export interface Location {
-    location: string;
+    country: string;
 }
 
 export interface Account {
     age: number;
     occupation: string;
-    monthlyIncome: number;
-    totalExpense: string;
-    currentInvestment: number;
-    shortTermGoal: string;
-    longTermGoal: string;
-    riskTolerance: string;
-    debt: string;
+    monthly_income: number;
+    monthly_expense: number;
+    monthly_debt?: number
+    total_remaining_debt?: number;
+    risk_tolerance: RiskTolerance;
+    goal_priorities: string;
+    current_amount_savings?: string;
+    short_term: string;
+    long_term: string;
 
 }
 
