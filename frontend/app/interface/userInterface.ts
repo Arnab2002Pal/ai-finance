@@ -6,15 +6,24 @@ export interface UserInput {
 }
 
 export interface UserAccountInfo {
-    age: string;
-    occupation: string;
-    monthlyIncome: string;
-    totalExpense: string;
-    currentInvestment: string;
-    shortTermGoal: string;
-    longTermGoal: string;
-    riskTolerance: string;
-    debt: string;
+    age: number;
+    occupation: string,
+    monthly_income: number,
+    monthly_expense: number,
+    monthly_debt?: number,
+    total_remaining_debt?: number,
+    risk_tolerance: RiskTolerance,
+    goal_priorities: string,
+    current_amount_savings?: string,
+    short_term: string,
+    long_term: string,
+}
+
+export enum RiskTolerance {
+    default = "",
+    Conservative = "Conservative",
+    Moderate = "Moderate",
+    Aggressive = "Aggressive",
 }
 
 export interface LocationInfo {

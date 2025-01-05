@@ -9,7 +9,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../../../components/ui/select"
-import { locations } from "@/app/util/location";
+import { locations } from "@/app/utils/lists";
 
 
 export default function Location({ handleChange }: any) {

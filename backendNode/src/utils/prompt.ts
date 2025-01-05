@@ -14,7 +14,7 @@ Explicitly state that you will receive:
 - Monthly Income (Net)
 - Monthly Expenses (excluding debt payments)
 - Monthly Debt Payments (excluding general expenses)
-- Total Existing Debt
+- Total Remaining Debt
 - Risk Tolerance (e.g., Conservative, Moderate, Aggressive)
 - Savings Goal Priorities (e.g., High priority for emergency fund, medium priority for retirement, low priority for a down payment, if not sure then decide as per your knowledge).
 - Amount of current savings in(e.g. Savings, Stocks, Cash)

@@ -170,7 +170,6 @@ const registerCredentialUser = async (req: Request, res: Response) => {
  */
 const handleCredentialUserAuth = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
   try {
     // Check if the user exists
     const user = await prisma.user.findUnique({

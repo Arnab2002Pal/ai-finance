@@ -16,7 +16,7 @@ export const NEXT_AUTH = {
                 if (!credentials) return null;
                 
                 try {
-                    const user = await credentialAuthentication('credentials', {
+                    const user = await credentialAuthentication('user/credentials', {
                         email: credentials.email,
                         password: credentials.password
                     });
@@ -53,7 +53,7 @@ export const NEXT_AUTH = {
                     provider: account.provider,
                     token: `${account.token_type} ${account.id_token}`
                 }              
-                user.accessToken = await googleAuthentication('session', { userData }).then(result => result.data)
+                user.accessToken = await googleAuthentication('user/session', { userData }).then(result => result.data)
                 return true;
             }else if(account.provider === "credentials"){
                 user.accessToken = user

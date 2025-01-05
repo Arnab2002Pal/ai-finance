@@ -13,7 +13,7 @@ import { fetchData } from "@/app/api/utility/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "@/app/components/Loader";
-import links from "@/app/util/links";
+import links from "@/app/utils/links";
 
 function MessageWarning() {
   const searchedMessage = useSearchParams();
@@ -49,7 +49,7 @@ export default function HomeLayout({
 
     const fetchUserInfo = async () => {
       try {
-        const response = await fetchData(`/userInfo/${user_id}`);
+        const response = await fetchData(`finance/financialReport/${user_id}`);
         if (response.status === 404) {
           if (response.errorType === "USER_NOT_FOUND") {
             await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/signin?message=User Not Registered` });

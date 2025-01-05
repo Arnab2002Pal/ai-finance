@@ -53,7 +53,7 @@ A cutting-edge application designed to simplify finance management using AI. Thi
 ## APIs
 
 ### User Routes
-- `GET /userInfo/:id` - Fetch user information by ID.
+- `GET /financialReport/:id` - Fetch user information by ID.
 - `GET /checkFinancialReport/:email` - Check financial report for a given email.
 
 ### Authentication Routes

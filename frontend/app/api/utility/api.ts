@@ -21,7 +21,7 @@ export const googleAuthentication = async (url: string, option: any) => {
   }
 };
 
-export const credentialAuthentication = async (url: string, option: any) => {
+export const credentialAuthentication = async (url: string, option: any) => {  
   try {
     const response = await axiosInstance.post(url, option);
     return response.data;
