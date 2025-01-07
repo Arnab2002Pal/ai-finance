@@ -1,8 +1,9 @@
+import { LocationInfo } from "@/app/interface/userInterface";
 import { locations } from "@/app/utils/lists";
 import React, { useState } from "react";
 
-const Location: React.FC<{ setFormData: (formData: any) => void }> = ({ setFormData }) => {
-    const [inputValue, setInputValue] = useState("");
+const Location: React.FC<{ formData: LocationInfo['location'], handleFormData: (formData: any) => void }> = ({ formData, handleFormData }) => {
+    const [inputValue, setInputValue] = useState(formData ||"");
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -10,15 +11,9 @@ const Location: React.FC<{ setFormData: (formData: any) => void }> = ({ setFormD
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInputValue(value);
-
+        handleFormData(value)
         // Update formData.locationInfo.location
-        setFormData((prev: any) => ({
-            ...prev,
-            locationInfo: {
-                ...prev.locationInfo,
-                location: value,
-            },
-        }));
+        
 
         if (value.length > 0) {
             const filtered = locations.filter((location) =>
@@ -36,20 +31,13 @@ const Location: React.FC<{ setFormData: (formData: any) => void }> = ({ setFormD
         setInputValue(suggestion);
 
         // Update formData.locationInfo.location
-        setFormData((prev: any) => ({
-            ...prev,
-            locationInfo: {
-                ...prev.locationInfo,
-                location: suggestion,
-            },
-        }));
-
+        handleFormData(suggestion);
         setShowSuggestions(false);
     };
 
     return (
         <div className="relative w-full max-w-sm text-black">
-            <label htmlFor="location" className="text-white text-xl font-semibold ">Select Country:</label>
+            <label htmlFor="location" className="text-white text-md md:text-xl font-semibold ">Select Country:</label>
             <input
                 id="location"
                 type="text"

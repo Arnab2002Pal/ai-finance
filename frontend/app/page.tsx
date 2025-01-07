@@ -1,5 +1,4 @@
 import Appbar from "./components/Appbar";
-import { AuroraBackground } from "@/app/components/ui/aurora-background";
 import { HeroTitle } from "./components/HeroTitle";
 import { getServerSession } from "next-auth";
 import { NEXT_AUTH } from "./lib/auth";
@@ -14,12 +13,10 @@ export default async function Home() {
 
   return (
     <div>
-      <AuroraBackground>
-        <div className="z-10">
+      <div className="">
           <Appbar />
           <HeroTitle />
         </div>
-      </AuroraBackground>
     </div>
   );
 }

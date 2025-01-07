@@ -5,6 +5,17 @@ export interface UserInput {
     password: string;
 }
 
+export interface FormData {
+    email: string;
+    locationInfo: LocationInfo;
+    accountInfo: UserAccountInfo;
+    termsAndCondition: TermsAndCondition;
+}
+
+export interface LocationInfo {
+    location: string;
+}
+
 export interface UserAccountInfo {
     age: number;
     occupation: string,
@@ -19,6 +30,10 @@ export interface UserAccountInfo {
     long_term: string,
 }
 
+export interface TermsAndCondition {
+    acceptTerms: boolean;
+}
+
 export enum RiskTolerance {
     default = "",
     Conservative = "Conservative",
@@ -26,20 +41,6 @@ export enum RiskTolerance {
     Aggressive = "Aggressive",
 }
 
-export interface LocationInfo {
-    location: string;
-}
-
-export interface TermsAndCondition {
-    acceptTerms: boolean;
-}
-
-export interface FormData {
-    email: string;
-    locationInfo: LocationInfo;
-    accountInfo: UserAccountInfo;
-    termsAndCondition: TermsAndCondition;
-}
 
 export interface UserInfo {
     user_id?: number;

@@ -57,7 +57,7 @@ export default function SignupForm() {
   return (
     <>
       <ToastContainer theme="dark" />
-      <div className="max-w-md w-full mx-auto p-4 sm:p-8 rounded-none md:rounded-2xl bg-white bg-opacity-10 backdrop-blur-md shadow-xl border border-gray-300 border-opacity-30">
+      <div className="max-w-md w-full mx-auto p-4 sm:p-8 rounded-none md:rounded-2xl bg-stone-400 bg-opacity-10 backdrop-blur-md shadow-xl border border-gray-300 border-opacity-30">
 
         <h2 className="font-bold text-lg sm:text-xl text-white">Welcome to Vault</h2>
         <p className="text-sm text-white mt-2">Register yourself to access your Vault</p>

@@ -22,7 +22,7 @@ const SignUp = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-[#000000] via-[#4a3503] to-[#f8d948]">
+    <div className="flex flex-col justify-center items-center min-h-screen">
       <SignupForm />
     </div>
   );

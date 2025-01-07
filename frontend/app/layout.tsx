@@ -6,7 +6,7 @@ import Providers from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Fortuna AI",
+  title: "Kuber AI",
   description: "Intelligent financial management app that empowers users to make smarter investment decisions with the help of advanced AI-driven insights",
 };
 
