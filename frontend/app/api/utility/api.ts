@@ -1,13 +1,19 @@
 import { UserInput } from "@/app/interface/userInterface";
-import { redirect } from 'next/navigation'
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
-  // headers: {
-  //     Authorization:
-  // }
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
+
+export const test = async (url: string) => {
+  try {
+    const response = await axiosInstance.get(url);
+    console.log("Response: ", response);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export const googleAuthentication = async (url: string, option: any) => {
   try {
@@ -21,7 +27,7 @@ export const googleAuthentication = async (url: string, option: any) => {
   }
 };
 
-export const credentialAuthentication = async (url: string, option: any) => {  
+export const credentialAuthentication = async (url: string, option: any) => {
   try {
     const response = await axiosInstance.post(url, option);
     return response.data;
@@ -112,12 +118,22 @@ export const fetchData = async (url: string) => {
 
 export const checkFinancialReport = async (url: string) => {
   try {
-    const response = await axiosInstance.get(url);    
+    const response = await axiosInstance.get(url);
     return response.data;
   } catch (error: any) {
-    const status = error?.response?.status;
-    if (status === 400 || status === 404) {
-      return error.response.data; 
-    }  }
-}
+    if (error.response) {
+      // Backend returned an error
+      return error.response.data;
+    } else {
+      // Network or unexpected error
+      console.error("Network error:", error);
+      return {
+        status: 500,
+        success: false,
+        errorType: "NETWORK_ERROR",
+        message: "An unexpected error occurred.",
+      };
+    }
+  }
+};
 

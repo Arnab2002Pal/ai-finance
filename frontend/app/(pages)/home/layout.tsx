@@ -49,7 +49,7 @@ export default function HomeLayout({
 
     const fetchUserInfo = async () => {
       try {
-        const response = await fetchData(`finance/financialReport/${user_id}`);
+        const response = await fetchData(`user/financialReport/${user_id}`);
         if (response.status === 404) {
           if (response.errorType === "USER_NOT_FOUND") {
             await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/signin?message=User Not Registered` });

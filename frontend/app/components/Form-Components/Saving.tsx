@@ -3,7 +3,7 @@ import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 
-export function Saving({ formData, handleFormData }:{
+export default function Saving({ formData, handleFormData }:{
     formData: string,
     handleFormData: (value: string) => void
 }) {

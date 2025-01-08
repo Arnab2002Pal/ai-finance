@@ -2,7 +2,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { useState } from "react";
 
-export function Expense({ formData, handleFormData }: { formData: number|undefined, handleFormData: (data:number)=> void}) {
+export default function Expense({ formData, handleFormData }: { formData: number|undefined, handleFormData: (data:number)=> void}) {
     const [expense, setExpense] = useState(formData||"");
 
     const handle_change_event = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -10,7 +10,6 @@ export function Expense({ formData, handleFormData }: { formData: number|undefin
         setExpense(newValue)
         handleFormData(newValue)
     }
-
 
     return (
         <div className="grid w-full max-w-sm items-center gap-4">
