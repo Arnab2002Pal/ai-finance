@@ -4,7 +4,7 @@ dotenv.config()
 
 const mode = process.env.NODE_ENV?.trim()
 const devUrl = "redis://localhost:6379"
-const prodUrl = `redis://${process.env.REDIS_HOST}:6379`
+const prodUrl = `redis://redis:6379`
 
 export const redis = createClient({
     url: mode === 'prod' ? prodUrl : devUrl
