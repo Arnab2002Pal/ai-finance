@@ -17,7 +17,7 @@ services:
     image: redis:alpine  
     container_name: ai-finance-redis-server
     ports:
-      - 6377:6379
+      - 6379:6379
     volumes:
       - redis-server_data:/data/server
     command: ["redis-server", "--appendonly", "yes"]
