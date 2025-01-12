@@ -1,9 +1,9 @@
 services:
   backend:
-    # image: "arnabpal342002/ai-finance-backend-application"
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "arnabpal342002/ai-finance-backend-application"
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     container_name: backend_application
     ports:
         - 3001:3001
@@ -27,8 +27,8 @@ services:
       - backend
 
   migrate:
-    # image: "arnabpal342002/ai-finance-backend-application"
-    build: .
+    image: "arnabpal342002/ai-finance-backend-application"
+    # build: .
     env_file:
       - .env
     command: ["npm", "run", "db:deploy"]
