@@ -7,7 +7,7 @@ const devUrl = "redis://localhost:6379"
 const prodUrl = `redis://redis:6379`
 const url = mode === 'prod' ? prodUrl : devUrl
 export const redis = createClient({
-    url: url
+    url: "redis://redis:6379"
 })
 
 redis.on('connect', () => {
