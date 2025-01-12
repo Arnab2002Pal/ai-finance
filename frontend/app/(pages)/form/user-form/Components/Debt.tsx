@@ -1,7 +1,7 @@
 import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
+import { Input } from "../../../../components/ui/input";
 import { useState } from "react";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "../../../../components/ui/checkbox";
 
 export default function Debt({ formData, handleFormData }: {
     formData: { monthly_debt: number; total_remaining_debt: number },
@@ -12,7 +12,7 @@ export default function Debt({ formData, handleFormData }: {
 
     const handleDebtChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        
+
         const newValue = Number(value)
         id === "monthly_debt" ? set_monthly_debt(newValue) : set_total_remaining_debt(newValue)
 
@@ -21,7 +21,9 @@ export default function Debt({ formData, handleFormData }: {
 
     return (
         <div className="grid w-full max-w-sm items-center gap-4">
-            {/* Age Field */}
+            <span className='text-xs md:text-sm'>Note* : Incase you do not have any Debt/EMI, keep both fields empty.</span>
+
+            {/* Monthly Debt Field */}
             <div className="flex flex-col gap-1">
                 <Label htmlFor="monthly_debt" className="text-md md:text-xl font-semibold ">
                     Monthly Debt
@@ -52,7 +54,6 @@ export default function Debt({ formData, handleFormData }: {
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  shadow-lg"
                 />
             </div>
-            <span className='text-xs md:text-sm'>Note* : Incase you do not have any Debt/EMI, keep both fields empty.</span>
         </div>
     );
 }

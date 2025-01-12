@@ -1,9 +1,9 @@
 import { Label } from "@radix-ui/react-label";
-import { Textarea } from "../ui/textarea";
-import { Checkbox } from "../ui/checkbox";
+import { Textarea } from "../../../../components/ui/textarea";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import { useState } from "react";
 
-export default function Saving({ formData, handleFormData }:{
+export default function Saving({ formData, handleFormData }: {
     formData: string,
     handleFormData: (value: string) => void
 }) {
@@ -19,7 +19,7 @@ export default function Saving({ formData, handleFormData }:{
             {/* Expense Field */}
             <div className="flex flex-col gap-1">
                 <Label htmlFor="current_amount_savings" className="text-md md:text-xl font-medium">
-                    How much have you saved till now?
+                    If you have any savings, How much ?
                 </Label>
                 <Textarea
                     id="current_amount_savings"

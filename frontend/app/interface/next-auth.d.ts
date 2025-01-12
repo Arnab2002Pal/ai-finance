@@ -7,15 +7,15 @@ import NextAuth from 'next-auth';
 declare module 'next-auth' {
     interface Session {
         user: {
-            user_id?: number;  // Add the user_id property
+            user_id?: number;
             name?: string | null;
             email?: string | null;
             image?: string | null;
         };
-        accessToken?: string;  // Add accessToken if you're using it
+        accessToken?: string;
     }
 
     interface User {
-        user_id?: number; // Add user_id to User interface if needed
+        user_id?: number;
     }
 }

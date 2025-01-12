@@ -1,12 +1,12 @@
 import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
+import { Input } from "../../../../components/ui/input";
 import { useState } from "react";
 
-export default function Expense({ formData, handleFormData }: { formData: number|undefined, handleFormData: (data:number)=> void}) {
-    const [expense, setExpense] = useState(formData||"");
+export default function Expense({ formData, handleFormData }: { formData: number | undefined, handleFormData: (data: number) => void }) {
+    const [expense, setExpense] = useState(formData || "");
 
     const handle_change_event = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = Number(e.target.value);        
+        const newValue = Number(e.target.value);
         setExpense(newValue)
         handleFormData(newValue)
     }

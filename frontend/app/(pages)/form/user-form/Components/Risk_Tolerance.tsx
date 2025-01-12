@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select'
 import { risk_tolerance } from '@/app/utils/lists'
-import { Label } from '../ui/label'
+import { Label } from '../../../../components/ui/label'
 
 const Risk_Tolerance = ({ formData, handleFormData }: {
   formData: string,

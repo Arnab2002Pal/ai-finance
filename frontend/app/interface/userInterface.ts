@@ -13,7 +13,7 @@ export interface FormData {
 }
 
 export interface LocationInfo {
-    location: string;
+    country: string;
 }
 
 export interface UserAccountInfo {
@@ -41,7 +41,6 @@ export enum RiskTolerance {
     Aggressive = "Aggressive",
 }
 
-
 export interface UserInfo {
     user_id?: number;
     name: string;
@@ -58,99 +57,67 @@ export interface UserFinancialInfo {
     expenseAnalysis: ExpenseAnalysis;
     investmentAdvice: InvestmentAdvice;
     savingPlan: SavingPlan;
-    debtManagement: DebtManagement;
+    debtManagement?: DebtManagement;
     goalRoadmap: GoalRoadmap;
-    structuredPlan: StructuredPlan;
-    growth: Growth;
-    summary: string;
+    structuredPlan: string[];
+    growthAnalysis: Growth;
+    reEvaluation: reEvaluation;
+    summary: Summary;
 }
 
 export interface ExpenseAnalysis {
-    MonhtlyEarning: number;
-    TotalInvestedAmount: number;
-    MonthlyExpenses: number;
-    MonthlyDebt: number;
-    MoneySaved: number;
-    Advice: string;
+    monthlyExpenses: number,
+    monthlyNetEarnings: number,
+    monthlyDebtPayments: number,
+    totalCurrentSavings: number,
+    totalMonthlySavings: number
+    advice: string;
 }
 
 export interface InvestmentAdvice {
-    WhereToInvest: WhereToInvest;
+    riskTolerance: RiskTolerance,
+    investments: InvestmentGroup[]
 }
 
-export interface WhereToInvest {
-    Allocation1: InvestmentOption;
-    Allocation2?: InvestmentOption;
-    Allocation3?: InvestmentOption;
-    Allocation4?: InvestmentOption;
-    Allocation5?: InvestmentOption;
-    Allocation6?: InvestmentOption;
-    Allocation7?: InvestmentOption;
-    Allocation8?: InvestmentOption;
-    GoalAlignment: string;
-    StrategyRationale: string;
-    DiversificationStrategy: string;
-    Advice: string;
-}
-
-export interface InvestmentOption {
-    Name: string;
-    PercentageAllocation: string;
-    Amount: number;
-    AssetClass: string;
+export interface InvestmentGroup {
+    assetClass: string;
+    investmentName: string;
+    amountAllocated: number;
+    percentageAllocation: number;
 }
 
 export interface SavingPlan {
-    TotalMonthlySaving: number;
-    AnnualSaving: number;
-    PercentageOfSalarySaved: string;
-    Advice: string;
+    annualSavings: number,
+    totalMonthlySavings: number,
+    percentageOfSalarySaved: number,
+    advice: string;
 }
 
 export interface DebtManagement {
-    TotalDebt: number;
-    MoneyToSetAside: {
-        TimePeriod: string;
-        SuggestedAmount: number;
-        AvailableFundsConsideration: string | number
-    }
-    Advice: {
-        DebtStrategy: string;
-        Priority: string;
-    };
+    totalExistingDebt: number,
+    recommendedDebtPayment: number,
+    advice: string;
 }
 
 export interface GoalRoadmap {
-    ShortTermGoal: ShortGoal;
-    LongTermGoal: LongGoal;
-}
-
-export interface ShortGoal {
-    Description: string;
-    TargetAmount: number;
-    MonthlySavingsNeeded: number;
-    Advice: string;
-}
-
-export interface LongGoal {
-    Description: string;
-    CurrentAge: number;
-    YearsToInvest: number | undefined;
-    EstimatedAnnualRequirement: number;
-    Advice: string;
-}
-
-export interface StructuredPlan {
-    Step1?: string;
-    Step2?: string;
-    Step3?: string;
-    Step4?: string;
-    Step5?: string;
-    Step6?: string;
-    Step7?: string;
+    longTermGoals: string;
+    shortTermGoals: string;
+    advice: string;
 }
 
 export interface Growth {
-    OverallCurrentGrowthPercentage: string;
-    PotentialGrowthPercentage: string;
+    currentGrowthPercentage: number;
+    potentialGrowthPercentage: number;
+}
+
+export interface reEvaluation {
+    timeframe: string
+}
+
+export interface Summary {
+    nextSteps: string,
+    currentSituation: string,
+    expectedOutcomes: string,
+    keyRecommendations: string,
+    reEvaluationTimeframe: number
 }

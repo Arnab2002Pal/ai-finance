@@ -5,7 +5,7 @@ import { Suspense, useEffect, useState } from "react";
 import SignInForm from "../components/Form-Components/signin-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loading from "../components/Loader";
+import {Loading} from "../components/Loader";
 import { MessageFetcher } from "../lib/utils";
 
 const SignIn = () => {
@@ -14,7 +14,11 @@ const SignIn = () => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    if (message) {
+    if (message === 'User Not Registered') {
+      toast.warn(message, {
+        autoClose: 2000,
+      });
+    } else if (message){
       toast.success(message, {
         autoClose: 2000,
       });

@@ -21,13 +21,19 @@ const generationConfig = {
 
 export async function generateResult(input: any) {
     console.log("[Gemini] Started Processing");
-    
-    const chatSession = model.startChat({
-        generationConfig
-    });
-    
-    const result = await chatSession.sendMessage(input);
-    console.log("[Gemini] Processing Complete");
-    const response = JSON.parse(result.response.text())
-    return response;
+
+    try {
+        const chatSession = model.startChat({
+            generationConfig
+        });
+
+        const result = await chatSession.sendMessage(input);
+        console.log("[Gemini] Processing Complete");
+        const response = JSON.parse(result.response.text());
+        return response;
+
+    } catch (error) {
+        console.error("[Gemini] Error during processing:", error);
+        return { error: 'An error occurred during processing.' };
+    }
 }

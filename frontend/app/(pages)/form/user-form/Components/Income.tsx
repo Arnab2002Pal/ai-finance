@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
 
 const Income: React.FC<{
     formData: {
         age: number,
         occupation: string,
         monthly_income: number,
-    }, handleFormData: (type: string, key:string ,value: string | number | undefined) => void
+    }, handleFormData: (type: string, key: string, value: string | number | undefined) => void
 }> = ({ formData, handleFormData }) => {
     const [occupation, setOccupation] = useState(formData.occupation || "");
     const [monthly_income, setMonthlyIncome] = useState<number | undefined>(formData.monthly_income || undefined);
@@ -15,8 +15,8 @@ const Income: React.FC<{
 
     // Age input handler
     const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {id, type, value} = e.target
-        
+        const { id, type, value } = e.target
+
         const newAge = Number(value);
         setAge(newAge);
 
@@ -27,7 +27,7 @@ const Income: React.FC<{
     const handleOccupationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, type, value } = e.target
         // console.log(id, type, value);
-        
+
         setOccupation(value);
         handleFormData(type, id, value)
     };

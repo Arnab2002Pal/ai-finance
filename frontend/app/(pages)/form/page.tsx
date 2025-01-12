@@ -1,7 +1,7 @@
 "use client";
 import React, { Suspense, useState } from "react";
 import { useSession } from "next-auth/react";
-import Loading from "@/app/components/Loader";
+import {Loading} from "@/app/components/Loader";
 import MultiStepForm from "@/app/components/Form-Components/Multi-StepForm";
 import { MessageFetcher } from "@/app/lib/utils";
 

@@ -9,6 +9,7 @@ import {
   updateUserFlag
 } from "../services/db_service";
 import { redis } from "../configs/redis";
+import { inputValidations } from "../validation/userValidation";
 
 const prisma = new PrismaClient();
 
@@ -22,8 +23,18 @@ const prisma = new PrismaClient();
  * @returns {Promise<void>}
  */
 const generateAdvice = async (req: Request, res: Response) => {
-  const { email, locationInfo, accountInfo, termsAndCondition } = req.body;
+  const {success, data } = inputValidations.safeParse(req.body)
+  
+  if(!success) {
+    return res.status(400).json({
+      status: 400,
+      success: false,
+      message: "Invalid Input",
+    });
+  }
 
+  const { email, locationInfo, accountInfo, termsAndCondition } = data;
+  
   const aiInput: UserInput = {
     country: locationInfo.country,
     age: accountInfo.age,
@@ -42,7 +53,7 @@ const generateAdvice = async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-    });
+    });    
 
     if (!user) {
       console.log("[SERVER] User not found!");
@@ -57,9 +68,8 @@ const generateAdvice = async (req: Request, res: Response) => {
     await updateOrCreateLocationInfo(user.id, locationInfo);
     await updateOrCreateAccountInfo(user.id, accountInfo);
     await updateOrCreateTermsAndCondition(user.id, termsAndCondition);
-    await updateUserFlag(user.id, false)
+    await updateUserFlag(user.id, false);
     console.log("[SERVER] DB Operation Successful.");
-
 
     const aiResponse = await generateFinancialAdvice(aiInput);
 
@@ -82,7 +92,7 @@ const generateAdvice = async (req: Request, res: Response) => {
     return res.status(500).json({
       status: 500,
       success: false,
-      message: "An error occurred while creating or updating user information",
+      message: "Server Error, Please try again.",
     });
   }
 };

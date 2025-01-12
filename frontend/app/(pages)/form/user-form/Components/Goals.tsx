@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
+import { Label } from '../../../../components/ui/label'
+import { Input } from '../../../../components/ui/input'
 
 const Goals = ({ formData, handleFormData }: {
     formData: {
         short_term: string,
         long_term: string,
     },
-    handleFormData: (id:string, value:string) => void
+    handleFormData: (id: string, value: string) => void
 }) => {
     const [shortTerm, setShortTerm] = useState<string>(formData.short_term || "")
     const [longTerm, setlongTerm] = useState<string>(formData.long_term || "")
@@ -15,11 +15,11 @@ const Goals = ({ formData, handleFormData }: {
     // Sync local state with parent state
     useEffect(() => {
         handleFormData('short_term', shortTerm);
-    }, [shortTerm]);
+    }, [handleFormData, shortTerm]);
 
     useEffect(() => {
         handleFormData('long_term', longTerm);
-    }, [longTerm]);
+    }, [handleFormData, longTerm]);
 
     const handleFormDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;

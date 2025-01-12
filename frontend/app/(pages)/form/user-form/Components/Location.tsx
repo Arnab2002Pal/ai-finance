@@ -2,7 +2,7 @@ import { LocationInfo } from "@/app/interface/userInterface";
 import { locations } from "@/app/utils/lists";
 import React, { useState } from "react";
 
-const Location: React.FC<{ formData: LocationInfo['location'], handleFormData: (formData: any) => void }> = ({ formData, handleFormData }) => {
+const Location: React.FC<{ formData: LocationInfo['country'], handleFormData: (formData: any) => void }> = ({ formData, handleFormData }) => {
     const [inputValue, setInputValue] = useState(formData ||"");
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);

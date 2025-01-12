@@ -1,8 +1,8 @@
 import { Label } from "@radix-ui/react-label";
-import { Input } from "../ui/input";
-import { Checkbox } from "../ui/checkbox";
+import { Input } from "../../../../components/ui/input";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import { useEffect, useState } from "react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select";
 import { priorities } from "@/app/utils/lists";
 
 export default function Priority({ formData, checked, handleFormData, handleCheckStatus }: {
