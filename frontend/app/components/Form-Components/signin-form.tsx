@@ -30,7 +30,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-black border-black md:border-gray-700 md:border-2">
+    <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-stone-400 bg-opacity-10 backdrop-blur-md shadow-xl border border-gray-300 border-opacity-30  md:border-2">
       <h2 className="font-bold text-lg md:text-xl text-neutral-200">Welcome to Vault</h2>
       <p className="text-xs md:text-sm mt-2 text-neutral-300">
         Login to access your Vault

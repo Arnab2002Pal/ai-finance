@@ -39,7 +39,7 @@ export default function SignupForm() {
   const submitForm = async (data: SignUpValidationSchema) => {
     const { confirmPassword, ...updatedFormData } = data;
     try {
-      const result = await credentialUserRegistration('userCreate', updatedFormData);
+      const result = await credentialUserRegistration('user/userCreate', updatedFormData);
       if (!result.success) {
         const redirectTo = result.providerId === "google" ? '/signin?message=Already registered with google' : '/signin?message=Already registered.';
         router.push(redirectTo);
@@ -57,9 +57,10 @@ export default function SignupForm() {
   return (
     <>
       <ToastContainer theme="dark" />
-      <div className="max-w-md w-full mx-auto p-4 sm:p-8 rounded-none md:rounded-2xl shadow-input bg-black border-black md:border-gray-700 md:border-2">
-        <h2 className="font-bold text-lg sm:text-xl text-neutral-200">Welcome to Vault</h2>
-        <p className="text-sm text-neutral-300 mt-2">Register yourself to access your Vault</p>
+      <div className="max-w-md w-full mx-auto p-4 sm:p-8 rounded-none md:rounded-2xl bg-zinc-700 bg-opacity-10 backdrop-blur-md shadow-xl border border-gray-300 border-opacity-30">
+
+        <h2 className="font-bold text-lg sm:text-xl text-white">Welcome to Vault</h2>
+        <p className="text-sm text-white mt-2">Register yourself to access your Vault</p>
 
         <form className="mt-6 space-y-6" onSubmit={handleSubmit(submitForm)}>
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-2">
@@ -93,21 +94,32 @@ export default function SignupForm() {
             {errors?.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword.message}</span>}
           </LabelInputContainer>
 
-          <button className="bg-zinc-800 w-full text-white rounded-md h-10 font-medium" type="submit">
-            Sign up &rarr;
-          </button>
+          <div className=" relative group/btn flex items-center justify-center w-full text-black rounded-md font-medium shadow-input bg-black shadow-[0px_0px_1px_1px_var(--neutral-800)] lg:mt-6 lg:space-x-2 lg:px-4">
+            <button
+              type="submit"
+              className="btn w-full text-md h-full px-4 py-2 text-white rounded disabled:opacity-50 flex items-center justify-center"
+            >
+              Sign up &rarr;
+            </button>
+            <BottomGradient />
+          </div>
 
-          <div className="pt-4 text-sm font-light text-white">
+          <div className=" text-sm font-light text-white">
             Already have an account? <Link href="/signin" className="font-semibold">Log In</Link>
           </div>
         </form>
 
-        <button onClick={() => signIn("google", { callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/form` })}
-          className="flex items-center justify-center w-full h-10 text-black bg-zinc-900 rounded-md mt-6"
-        >
-          <IconBrandGoogle className="h-4 w-4 text-neutral-300" />
-          <span className="ml-2 text-neutral-300 text-sm">Google</span>
-        </button>
+
+        <div className=" relative group/btn flex items-center justify-center w-full text-black rounded-md font-medium shadow-input bg-black shadow-[0px_0px_1px_1px_var(--neutral-800)] lg:mt-6 lg:space-x-2 lg:px-4">
+          <button
+            onClick={() => signIn("google", { callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/form` })}
+            className="btn w-full h-full px-4 py-2 text-white rounded disabled:opacity-50 flex items-center justify-center"
+          >
+            <IconBrandGoogle className="h-4 w-4 text-white" />
+            <span className="ml-2 text-white text-md">Google</span>
+          </button>
+          <BottomGradient />
+        </div>
       </div>
     </>
   );
@@ -117,3 +129,14 @@ export default function SignupForm() {
 const LabelInputContainer = ({ children, className }: any) => {
   return <div className={`flex flex-col w-full space-y-2 ${className}`}>{children}</div>;
 };
+
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+

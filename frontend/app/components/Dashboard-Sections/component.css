@@ -1,0 +1,44 @@
+.text-gold {
+  background: linear-gradient(180deg, #d4af37, #f7c66e, #b78d24);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.text-silver {
+  background: linear-gradient(180deg, #b0b0b0, #d6d6d6, #8a8a8a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+
+.bg-gold {
+    background: linear-gradient(270deg, #d4af37, #f7c66e, #b78d24);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.hover\:shadow-xl {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.hover\:shadow-yellow-400\/30:hover {
+  box-shadow: 0 8px 24px rgba(234, 179, 8, 0.3);
+}
+

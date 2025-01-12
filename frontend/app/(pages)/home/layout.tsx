@@ -3,8 +3,9 @@ import React, { useState, useEffect, Suspense } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { Sidebar, SidebarBody, SidebarLink } from "../../components/ui/sidebar";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import links from "@/app/utils/links";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { cn, fetchInitials } from "@/app/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { userFinancialInfoState } from "@/app/store/atoms/financialAtom";
@@ -12,8 +13,7 @@ import { useSetRecoilState } from "recoil";
 import { fetchData } from "@/app/api/utility/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Loading from "@/app/components/Loader";
-import links from "@/app/util/links";
+import {Loading} from "@/app/components/Loader";
 
 function MessageWarning() {
   const searchedMessage = useSearchParams();
@@ -49,7 +49,8 @@ export default function HomeLayout({
 
     const fetchUserInfo = async () => {
       try {
-        const response = await fetchData(`/userInfo/${user_id}`);
+        const response = await fetchData(`user/financialReport/${user_id}`);
+        
         if (response.status === 404) {
           if (response.errorType === "USER_NOT_FOUND") {
             await signOut({ callbackUrl: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/signin?message=User Not Registered` });
@@ -68,7 +69,7 @@ export default function HomeLayout({
         }
 
         if (response.status === 200) {
-          setUserFinancialInfo(response.userFinancialInfo);
+          setUserFinancialInfo(response.data);
           setLoading(false);
         }
       } catch (error) {
@@ -162,7 +163,7 @@ export const Logo = () => (
   <Link href="#" className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20">
     <div className="h-5 w-6 bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
     <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="font-medium text-white whitespace-pre">
-      Fortuna AI
+      Kuber AI
     </motion.span>
   </Link>
 );

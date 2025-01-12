@@ -18,35 +18,48 @@ export const schema = {
             required: ["monthlyNetEarnings", "totalCurrentSavings", "monthlyExpenses", "monthlyDebtPayments", "totalMonthlySavings"],
         },
         investmentAdvice: {
-            type: SchemaType.ARRAY,
-            description: "Detailed investment advice with allocation percentages and amounts",
-            items: {
-                type: SchemaType.OBJECT,
-                properties: {
-                    investmentName: {
-                        type: SchemaType.STRING,
-                        description: "Name of the investment option",
-                        nullable: false,
-                    },
-                    assetClass: {
-                        type: SchemaType.STRING,
-                        description: "Type of asset (e.g., stocks, bonds)",
-                        nullable: false,
-                    },
-                    percentageAllocation: {
-                        type: SchemaType.NUMBER,
-                        description: "Percentage of total savings allocated (in whole numbers, e.g., 20 for 20%)",
-                        nullable: false,
-                    },
-                    amountAllocated: {
-                        type: SchemaType.NUMBER,
-                        description: "Amount allocated to the investment in numbers only (e.g., 600, 200)",
-                        nullable: false,
+            type: SchemaType.OBJECT,
+            description: "Detailed investment advice with risk tolerance and allocation percentages",
+            properties: {
+                riskTolerance: {
+                    type: SchemaType.STRING,
+                    description: "Type of risk: Aggressive, Moderate, or Conservative",
+                    nullable: false,
+                },
+                investments: {
+                    type: SchemaType.ARRAY,
+                    description: "List of investment options with allocation percentages and amounts",
+                    items: {
+                        type: SchemaType.OBJECT,
+                        properties: {
+                            investmentName: {
+                                type: SchemaType.STRING,
+                                description: "Name of the investment option",
+                                nullable: false,
+                            },
+                            assetClass: {
+                                type: SchemaType.STRING,
+                                description: "Type of asset (e.g., stocks, bonds)",
+                                nullable: false,
+                            },
+                            percentageAllocation: {
+                                type: SchemaType.NUMBER,
+                                description: "Percentage of total savings allocated (e.g., 20 for 20%)",
+                                nullable: false,
+                            },
+                            amountAllocated: {
+                                type: SchemaType.NUMBER,
+                                description: "Amount allocated to the investment (e.g., 600, 200)",
+                                nullable: false,
+                            },
+                        },
+                        required: ["investmentName", "assetClass", "percentageAllocation", "amountAllocated"],
                     },
                 },
-                required: ["investmentName", "assetClass", "percentageAllocation", "amountAllocated"],
             },
+            required: ["riskTolerance", "investments"],
         },
+
         savingPlan: {
             type: SchemaType.OBJECT,
             description: "Savings plan overview and advice",

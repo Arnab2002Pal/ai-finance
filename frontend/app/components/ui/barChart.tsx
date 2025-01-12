@@ -11,25 +11,38 @@ import {
 } from 'chart.js';
 import { userFinancialInfoState } from '@/app/store/atoms/financialAtom';
 import { useRecoilValue } from 'recoil';
-import { parsedPercentage } from '@/app/lib/utils';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const BarChart = () => {
   const userFinancialInfo = useRecoilValue(userFinancialInfoState);
 
+  let newValue;
+  if (
+    userFinancialInfo.growthAnalysis.currentGrowthPercentage >
+    userFinancialInfo.growthAnalysis.potentialGrowthPercentage
+  ) {
+    newValue =
+      userFinancialInfo.growthAnalysis.potentialGrowthPercentage +
+      userFinancialInfo.growthAnalysis.currentGrowthPercentage;
+  } else {
+    newValue = userFinancialInfo.growthAnalysis.potentialGrowthPercentage;
+  }
+
   const data = {
-    labels: ['Growth'],
+    labels: ['Growth Analysis'],
     datasets: [
       {
-        label: 'Current',
-        data: [parsedPercentage(userFinancialInfo.growth?.OverallCurrentGrowthPercentage)],
-        backgroundColor: '#de1a24',
+        label: 'Current Growth',
+        data: [userFinancialInfo.growthAnalysis.currentGrowthPercentage],
+        backgroundColor: 'rgba(63, 143, 41)', // Green
+        
       },
       {
-        label: 'Potential',
-        data: [parsedPercentage(userFinancialInfo.growth?.PotentialGrowthPercentage)],
-        backgroundColor: '#3f8f29',
+        label: 'Potential Growth',
+        data: [newValue],
+        backgroundColor: 'rgba(255, 215, 0)', // Gold
+        
       },
     ],
   };
@@ -41,15 +54,19 @@ const BarChart = () => {
       legend: {
         position: 'top',
         labels: {
-          color: 'white', // Change legend label color to white
+          color: '#f5f5f5',
+          font: {
+            size: 14,
+          },
         },
       },
       tooltip: {
         enabled: true,
+        backgroundColor: '#333',
+        titleColor: '#fff',
+        bodyColor: '#ddd',
         callbacks: {
-          label: function (context: any) {
-            return `${context.dataset.label}: ${context.raw}%`;
-          },
+          label: (context: any) => `${context.dataset.label}: ${context.raw}%`,
         },
       },
     },
@@ -59,21 +76,31 @@ const BarChart = () => {
           display: false,
         },
         ticks: {
-          color: 'white', // Change X-axis ticks color to white
+          color: '#f5f5f5',
+          font: {
+            size: 14,
+          },
         },
       },
       y: {
         grid: {
           display: true,
-          color: 'rgba(255, 255, 255, 0.1)', // Lighter grid lines
+          color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: 'white', // Change Y-axis ticks color to white
+          color: '#f5f5f5',
+          font: {
+            size: 14,
+          },
         },
       },
     },
-    barPercentage: 0.8, // Adjust this value to make bars thinner
-    categoryPercentage: 0.4, // Adjust this value to control spacing between bars
+    animation: {
+      duration: 1000,
+      easing: 'easeOutBounce',
+    },
+    barPercentage: 0.7,
+    categoryPercentage: 0.5,
   };
 
   return (

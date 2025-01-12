@@ -170,7 +170,6 @@ const registerCredentialUser = async (req: Request, res: Response) => {
  */
 const handleCredentialUserAuth = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
   try {
     // Check if the user exists
     const user = await prisma.user.findUnique({
@@ -293,7 +292,7 @@ const getUserFinancialReport = async (req: Request, res: Response) => {
 
     // Cache the financial advice in Redis
     await redis.setEx(cacheKey, 2 * 60, JSON.stringify(userFinancialDetails));
-    console.log(`[SERVER] Added Resutt to cache`);
+    console.log(`[SERVER] Added Result to cache`);
 
     return res.status(200).json({
       status: 200,

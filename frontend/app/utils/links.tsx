@@ -8,19 +8,19 @@ import {
 const links = [
     {
         label: "Dashboard",
-        href: "#",
+        href: `/home`,
         icon: (
             <IconBrandTabler className="text-neutral-200 h-5 w-5 flex-shrink-0" />
         ),
     },
     {
-        label: "Profile",
-        href: "#",
+        label: "Learning",
+        href: `/home/learning`,
         icon: <IconUserBolt className="text-neutral-200 h-5 w-5 flex-shrink-0" />,
     },
     {
         label: "Settings",
-        href: "#",
+        href: "/home/settings",
         icon: <IconSettings className="text-neutral-200 h-5 w-5 flex-shrink-0" />,
     },
     {

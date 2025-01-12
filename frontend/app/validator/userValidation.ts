@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { locations } from '../utils/lists';
 
 export const signUpValidationSchema = z.object({
     firstName: z.string().min(1, { message: 'First name is required' }),
@@ -19,16 +20,3 @@ export const signInValidationSchema = z.object({
 })
 
 export interface SignInValidationSchema extends z.infer<typeof signInValidationSchema> { }
-
-export const accountValidationSchema = z.object({
-    age: z.number({ message: "Enter a valid age."}),
-    occupation: z.string().optional(),
-    monthlyIncome: z.number({ message: "Enter a valid monthly income."}),
-    totalExpense: z.string().min(1, { message: 'Total expenses are required' }),
-    currentInvestment: z.number({ message: "Enter a valid current invested amount."}).optional(),
-    shortTermGoal: z.string().min(1, { message: 'Short Term Goal.'}).optional(),
-    longTermGoal: z.string().min(1, { message: 'Long Term Goal.'}).optional(),
-    debt: z.string().optional(),
-})
-
-export interface AccountValidation extends z.infer<typeof accountValidationSchema> { }

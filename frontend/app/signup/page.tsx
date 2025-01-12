@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import SignupForm from "../components/Form-Components/signup-form";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Loading from "../components/Loader";
+import {Loading} from "../components/Loader";
 
 const SignUp = () => {
   const router = useRouter();

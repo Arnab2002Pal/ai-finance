@@ -6,5 +6,6 @@ const financial_router = express.Router();
 
 // POST
 financial_router.post('/generateAdvice',  rateLimiter(1,30),generateAdvice)
+// financial_router.post('/generateAdvice',generateAdvice)
 
 export default financial_router;
