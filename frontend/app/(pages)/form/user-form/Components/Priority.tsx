@@ -73,7 +73,7 @@ export default function Priority({ formData, checked, handleFormData, handleChec
                     <div className="w-full md:w-2/3">
                         <Input
                             type="text"
-                            placeholder="Excluding debt payments"
+                            placeholder="E.g., Increase savings, Reduce Debt..."
                             disabled={check}
                             className={`px-4 py-2 border text-black shadow-lg border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${check ? "bg-gray-200 cursor-default" : ""
                                 }`}

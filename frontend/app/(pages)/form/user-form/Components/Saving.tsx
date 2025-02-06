@@ -25,7 +25,7 @@ export default function Saving({ formData, handleFormData }: {
                     id="current_amount_savings"
                     value={saving || ""}
                     onChange={handle_event}
-                    placeholder="Example: 20,000 in Stocks and 10,000 in Cash."
+                    placeholder="Example: 20,000 in Stocks and 10,000 in Cash or None."
                     className="px-4 py-2 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y min-h-[80px] max-h-[200px]  shadow-lg"
                 />
             </div>
